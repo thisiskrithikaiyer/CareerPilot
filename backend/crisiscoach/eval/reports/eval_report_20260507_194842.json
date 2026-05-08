@@ -1,0 +1,706 @@
+{
+  "routing": {
+    "accuracy": 1.0,
+    "correct": 8,
+    "total": 8,
+    "results": [
+      {
+        "id": "intake_001",
+        "input": "I just got laid off yesterday from my job of 3 years. I don't know what to do.",
+        "expected": "intake",
+        "predicted": "intake",
+        "reason": "Phase locked: collecting onboarding information",
+        "correct": true
+      },
+      {
+        "id": "intake_002",
+        "input": "Hi, I'm new here. I was laid off last month from a software engineering role.",
+        "expected": "intake",
+        "predicted": "intake",
+        "reason": "Phase locked: collecting onboarding information",
+        "correct": true
+      },
+      {
+        "id": "intake_003",
+        "input": "Can you help me figure out my next move? I'm a senior PM who just lost my job.",
+        "expected": "intake",
+        "predicted": "intake",
+        "reason": "Phase locked: collecting onboarding information",
+        "correct": true
+      },
+      {
+        "id": "intake_004",
+        "input": "Software Engineer",
+        "expected": "intake",
+        "predicted": "intake",
+        "reason": "Phase locked: collecting onboarding information",
+        "correct": true
+      },
+      {
+        "id": "intake_005",
+        "input": "3-6 months, I have some runway",
+        "expected": "intake",
+        "predicted": "intake",
+        "reason": "Phase locked: collecting onboarding information",
+        "correct": true
+      },
+      {
+        "id": "acct_001",
+        "input": "I applied to 2 jobs today and had a coffee chat with an old colleague.",
+        "expected": "checkin",
+        "predicted": "checkin",
+        "reason": "User is logging their daily progress.",
+        "correct": true
+      },
+      {
+        "id": "acct_002",
+        "input": "I didn't do anything today. I just couldn't get started.",
+        "expected": "accountability",
+        "predicted": "accountability",
+        "reason": "User is showing drift and low motivation.",
+        "correct": true
+      },
+      {
+        "id": "acct_003",
+        "input": "I've been slacking this whole week, nothing got done.",
+        "expected": "accountability",
+        "predicted": "accountability",
+        "reason": "User is showing drift and missed days.",
+        "correct": true
+      }
+    ]
+  },
+  "agent_intake": {
+    "passed": 3,
+    "total": 5,
+    "pass_rate": 0.6,
+    "avg_similarity": 69.1,
+    "results": [
+      {
+        "id": "intake_001",
+        "input": "I just got laid off yesterday from my job of 3 years. I don't know what to do.",
+        "response_snippet": "That's tough news. It's normal to feel lost. We've helped plenty of people in this spot. What kind of role were you working in, and how long were you hoping to stay in this current job search?",
+        "intent_routed": "intake",
+        "routing_correct": true,
+        "similarity": {
+          "passed": true,
+          "avg_similarity": 63.3,
+          "keyword_scores": [
+            {
+              "phrase": "don't worry",
+              "type": "must_not_contain",
+              "similarity": 50.0,
+              "passed": true
+            },
+            {
+              "phrase": "everything will be fine",
+              "type": "must_not_contain",
+              "similarity": 40.0,
+              "passed": true
+            },
+            {
+              "phrase": "one_of(['role', 'what kind', 'targeting', 'engineer', 'position'])",
+              "type": "must_contain_one_of",
+              "candidates": [
+                {
+                  "phrase": "role",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "what kind",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "targeting",
+                  "similarity": 40.0,
+                  "matched": false
+                },
+                {
+                  "phrase": "engineer",
+                  "similarity": 47.1,
+                  "matched": false
+                },
+                {
+                  "phrase": "position",
+                  "similarity": 47.1,
+                  "matched": false
+                }
+              ],
+              "passed": true
+            }
+          ]
+        },
+        "error": null,
+        "passed": true
+      },
+      {
+        "id": "intake_002",
+        "input": "Hi, I'm new here. I was laid off last month from a software engineering role.",
+        "response_snippet": "No surprise \u2014 mass layoffs are the new normal. Let's focus on getting you back on track. What kind of role are you targeting now?",
+        "intent_routed": "intake",
+        "routing_correct": true,
+        "similarity": {
+          "passed": false,
+          "avg_similarity": 54.5,
+          "keyword_scores": [
+            {
+              "phrase": "one_of(['timeline', 'offer', 'months', 'urgency', 'when', 'long'])",
+              "type": "must_contain_one_of",
+              "candidates": [
+                {
+                  "phrase": "timeline",
+                  "similarity": 38.1,
+                  "matched": false
+                },
+                {
+                  "phrase": "offer",
+                  "similarity": 50.0,
+                  "matched": false
+                },
+                {
+                  "phrase": "months",
+                  "similarity": 46.2,
+                  "matched": false
+                },
+                {
+                  "phrase": "urgency",
+                  "similarity": 50.0,
+                  "matched": false
+                },
+                {
+                  "phrase": "when",
+                  "similarity": 54.5,
+                  "matched": false
+                },
+                {
+                  "phrase": "long",
+                  "similarity": 36.4,
+                  "matched": false
+                }
+              ],
+              "passed": false
+            }
+          ]
+        },
+        "error": null,
+        "passed": false
+      },
+      {
+        "id": "intake_003",
+        "input": "Can you help me figure out my next move? I'm a senior PM who just lost my job.",
+        "response_snippet": "Losing a PM role is tough, but we can focus on the search ahead. What's your ideal next role?",
+        "intent_routed": "intake",
+        "routing_correct": true,
+        "similarity": {
+          "passed": false,
+          "avg_similarity": 57.6,
+          "keyword_scores": [
+            {
+              "phrase": "sorry to hear",
+              "type": "must_not_contain",
+              "similarity": 48.5,
+              "passed": true
+            },
+            {
+              "phrase": "one_of(['timeline', 'offer', 'months', 'urgency', 'when'])",
+              "type": "must_contain_one_of",
+              "candidates": [
+                {
+                  "phrase": "timeline",
+                  "similarity": 55.6,
+                  "matched": false
+                },
+                {
+                  "phrase": "offer",
+                  "similarity": 40.0,
+                  "matched": false
+                },
+                {
+                  "phrase": "months",
+                  "similarity": 66.7,
+                  "matched": false
+                },
+                {
+                  "phrase": "urgency",
+                  "similarity": 33.3,
+                  "matched": false
+                },
+                {
+                  "phrase": "when",
+                  "similarity": 40.0,
+                  "matched": false
+                }
+              ],
+              "passed": false
+            }
+          ]
+        },
+        "error": null,
+        "passed": false
+      },
+      {
+        "id": "intake_004",
+        "input": "Software Engineer",
+        "response_snippet": "Great, you're targeting a Software Engineer role. What's your urgency \u2014 when do you need to land a new offer?",
+        "intent_routed": "intake",
+        "routing_correct": true,
+        "similarity": {
+          "passed": true,
+          "avg_similarity": 100.0,
+          "keyword_scores": [
+            {
+              "phrase": "one_of(['timeline', 'offer', 'months', 'urgency', 'when', 'how long', 'soon'])",
+              "type": "must_contain_one_of",
+              "candidates": [
+                {
+                  "phrase": "timeline",
+                  "similarity": 42.1,
+                  "matched": false
+                },
+                {
+                  "phrase": "offer",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "months",
+                  "similarity": 33.3,
+                  "matched": false
+                },
+                {
+                  "phrase": "urgency",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "when",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "how long",
+                  "similarity": 42.1,
+                  "matched": false
+                },
+                {
+                  "phrase": "soon",
+                  "similarity": 40.0,
+                  "matched": false
+                }
+              ],
+              "passed": true
+            }
+          ]
+        },
+        "error": null,
+        "passed": true
+      },
+      {
+        "id": "intake_005",
+        "input": "3-6 months, I have some runway",
+        "response_snippet": "Okay, sounds like you've got some breathing room \u2014 that's a solid foundation for a job search. What kind of role are you targeting?",
+        "intent_routed": "intake",
+        "routing_correct": true,
+        "similarity": {
+          "passed": true,
+          "avg_similarity": 70.0,
+          "keyword_scores": [
+            {
+              "phrase": "sorry",
+              "type": "must_not_contain",
+              "similarity": 40.0,
+              "passed": true
+            },
+            {
+              "phrase": "one_of(['role', 'what kind', 'targeting', 'engineer', 'PM', 'position'])",
+              "type": "must_contain_one_of",
+              "candidates": [
+                {
+                  "phrase": "role",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "what kind",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "targeting",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "engineer",
+                  "similarity": 36.4,
+                  "matched": false
+                },
+                {
+                  "phrase": "PM",
+                  "similarity": 25.0,
+                  "matched": false
+                },
+                {
+                  "phrase": "position",
+                  "similarity": 45.5,
+                  "matched": false
+                }
+              ],
+              "passed": true
+            }
+          ]
+        },
+        "error": null,
+        "passed": true
+      }
+    ]
+  },
+  "agent_accountability": {
+    "passed": 1,
+    "total": 3,
+    "pass_rate": 0.333,
+    "avg_similarity": 68.2,
+    "results": [
+      {
+        "id": "acct_001",
+        "input": "I applied to 2 jobs today and had a coffee chat with an old colleague.",
+        "response_snippet": "You mentioned applying to two jobs today and having a coffee chat with an old colleague. That's a good move on the job market front. Here's some specific advice for you: Start making a list of potenti",
+        "intent_routed": "checkin",
+        "routing_correct": true,
+        "similarity": {
+          "passed": false,
+          "avg_similarity": 67.5,
+          "keyword_scores": [
+            {
+              "phrase": "great job",
+              "type": "must_not_contain",
+              "similarity": 60.9,
+              "passed": true
+            },
+            {
+              "phrase": "proud of you",
+              "type": "must_not_contain",
+              "similarity": 66.7,
+              "passed": true
+            },
+            {
+              "phrase": "amazing",
+              "type": "must_not_contain",
+              "similarity": 80.0,
+              "passed": false
+            },
+            {
+              "phrase": "fantastic",
+              "type": "must_not_contain",
+              "similarity": 47.6,
+              "passed": true
+            },
+            {
+              "phrase": "incredible",
+              "type": "must_not_contain",
+              "similarity": 50.0,
+              "passed": true
+            },
+            {
+              "phrase": "one_of(['coffee chat', 'colleague', 'network', 'applied', 'application'])",
+              "type": "must_contain_one_of",
+              "candidates": [
+                {
+                  "phrase": "coffee chat",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "colleague",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "network",
+                  "similarity": 57.1,
+                  "matched": false
+                },
+                {
+                  "phrase": "applied",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "application",
+                  "similarity": 63.6,
+                  "matched": false
+                }
+              ],
+              "passed": true
+            }
+          ]
+        },
+        "error": null,
+        "passed": false
+      },
+      {
+        "id": "acct_002",
+        "input": "I didn't do anything today. I just couldn't get started.",
+        "response_snippet": "Portfolio paralysis can be a real challenge, especially when the stakes feel high.\n\nLet's break it down to the smallest possible next step. Can you open LeetCode and solve one easy problem, just one?",
+        "intent_routed": "accountability",
+        "routing_correct": true,
+        "similarity": {
+          "passed": true,
+          "avg_similarity": 69.5,
+          "keyword_scores": [
+            {
+              "phrase": "you need to",
+              "type": "must_not_contain",
+              "similarity": 70.6,
+              "passed": true
+            },
+            {
+              "phrase": "you must",
+              "type": "must_not_contain",
+              "similarity": 58.8,
+              "passed": true
+            },
+            {
+              "phrase": "you should have",
+              "type": "must_not_contain",
+              "similarity": 48.5,
+              "passed": true
+            },
+            {
+              "phrase": "one_of(['one thing', 'small step', 'start', 'tomorrow', 'next'])",
+              "type": "must_contain_one_of",
+              "candidates": [
+                {
+                  "phrase": "one thing",
+                  "similarity": 50.0,
+                  "matched": false
+                },
+                {
+                  "phrase": "small step",
+                  "similarity": 64.0,
+                  "matched": false
+                },
+                {
+                  "phrase": "start",
+                  "similarity": 53.3,
+                  "matched": false
+                },
+                {
+                  "phrase": "tomorrow",
+                  "similarity": 28.6,
+                  "matched": false
+                },
+                {
+                  "phrase": "next",
+                  "similarity": 100.0,
+                  "matched": true
+                }
+              ],
+              "passed": true
+            }
+          ]
+        },
+        "error": null,
+        "passed": true
+      },
+      {
+        "id": "acct_003",
+        "input": "I've been slacking this whole week, nothing got done.",
+        "response_snippet": "It's tough to break the inertia. What's the smallest, most annoying thing you could do right now to get back on track? For example, just making a list of the companies you want to apply to in the next",
+        "intent_routed": "accountability",
+        "routing_correct": true,
+        "similarity": {
+          "passed": false,
+          "avg_similarity": 67.5,
+          "keyword_scores": [
+            {
+              "phrase": "amazing",
+              "type": "must_not_contain",
+              "similarity": 80.0,
+              "passed": false
+            },
+            {
+              "phrase": "incredible",
+              "type": "must_not_contain",
+              "similarity": 45.5,
+              "passed": true
+            },
+            {
+              "phrase": "fantastic",
+              "type": "must_not_contain",
+              "similarity": 44.4,
+              "passed": true
+            },
+            {
+              "phrase": "one_of(['week', 'plan', 'reset', 'tomorrow', 'next', 'smallest'])",
+              "type": "must_contain_one_of",
+              "candidates": [
+                {
+                  "phrase": "week",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "plan",
+                  "similarity": 36.4,
+                  "matched": false
+                },
+                {
+                  "phrase": "reset",
+                  "similarity": 46.2,
+                  "matched": false
+                },
+                {
+                  "phrase": "tomorrow",
+                  "similarity": 40.0,
+                  "matched": false
+                },
+                {
+                  "phrase": "next",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "smallest",
+                  "similarity": 100.0,
+                  "matched": true
+                }
+              ],
+              "passed": true
+            }
+          ]
+        },
+        "error": null,
+        "passed": false
+      }
+    ]
+  },
+  "agent_checkin": {
+    "passed": 2,
+    "total": 2,
+    "pass_rate": 1.0,
+    "avg_similarity": 69.8,
+    "results": [
+      {
+        "id": "checkin_001",
+        "input": "Mood: 3/10, Energy: 2/10. Wins: none. Blockers: Can't stop doom-scrolling job boards, No responses f",
+        "response_snippet": "Let's get clear on your current state. You're feeling a 3 out of 10 with your mood and are running on a 2 out of 10 for energy, which is tough.\n\nAs for your wins today, you've got an honest report - n",
+        "intent_routed": "checkin",
+        "routing_correct": true,
+        "similarity": {
+          "passed": true,
+          "avg_similarity": 72.1,
+          "keyword_scores": [
+            {
+              "phrase": "keep your head up",
+              "type": "must_not_contain",
+              "similarity": 56.4,
+              "passed": true
+            },
+            {
+              "phrase": "stay positive",
+              "type": "must_not_contain",
+              "similarity": 60.0,
+              "passed": true
+            },
+            {
+              "phrase": "one_of(['recruiter', 'doom', 'energy', 'tough', 'hard', 'rough'])",
+              "type": "must_contain_one_of",
+              "candidates": [
+                {
+                  "phrase": "recruiter",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "doom",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "energy",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "tough",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "hard",
+                  "similarity": 42.9,
+                  "matched": false
+                },
+                {
+                  "phrase": "rough",
+                  "similarity": 66.7,
+                  "matched": false
+                }
+              ],
+              "passed": true
+            }
+          ]
+        },
+        "error": null,
+        "passed": true
+      },
+      {
+        "id": "checkin_002",
+        "input": "Mood: 8/10, Energy: 7/10. Wins: Got a recruiter screen scheduled, Finished tailoring resume. Blocker",
+        "response_snippet": "You started the day by scheduling a recruiter screen, which is a significant step in your job search. Also, you managed to finish tailoring your resume, which will help make your application stand out",
+        "intent_routed": "checkin",
+        "routing_correct": true,
+        "similarity": {
+          "passed": true,
+          "avg_similarity": 67.5,
+          "keyword_scores": [
+            {
+              "phrase": "amazing",
+              "type": "must_not_contain",
+              "similarity": 52.6,
+              "passed": true
+            },
+            {
+              "phrase": "incredible",
+              "type": "must_not_contain",
+              "similarity": 50.0,
+              "passed": true
+            },
+            {
+              "phrase": "one_of(['recruiter', 'screen', 'resume', 'tailored'])",
+              "type": "must_contain_one_of",
+              "candidates": [
+                {
+                  "phrase": "recruiter",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "screen",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "resume",
+                  "similarity": 100.0,
+                  "matched": true
+                },
+                {
+                  "phrase": "tailored",
+                  "similarity": 54.5,
+                  "matched": false
+                }
+              ],
+              "passed": true
+            }
+          ]
+        },
+        "error": null,
+        "passed": true
+      }
+    ]
+  }
+}
