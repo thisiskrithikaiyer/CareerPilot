@@ -1,9 +1,7 @@
 """Evaluates whether agent responses use the right tone — direct but not harsh."""
 import json
-from openai import OpenAI
-from crisiscoach.config import GROQ_API_KEY, GROQ_MODEL
-
-_client = OpenAI(api_key=GROQ_API_KEY, base_url="https://api.groq.com/openai/v1")
+from crisiscoach.utils.groq_client import groq_complete
+from crisiscoach.config import GROQ_MODEL
 
 BANNED_PHRASES = [
     "don't worry", "everything will be fine", "you've got this",
@@ -26,7 +24,7 @@ def score_tone(response: str, expected_tone: str) -> dict:
         'Output JSON: {"tone_match": 0-10, "is_direct": true/false, '
         '"is_empathetic": true/false, "is_harsh": true/false, "notes": "..."}'
     )
-    resp = _client.chat.completions.create(
+    resp = groq_complete(
         model=GROQ_MODEL,
         max_tokens=200,
         temperature=0,

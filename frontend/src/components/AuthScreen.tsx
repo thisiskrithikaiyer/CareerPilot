@@ -35,20 +35,20 @@ export default function AuthScreen({ onAuth }: { onAuth: () => void }) {
       <div className="hidden lg:flex lg:w-1/2 bg-violet-900 flex-col justify-between px-14 py-12">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-full bg-white/15 flex items-center justify-center">
-            <span className="text-white text-xs font-bold tracking-tight">CC</span>
+            <span className="text-white text-xs font-bold tracking-tight">CP</span>
           </div>
-          <span className="text-white font-semibold text-sm">CrisisCoach AI</span>
+          <span className="text-white font-semibold text-sm">CareerPilot</span>
         </div>
 
         <div>
           <p className="text-violet-300 text-xs font-semibold tracking-widest uppercase mb-4">
-            Your personal coach
+            AI job coaching platform
           </p>
           <h2 className="text-4xl font-bold text-white leading-tight mb-4">
-            We&apos;re turning this<br />into your success<br />story.
+            Your goal.<br />Your schedule.<br />Your offer.
           </h2>
           <p className="text-violet-300 text-sm leading-relaxed max-w-xs">
-            Whatever you&apos;re facing right now — job loss, burnout, uncertainty — I&apos;m here to help you cut through the chaos and take back control.
+            Tell me your target role and timeline — I&apos;ll build your personalized plan and schedule every day around getting you that offer.
           </p>
         </div>
 
@@ -63,9 +63,9 @@ export default function AuthScreen({ onAuth }: { onAuth: () => void }) {
           {/* Mobile brand */}
           <div className="flex items-center gap-2.5 mb-8 lg:hidden">
             <div className="w-8 h-8 rounded-full bg-violet-700 flex items-center justify-center">
-              <span className="text-white text-xs font-bold">CC</span>
+              <span className="text-white text-xs font-bold">CP</span>
             </div>
-            <span className="font-semibold text-gray-900 text-sm">CrisisCoach AI</span>
+            <span className="font-semibold text-gray-900 text-sm">CareerPilot</span>
           </div>
 
           <h1 className="text-2xl font-bold text-gray-900 mb-1">

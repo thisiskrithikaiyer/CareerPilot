@@ -1,9 +1,7 @@
 """Mock prep sub-agent — generates interview questions and scores answers."""
 import json
-from openai import OpenAI
-from crisiscoach.config import GROQ_API_KEY, GROQ_MODEL
-
-_client = OpenAI(api_key=GROQ_API_KEY, base_url="https://api.groq.com/openai/v1")
+from crisiscoach.utils.groq_client import groq_complete
+from crisiscoach.config import GROQ_MODEL
 
 
 async def generate_questions(role: str, interview_stage: str, n: int = 5) -> list[dict]:
@@ -12,7 +10,7 @@ async def generate_questions(role: str, interview_stage: str, n: int = 5) -> lis
         "Mix behavioral, technical, and situational. "
         'Output JSON array: [{"question": "...", "type": "behavioral|technical|situational", "difficulty": 1-3}]'
     )
-    resp = _client.chat.completions.create(
+    resp = groq_complete(
         model=GROQ_MODEL,
         max_tokens=512,
         temperature=0.5,
@@ -29,7 +27,7 @@ async def score_answer(question: str, answer: str, role: str) -> dict:
         '{"score": <1-10>, "strengths": [...], "gaps": [...], "improved_version": "..."}. '
         "Be direct and specific."
     )
-    resp = _client.chat.completions.create(
+    resp = groq_complete(
         model=GROQ_MODEL,
         max_tokens=512,
         temperature=0.2,

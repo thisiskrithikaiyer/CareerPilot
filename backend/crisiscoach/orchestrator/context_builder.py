@@ -17,7 +17,7 @@ def _compute_deviation(actual: int, target: int) -> dict:
     return {"actual": actual, "target": target, "deviation_pct": dev}
 
 
-async def _fetch_tracking_summary(sb, user_id: str, days_since_layoff: int | None) -> dict:
+async def _fetch_tracking_summary(sb, user_id: str, days_since_start: int | None) -> dict:
     try:
         # Last 14 check-ins
         checkin_rows = (
@@ -111,7 +111,7 @@ async def _fetch_tracking_summary(sb, user_id: str, days_since_layoff: int | Non
                 break
         no_interview_rescore = (
             days_since_interview is None or days_since_interview >= NO_INTERVIEW_RESCORE_DAYS
-        ) and (days_since_layoff or 0) >= NO_INTERVIEW_RESCORE_DAYS
+        ) and (days_since_start or 0) >= NO_INTERVIEW_RESCORE_DAYS
 
         # Latest goal targets for deviation calc
         goal_row = (
@@ -145,7 +145,7 @@ async def _fetch_tracking_summary(sb, user_id: str, days_since_layoff: int | Non
                 revision_mode = True
 
         if not revision_mode:
-            return {"current_day": days_since_layoff, "revision_mode": False}
+            return {"current_day": days_since_start, "revision_mode": False}
 
         avg_mood = round(sum(c["mood_score"] for c in checkin_rows) / len(checkin_rows), 1)
         avg_energy = round(sum(c["energy_score"] for c in checkin_rows) / len(checkin_rows), 1)
@@ -167,7 +167,7 @@ async def _fetch_tracking_summary(sb, user_id: str, days_since_layoff: int | Non
 
         return {
             "revision_mode": True,
-            "current_day": days_since_layoff,
+            "current_day": days_since_start,
             "checkin_count": len(checkin_rows),
             "avg_mood": avg_mood,
             "avg_energy": avg_energy,
@@ -221,28 +221,27 @@ async def build_context(state: CrisisCoachState, intent: str = "") -> dict:
         # User profile — only fetch heavy text fields when the agent needs them
         needs_profile = intent in _PROFILE_AGENTS
         # phase + intake_complete always fetched — router needs them on every request
-        profile_cols = "layoff_date, visa_deadline, runway_weeks, open_tasks, intake_complete, phase"
+        profile_cols = "search_start_date, runway_weeks, open_tasks, intake_complete, phase"
         if needs_profile:
             profile_cols += ", resume_text, linkedin_text, role, leetcode_level"
+        else:
+            profile_cols += ", leetcode_level"
 
         profile_row = (
             sb.table("users")
             .select(profile_cols)
             .eq("id", user_id)
-            .single()
+            .limit(1)
             .execute()
         )
-        profile = profile_row.data or {}
+        profile = profile_row.data[0] if profile_row.data else {}
 
         days_since = None
-        if profile.get("layoff_date"):
-            layoff = date.fromisoformat(profile["layoff_date"])
-            days_since = (date.today() - layoff).days
+        if profile.get("search_start_date"):
+            search_start = date.fromisoformat(profile["search_start_date"])
+            days_since = (date.today() - search_start).days
 
-        # Effective deadline = tightest of visa deadline and financial runway
         deadline_candidates = []
-        if profile.get("visa_deadline"):
-            deadline_candidates.append((date.fromisoformat(profile["visa_deadline"]) - date.today()).days)
         if profile.get("runway_weeks") is not None:
             deadline_candidates.append(profile["runway_weeks"] * 7)
         days_left = min(deadline_candidates) if deadline_candidates else None
@@ -251,14 +250,19 @@ async def build_context(state: CrisisCoachState, intent: str = "") -> dict:
         if needs_profile:
             tracking_summary = await _fetch_tracking_summary(sb, user_id, days_since)
 
+        intake_complete = bool(profile.get("intake_complete", False))
+        raw_phase = profile.get("phase") or ("goal_setup" if intake_complete else "intake")
+        phase = "goal_setup" if raw_phase == "goal_planner" else raw_phase
+
         return {
             "days_since": days_since,
             "days_left": days_left,
             "mood_score": checkin.get("mood_score"),
             "energy_score": checkin.get("energy_score"),
-            "intake_complete": bool(profile.get("intake_complete", False)),
-            "phase": profile.get("phase", "intake"),
+            "intake_complete": intake_complete,
+            "phase": phase,
             "open_tasks": profile.get("open_tasks"),
+            "leetcode_level": profile.get("leetcode_level"),
             "resume_text": profile.get("resume_text"),
             "linkedin_text": profile.get("linkedin_text"),
             "tracking_summary": tracking_summary,

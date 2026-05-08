@@ -18,10 +18,8 @@ Output written to users.talent_map:
   }
 """
 import json
-from openai import OpenAI
-from crisiscoach.config import GROQ_API_KEY, GROQ_MODEL
-
-_client = OpenAI(api_key=GROQ_API_KEY, base_url="https://api.groq.com/openai/v1")
+from crisiscoach.utils.groq_client import groq_complete
+from crisiscoach.config import GROQ_MODEL
 
 _SCORE_PROMPT = """
 You are a technical skills tracker. Score each skill based primarily on demonstrated activity — not just what's on a resume.
@@ -187,7 +185,7 @@ async def map_talent(user_id: str, resume_text: str = "", linkedin_summary: str 
 
     signals_block = _build_signals_block(signals)
 
-    resp = _client.chat.completions.create(
+    resp = groq_complete(
         model=GROQ_MODEL,
         max_tokens=1024,
         temperature=0,

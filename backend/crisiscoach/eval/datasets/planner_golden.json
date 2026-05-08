@@ -2,7 +2,7 @@
   {
     "id": "planner_001",
     "input_profile": {
-      "days_since_layoff": 5,
+      "days_since_start": 5,
       "runway_weeks": 24,
       "mood_score": 6,
       "energy_score": 7,
@@ -17,7 +17,7 @@
   {
     "id": "planner_002",
     "input_profile": {
-      "days_since_layoff": 30,
+      "days_since_start": 30,
       "runway_weeks": 8,
       "mood_score": 4,
       "energy_score": 3,

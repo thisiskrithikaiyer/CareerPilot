@@ -5,6 +5,7 @@ load_dotenv()
 
 # LLM
 GROQ_API_KEY: str = os.environ.get("GROK_API_KEY", "")
+GROQ_API_KEY_2: str = os.environ.get("GROQ_API_KEY_2", "")
 GROQ_MODEL: str = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
 
 # Supabase

@@ -1,11 +1,8 @@
 from langchain_core.messages import HumanMessage
 """Daily tracker agent — processes check-in messages and generates empathetic responses."""
-import os
-from openai import OpenAI
-from crisiscoach.config import GROQ_API_KEY, GROQ_MODEL
+from crisiscoach.utils.groq_client import groq_complete
+from crisiscoach.config import GROQ_MODEL
 from crisiscoach.orchestrator.state import CrisisCoachState
-
-_client = OpenAI(api_key=GROQ_API_KEY, base_url="https://api.groq.com/openai/v1")
 
 
 async def generate_checkin_response(
@@ -24,10 +21,13 @@ async def generate_checkin_response(
     )
     system = (
         "You are a direct, caring job-loss coach. Acknowledge the user's mood and energy honestly. "
-        "Celebrate wins specifically. Name blockers and give one concrete suggestion. "
-        "Be warm but brief (under 120 words). Never be generic."
+        "Celebrate wins specifically — name WHAT they did, not generic praise. "
+        "Name blockers and give one concrete suggestion. Be warm but brief (under 120 words). "
+        "BANNED PHRASES — never say these: 'proud of you', 'amazing', 'incredible', 'fantastic', "
+        "'keep your head up', 'stay positive', 'you've got this', 'great job'. "
+        "Instead: name exactly what they did and why it matters."
     )
-    resp = _client.chat.completions.create(
+    resp = groq_complete(
         model=GROQ_MODEL,
         max_tokens=256,
         messages=[{"role": "system", "content": system}, {"role": "user", "content": user_msg}],
@@ -35,17 +35,46 @@ async def generate_checkin_response(
     return resp.choices[0].message.content
 
 
+def _has_progress_content(text: str) -> bool:
+    """Return True if the message contains substantive progress info (not just a bare greeting)."""
+    if not text:
+        return False
+    stripped = text.strip().lower()
+    # Bare openers with no substance
+    bare_openers = {"check in", "checkin", "check-in", "hi", "hello", "hey", "daily check-in", "daily checkin"}
+    if stripped in bare_openers:
+        return False
+    # Must be long enough to contain real content
+    return len(text.split()) >= 4
+
+
 async def run(state: CrisisCoachState) -> dict:
     last_msg = next(
         (m for m in reversed(state["messages"]) if isinstance(m, HumanMessage)), None
     )
     content = last_msg.content if last_msg else ""
-    system = (
-        "You are CrisisCoach. The user wants to do their daily check-in. "
-        "If they haven't provided scores, ask for mood (1-10) and energy (1-10), wins, and blockers. "
-        "If they have, acknowledge warmly and give one targeted piece of advice."
-    )
-    resp = _client.chat.completions.create(
+
+    if _has_progress_content(content):
+        system = (
+            "You are CrisisCoach — a direct, no-fluff career coach for tech professionals in career transition. "
+            "The user has shared what they did today. Acknowledge their progress FIRST — name specifically "
+            "what they did and why it matters (e.g. 'Two applications is concrete pipeline-building; "
+            "the coffee chat is a warm lead worth following up'). Then give one targeted next step. "
+            "Do NOT ask for mood or energy scores — they already shared their update. "
+            "BANNED PHRASES — never say: 'proud of you', 'amazing', 'incredible', 'fantastic', "
+            "'keep your head up', 'stay positive', 'you've got this', 'great job', 'on a scale', 'rate your mood'. "
+            "Acknowledge wins by naming WHAT they did, not generic cheering. Under 150 words."
+        )
+    else:
+        system = (
+            "You are CrisisCoach — a direct, no-fluff career coach for tech professionals in career transition. "
+            "The user wants to do their daily check-in but hasn't shared anything yet. "
+            "Ask them to share: what they got done today, any blockers, and optionally their mood/energy (1-10). "
+            "Keep it to one short question, not a form. "
+            "BANNED PHRASES — never say: 'proud of you', 'amazing', 'incredible', 'fantastic', "
+            "'keep your head up', 'stay positive', 'you've got this', 'great job'."
+        )
+    resp = groq_complete(
         model=GROQ_MODEL,
         max_tokens=512,
         messages=[{"role": "system", "content": system}, {"role": "user", "content": content}],
@@ -57,8 +86,12 @@ async def run(state: CrisisCoachState) -> dict:
         try:
             import asyncio
             from crisiscoach.agents.background.talent_mapper import map_talent
-            asyncio.get_event_loop().create_task(map_talent(user_id))
-        except Exception:
-            pass
+            loop = asyncio.get_event_loop()
+            if loop.is_running():
+                asyncio.ensure_future(map_talent(user_id))
+            else:
+                loop.run_until_complete(map_talent(user_id))
+        except Exception as e:
+            print(f"[DAILY_TRACKER] Background talent map failed: {e}")
 
     return {"response": resp.choices[0].message.content, "sources": []}

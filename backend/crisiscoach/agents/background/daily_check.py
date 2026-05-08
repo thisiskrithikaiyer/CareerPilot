@@ -13,18 +13,16 @@ from datetime import date, timedelta
 from crisiscoach.agents.background.signal_analyzer import analyze
 from crisiscoach.agents.background.plan_prioritizer import prioritize
 from crisiscoach.agents.background.schedule_builder import build_schedule, build_coach_note
-from crisiscoach.agents.background.planner import (
-    LEETCODE_CURRICULUM, BEHAVIORAL_ROTATION,
-    _get_next_leetcode_topic, _get_behavioral_focus,
-)
+from crisiscoach.agents.background.planner import BEHAVIORAL_ROTATION, _get_behavioral_focus
+from crisiscoach.agents.background.role_curriculum import get_next_topic, get_next_system_design, detect_role_type
 
 
-async def build_daily_plan(user_id: str) -> dict:
+async def build_daily_plan(user_id: str, for_date: str | None = None) -> dict:
     from crisiscoach.db.supabase import get_client
     sb = get_client()
 
-    today = date.today()
-    tomorrow = (today + timedelta(days=1)).isoformat()
+    today = date.fromisoformat(for_date) if for_date else date.today()
+    plan_date = today.isoformat()
 
     # ── 1. Analyze signals ────────────────────────────────────────────────────
     signals = await analyze(user_id, sb)
@@ -35,14 +33,51 @@ async def build_daily_plan(user_id: str) -> dict:
     # ── 3. Curriculum progression ─────────────────────────────────────────────
     profile = (
         sb.table("users")
-        .select("layoff_date")
+        .select("search_start_date")
         .eq("id", user_id)
         .single()
         .execute()
     ).data or {}
-    days_since_layoff = 0
-    if profile.get("layoff_date"):
-        days_since_layoff = (today - date.fromisoformat(profile["layoff_date"])).days
+    days_since_start = 0
+    if profile.get("search_start_date"):
+        days_since_start = (today - date.fromisoformat(profile["search_start_date"])).days
+
+    # Read role + curriculum from goal plan (embedded at plan creation time)
+    goal_for_role = (
+        sb.table("goal_plan")
+        .select("goal_stratergy")
+        .eq("user_id", user_id)
+        .order("created_at", desc=True)
+        .limit(1)
+        .execute()
+    ).data
+    goal_stratergy = (goal_for_role[0].get("goal_stratergy") or {}) if goal_for_role else {}
+    role_targets = goal_stratergy.get("role_targets", {})
+    role_text = role_targets.get("realistic") or role_targets.get("stretch") or ""
+
+    # Use embedded curriculum if available, fall back to re-detecting from role text
+    embedded = goal_stratergy.get("curriculum")
+    if embedded:
+        from crisiscoach.agents.background.role_curriculum import detect_role_type
+        _lc_topics = embedded["leetcode_topics"]
+        _sd_concepts = embedded["system_design_concepts"]
+        _role_type = goal_stratergy.get("role_type") or detect_role_type(role_text)
+
+        def get_next_topic(_, completed):  # type: ignore[override]
+            done = {t.lower() for t in completed}
+            for t in _lc_topics:
+                if t["topic"].lower() not in done:
+                    return t
+            return _lc_topics[-1]
+
+        def get_next_system_design(_, completed):  # type: ignore[override]
+            done = {c.lower() for c in completed}
+            for c in _sd_concepts:
+                if c["concept"].lower() not in done:
+                    return c
+            return _sd_concepts[-1]
+    else:
+        _role_type = detect_role_type(role_text)
 
     past_plans = (
         sb.table("plans")
@@ -52,13 +87,20 @@ async def build_daily_plan(user_id: str) -> dict:
         .limit(30)
         .execute()
     ).data or []
-    completed_topics = list({
+    completed_lc_topics = list({
         p["plan_json"]["leetcode_topic"]
         for p in past_plans
         if p.get("plan_json") and p["plan_json"].get("leetcode_topic")
     })
-    next_lc = _get_next_leetcode_topic(completed_topics)
-    behavioral = _get_behavioral_focus(days_since_layoff)
+    completed_sd_concepts = list({
+        p["plan_json"]["system_design_concept"]
+        for p in past_plans
+        if p.get("plan_json") and p["plan_json"].get("system_design_concept")
+    })
+
+    next_lc = get_next_topic(role_text, completed_lc_topics)
+    next_sd = get_next_system_design(role_text, completed_sd_concepts)
+    behavioral = _get_behavioral_focus(days_since_start)
 
     # ── 4. Build time-blocked schedule ───────────────────────────────────────
     schedule = build_schedule(priority, signals, next_lc, behavioral)
@@ -66,24 +108,30 @@ async def build_daily_plan(user_id: str) -> dict:
 
     # ── 5. Compose plan_json ──────────────────────────────────────────────────
     targets = priority["adjusted_targets"]
+    lc_count = targets.get("leetcode_problems", 2)
     plan_json = {
-        "date": tomorrow,
+        "date": plan_date,
         "priority_mode": priority["priority_mode"],
         "mode_reason": priority["mode_reason"],
+        "role_type": _role_type,
         "job_apps": targets.get("job_apps", 8),
         "networking": targets.get("networking", 5),
-        "leetcode_problems": targets.get("leetcode_problems", 2),
+        "leetcode_problems": lc_count,
         "leetcode_topic": next_lc["topic"],
-        "leetcode_suggested": next_lc["problems"][:targets.get("leetcode_problems", 2)],
-        "behavioral_focus": behavioral,
+        "leetcode_suggested": next_lc["problems"][:lc_count],
+        "leetcode_skills": next_lc.get("skills", []),
         "system_design": targets.get("system_design", 1),
+        "system_design_concept": next_sd["concept"],
+        "system_design_key_points": next_sd["key_points"],
+        "system_design_skills": next_sd.get("skills", []),
+        "behavioral_focus": behavioral,
         "coach_note": coach_note,
     }
 
     # ── 6. Save to plans table ────────────────────────────────────────────────
     plan_row = sb.table("plans").insert({
         "user_id": user_id,
-        "date": tomorrow,
+        "date": plan_date,
         "coach_note": coach_note,
         "plan_json": plan_json,
         "schedule": schedule,

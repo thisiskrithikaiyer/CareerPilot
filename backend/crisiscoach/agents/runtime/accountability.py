@@ -1,11 +1,9 @@
 from langchain_core.messages import HumanMessage
 """Accountability agent — reviews task progress and adjusts the plan."""
-from openai import OpenAI
-from crisiscoach.config import GROQ_API_KEY, GROQ_MODEL
+from crisiscoach.utils.groq_client import groq_complete
+from crisiscoach.config import GROQ_MODEL
 from crisiscoach.orchestrator.state import CrisisCoachState
 from crisiscoach.prompts.loader import load_prompt
-
-_client = OpenAI(api_key=GROQ_API_KEY, base_url="https://api.groq.com/openai/v1")
 
 
 async def run(state: CrisisCoachState) -> dict:
@@ -23,7 +21,7 @@ async def run(state: CrisisCoachState) -> dict:
         {"role": "user" if isinstance(m, HumanMessage) else "assistant", "content": m.content}
         for m in state["messages"]
     ]
-    resp = _client.chat.completions.create(
+    resp = groq_complete(
         model=GROQ_MODEL,
         max_tokens=512,
         messages=[{"role": "system", "content": system}, *history],

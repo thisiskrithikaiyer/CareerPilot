@@ -1,8 +1,6 @@
 """LinkedIn enhancer sub-agent — optimizes headline and about section."""
-from openai import OpenAI
-from crisiscoach.config import GROQ_API_KEY, GROQ_MODEL
-
-_client = OpenAI(api_key=GROQ_API_KEY, base_url="https://api.groq.com/openai/v1")
+from crisiscoach.utils.groq_client import groq_complete
+from crisiscoach.config import GROQ_MODEL
 
 
 async def improve_headline(current_headline: str, talent_map: dict) -> str:
@@ -13,7 +11,7 @@ async def improve_headline(current_headline: str, talent_map: dict) -> str:
         f"Highlight: {skills}. Max 220 characters. No hashtags.\n\n"
         f"Current: {current_headline}\n\nImproved:"
     )
-    resp = _client.chat.completions.create(
+    resp = groq_complete(
         model=GROQ_MODEL,
         max_tokens=60,
         temperature=0.3,
@@ -31,7 +29,7 @@ async def improve_about(current_about: str, talent_map: dict) -> str:
         "First person. No clichés like 'passionate' or 'seasoned'.\n\n"
         f"Current:\n{current_about}\n\nImproved:"
     )
-    resp = _client.chat.completions.create(
+    resp = groq_complete(
         model=GROQ_MODEL,
         max_tokens=400,
         temperature=0.3,

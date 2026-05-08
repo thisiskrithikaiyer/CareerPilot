@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CrisisCoach.AI",
-  description: "Let me help you!",
+  title: "CareerPilot",
+  description: "AI-powered career coaching for your next role.",
 };
 
 export default function RootLayout({

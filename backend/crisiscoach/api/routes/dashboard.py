@@ -129,7 +129,7 @@ async def get_dashboard(user: dict = Depends(get_current_user)):
         # ── User profile ──────────────────────────────────────────────────────
         profile = (
             sb.table("users")
-            .select("layoff_date, visa_deadline, runway_weeks, open_tasks, phase, "
+            .select("search_start_date, runway_weeks, open_tasks, phase, "
                     "talent_map, tracking_skills, role, leetcode_level, intake_complete")
             .eq("id", user_id)
             .single()
@@ -137,12 +137,10 @@ async def get_dashboard(user: dict = Depends(get_current_user)):
         ).data or {}
 
         days_since = None
-        if profile.get("layoff_date"):
-            days_since = (date.today() - date.fromisoformat(profile["layoff_date"])).days
+        if profile.get("search_start_date"):
+            days_since = (date.today() - date.fromisoformat(profile["search_start_date"])).days
 
         deadline_candidates = []
-        if profile.get("visa_deadline"):
-            deadline_candidates.append((date.fromisoformat(profile["visa_deadline"]) - date.today()).days)
         if profile.get("runway_weeks") is not None:
             deadline_candidates.append(profile["runway_weeks"] * 7)
         days_left = min(deadline_candidates) if deadline_candidates else None

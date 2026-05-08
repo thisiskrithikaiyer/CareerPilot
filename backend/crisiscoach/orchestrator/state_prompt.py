@@ -8,7 +8,7 @@ from crisiscoach.orchestrator.state import CrisisCoachState
 # Ordered list of (state_key, display_label, formatter)
 _FIELDS: list[tuple[str, str, callable]] = [
     ("phase",          "Phase",                   str),
-    ("days_since",     "Days since layoff",        str),
+    ("days_since",     "Days into search",         str),
     ("days_left",      "Days left to offer",       str),
     ("mood_score",     "Last mood",                lambda v: f"{v}/10"),
     ("energy_score",   "Last energy",              lambda v: f"{v}/10"),

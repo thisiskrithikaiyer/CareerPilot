@@ -1,26 +1,47 @@
 [
   {
     "id": "intake_001",
-    "input": "I just got laid off yesterday from my job of 3 years. I don't know what to do.",
+    "phase": "intake",
+    "input": "I'm ready to find my next role. Not sure where to start.",
     "expected_intent": "intake",
-    "expected_tone": "empathetic",
-    "must_contain": ["feel", "next step"],
+    "expected_tone": "direct",
+    "must_contain_one_of": ["role", "what kind", "targeting", "engineer", "position"],
     "must_not_contain": ["don't worry", "everything will be fine"]
   },
   {
     "id": "intake_002",
-    "input": "Hi, I'm new here. I was laid off last month from a software engineering role.",
+    "phase": "intake",
+    "input": "Hi, I'm new here. I'm a software engineer looking for my next opportunity.",
     "expected_intent": "intake",
     "expected_tone": "welcoming",
-    "must_contain": ["layoff date", "visa", "runway"],
+    "must_contain_one_of": ["timeline", "offer", "months", "urgency", "when", "long", "how soon"],
     "must_not_contain": []
   },
   {
     "id": "intake_003",
-    "input": "Can you help me figure out my next move? I'm a senior PM who just lost my job.",
+    "phase": "intake",
+    "input": "Can you help me figure out my next move? I'm a senior PM exploring new roles.",
     "expected_intent": "intake",
     "expected_tone": "direct",
-    "must_contain": ["strengths", "target"],
-    "must_not_contain": ["sorry to hear"]
+    "must_contain_one_of": ["timeline", "offer", "months", "urgency", "when", "role", "targeting"],
+    "must_not_contain": []
+  },
+  {
+    "id": "intake_004",
+    "phase": "intake",
+    "input": "Software Engineer",
+    "expected_intent": "intake",
+    "expected_tone": "direct",
+    "must_contain_one_of": ["timeline", "offer", "months", "urgency", "when", "how long", "soon"],
+    "must_not_contain": []
+  },
+  {
+    "id": "intake_005",
+    "phase": "intake",
+    "input": "3-6 months, I have some runway",
+    "expected_intent": "intake",
+    "expected_tone": "direct",
+    "must_contain_one_of": ["role", "what kind", "targeting", "engineer", "PM", "position"],
+    "must_not_contain": ["sorry"]
   }
 ]

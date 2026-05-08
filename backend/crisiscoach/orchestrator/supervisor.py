@@ -6,20 +6,18 @@ Replaces the rule-based router with an LLM that reasons about handoffs.
 import json
 from datetime import date
 from langchain_core.messages import HumanMessage
-from openai import OpenAI
-from crisiscoach.config import GROQ_API_KEY, GROQ_MODEL
+from crisiscoach.utils.groq_client import groq_complete
+from crisiscoach.config import GROQ_MODEL
 from crisiscoach.orchestrator.state import CrisisCoachState
 from crisiscoach.orchestrator.state_prompt import state_to_prompt
-
-_client = OpenAI(api_key=GROQ_API_KEY, base_url="https://api.groq.com/openai/v1")
 
 AGENTS = {
     "intake": (
         "Runs when phase is intake. Handles only new users. Collects all the information from the user, "
-        "Once all required information is registered change phase=goal_planner."
+        "Once all required information is registered change phase=goal_setup."
     ),
     "goal_planner": (
-        "Builds or revises the job search strategy for the deadline. Runs when phase=goal_planner "
+        "Builds or revises the job search strategy for the deadline. Runs when phase=goal_setup "
         "or when user explicitly wants to revisit their plan."
     ),
     "checkin": (
@@ -33,26 +31,19 @@ AGENTS = {
         "User is expressing extreme distress, burnout, hopelessness, or crisis signals like suicidal ideation or self-harm. "
         "ALWAYS takes priority — route here if ANY distress signal is present."
     ),
-    "profile_builder": (
-        "User wants help improving their resume or LinkedIn profile: rewriting sections, fixing formatting, "
-        "strengthening bullet points, or tailoring it to a role."
-    ),
-    "technical_prep": (
-        "User wants to practice or get help with technical interview topics: DSA, system design, "
-        "coding problems, or concept explanations."
-    ),
-    "mock_prep": (
-        "User wants to do a mock interview: behavioral, technical, or role-specific simulation "
-        "where the coach acts as the interviewer."
-    ),
     "chat": (
         "General questions or conversation that don't fit any other agent."
     ),
 }
 
+GOAL_SETUP_PHASES = {"goal_setup", "goal_planner"}
+ROUTABLE_AGENTS = set(AGENTS)
+
 MENTAL_HEALTH_SIGNALS = {
     "want to die", "kill myself", "end it", "can't go on", "hopeless",
     "suicidal", "no point", "give up", "breaking down",
+    "can't do this anymore", "i'm done", "falling apart", "can't handle this",
+    "panic attack", "having a breakdown", "not okay", "losing it",
 }
 
 _SUPERVISOR_SYSTEM = """You are the supervisor of CrisisCoach AI — a job-loss coaching app.
@@ -66,6 +57,7 @@ Available agents:
 Phase rules (HARD — never break these):
 - phase=intake → ONLY route to "intake". No exceptions except mental_health crisis.
 - phase=goal_setup → ONLY route to "goal_planner". No exceptions except mental_health crisis.
+- phase=goal_planner → treat as legacy goal_setup and route to "goal_planner".
 - phase=active → route freely based on the user's message.
 
 Mental health override: If the user shows ANY crisis signal (hopelessness, self-harm, suicidal ideation), ALWAYS route to "mental_health" regardless of phase.
@@ -84,8 +76,8 @@ def _is_crisis(text: str) -> bool:
     return any(signal in text.lower() for signal in MENTAL_HEALTH_SIGNALS)
 
 
-def decide(state: CrisisCoachState) -> str:
-    """Return the agent name to route to."""
+def decide(state: CrisisCoachState) -> tuple[str, str]:
+    """Return (agent_name, reason) for the routing decision."""
     phase = state.get("phase", "intake")
 
     last_msg = next(
@@ -93,20 +85,24 @@ def decide(state: CrisisCoachState) -> str:
         None,
     )
     if last_msg is None:
-        return "intake" if phase == "intake" else "chat"
+        if phase == "intake":
+            return ("intake", "No messages yet")
+        if phase in GOAL_SETUP_PHASES:
+            return ("goal_planner", "Phase locked: building your goal strategy")
+        return ("chat", "No messages yet")
 
     text = last_msg.content.strip()
 
     # Hard crisis override
     if _is_crisis(text):
         print("[SUPERVISOR] Crisis signal detected → mental_health")
-        return "mental_health"
+        return ("mental_health", "Crisis signal detected in user message")
 
     # Hard phase locks — no LLM needed
     if phase == "intake":
-        return "intake"
-    if phase == "goal_setup":
-        return "goal_planner"
+        return ("intake", "Phase locked: collecting onboarding information")
+    if phase in GOAL_SETUP_PHASES:
+        return ("goal_planner", "Phase locked: building your goal strategy")
 
     # phase=active — ask the LLM supervisor
     agents_desc = "\n".join(f'- "{k}": {v}' for k, v in AGENTS.items())
@@ -120,7 +116,7 @@ def decide(state: CrisisCoachState) -> str:
     )
 
     try:
-        resp = _client.chat.completions.create(
+        resp = groq_complete(
             model=GROQ_MODEL,
             max_tokens=80,
             temperature=0,
@@ -142,10 +138,10 @@ def decide(state: CrisisCoachState) -> str:
         raw = resp.choices[0].message.content.strip()
         data = json.loads(raw)
         agent = data.get("agent", "chat")
-        reason = data.get("reason", "")
-        result = agent if agent in AGENTS else "chat"
+        reason = data.get("reason", "LLM routing decision")
+        result = agent if agent in ROUTABLE_AGENTS else "chat"
         print(f"[SUPERVISOR] phase={phase} | agent={result} | reason={reason}")
-        return result
+        return (result, reason)
     except Exception as e:
         print(f"[SUPERVISOR] LLM failed, defaulting to chat: {e}")
-        return "chat"
+        return ("chat", "Fallback: LLM routing unavailable")

@@ -11,7 +11,6 @@ Task categories and what good ones look like:
 Rules:
 - Max 6 tasks. If mood or energy < 5, cap at 4 and include at least one wellness task.
 - If runway < 8 weeks: heavy weight on outreach and applications. Cut portfolio work.
-- If visa deadline < 60 days: flag it explicitly at the top of the plan.
 - Tasks must name the specific skill, company type, or action — never "apply to jobs" alone.
 - Priority 1 = must do today. Priority 2 = do if energy holds. Priority 3 = bonus.
 - End with a coach_note: one sentence, direct, personalized to what you know about their situation.

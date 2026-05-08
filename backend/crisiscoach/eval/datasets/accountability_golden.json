@@ -1,18 +1,29 @@
 [
   {
     "id": "acct_001",
+    "phase": "active",
     "input": "I applied to 2 jobs today and had a coffee chat with an old colleague.",
-    "expected_intent": "accountability",
+    "expected_intent": "checkin",
     "expected_tone": "encouraging_specific",
-    "must_contain_one_of": ["coffee chat", "colleague", "network"],
-    "must_not_contain": ["great job", "proud of you"]
+    "must_contain_one_of": ["coffee chat", "colleague", "network", "applied", "application"],
+    "must_not_contain": ["great job", "proud of you", "amazing", "fantastic", "incredible"]
   },
   {
     "id": "acct_002",
+    "phase": "active",
     "input": "I didn't do anything today. I just couldn't get started.",
     "expected_intent": "accountability",
     "expected_tone": "empathetic_direct",
-    "must_contain_one_of": ["one thing", "small step", "start"],
-    "must_not_contain": ["you should", "you need to", "you must"]
+    "must_contain_one_of": ["one thing", "small step", "start", "tomorrow", "next"],
+    "must_not_contain": ["you need to", "you must", "you should have"]
+  },
+  {
+    "id": "acct_003",
+    "phase": "active",
+    "input": "I've been slacking this whole week, nothing got done.",
+    "expected_intent": "accountability",
+    "expected_tone": "direct",
+    "must_contain_one_of": ["week", "plan", "reset", "tomorrow", "next", "smallest"],
+    "must_not_contain": ["amazing", "incredible", "fantastic"]
   }
 ]

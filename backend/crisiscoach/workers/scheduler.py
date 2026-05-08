@@ -1,23 +1,10 @@
-"""Cron job scheduler — visa countdown, finance checks, interview prep (APScheduler)."""
+"""Cron job scheduler — finance checks, interview prep (APScheduler)."""
 import asyncio
 import logging
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 logger = logging.getLogger(__name__)
-
-
-async def _run_visa_checks() -> None:
-    from crisiscoach.db.supabase import get_client
-    from crisiscoach.agents.background.visa_support_agent import run_for_user
-
-    sb = get_client()
-    users = sb.table("users").select("id").not_.is_("visa_deadline", "null").execute()
-    for u in users.data:
-        try:
-            await run_for_user(u["id"])
-        except Exception as e:
-            logger.error(f"visa_check failed for {u['id']}: {e}")
 
 
 async def _run_finance_checks() -> None:
@@ -46,17 +33,31 @@ async def _run_interview_prep() -> None:
             logger.error(f"interview_prep failed for {u['id']}: {e}")
 
 
+async def _run_target_recalibration() -> None:
+    from crisiscoach.db.supabase import get_client
+    from crisiscoach.agents.background.target_recalibrator import recalibrate_targets
+
+    sb = get_client()
+    # Only run for users who have committed to a goal plan (phase=active)
+    users = sb.table("users").select("id").eq("phase", "active").execute()
+    for u in users.data:
+        try:
+            await recalibrate_targets(u["id"])
+        except Exception as e:
+            logger.error(f"target_recalibration failed for {u['id']}: {e}")
+
+
 def build_scheduler() -> AsyncIOScheduler:
     scheduler = AsyncIOScheduler()
-
-    # Visa check — daily at 8 AM
-    scheduler.add_job(_run_visa_checks, CronTrigger(hour=8, minute=0), id="visa_check")
 
     # Finance check — every Sunday at 9 AM
     scheduler.add_job(_run_finance_checks, CronTrigger(day_of_week="sun", hour=9), id="finance_check")
 
     # Interview prep — every Monday at 7 AM
     scheduler.add_job(_run_interview_prep, CronTrigger(day_of_week="mon", hour=7), id="interview_prep")
+
+    # Target recalibration — every Sunday at 6 AM (before finance check)
+    scheduler.add_job(_run_target_recalibration, CronTrigger(day_of_week="sun", hour=6), id="target_recalibration")
 
     return scheduler
 

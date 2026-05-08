@@ -1,9 +1,7 @@
 """Interview prep agent — weekly prep plan based on target roles and interview stage."""
 import json
-from openai import OpenAI
-from crisiscoach.config import GROQ_API_KEY, GROQ_MODEL
-
-_client = OpenAI(api_key=GROQ_API_KEY, base_url="https://api.groq.com/openai/v1")
+from crisiscoach.utils.groq_client import groq_complete
+from crisiscoach.config import GROQ_MODEL
 
 
 async def generate_prep_plan(user_id: str) -> dict:
@@ -32,7 +30,7 @@ async def generate_prep_plan(user_id: str) -> dict:
         '"mock_question": "...", "resource": "..."}. '
         "Be specific to their target role. No generic tips."
     )
-    resp = _client.chat.completions.create(
+    resp = groq_complete(
         model=GROQ_MODEL,
         max_tokens=768,
         temperature=0.3,

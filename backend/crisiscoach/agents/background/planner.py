@@ -1,10 +1,8 @@
 """Planner agent — builds tomorrow's focused daily plan based on last 5 days of activity."""
 import json
 from datetime import date, timedelta
-from openai import OpenAI
-from crisiscoach.config import GROQ_API_KEY, GROQ_MODEL
-
-_client = OpenAI(api_key=GROQ_API_KEY, base_url="https://api.groq.com/openai/v1")
+from crisiscoach.utils.groq_client import groq_complete
+from crisiscoach.config import GROQ_MODEL
 
 # Ordered leetcode topic curriculum — planner advances through this based on what's been done
 LEETCODE_CURRICULUM = [
@@ -58,10 +56,10 @@ async def generate_plan(user_id: str) -> dict:
     sb = get_client()
 
     # Load user profile for goal targets
-    profile = (sb.table("users").select("layoff_date").eq("id", user_id).single().execute()).data or {}
-    days_since_layoff = 0
-    if profile.get("layoff_date"):
-        days_since_layoff = (date.today() - date.fromisoformat(profile["layoff_date"])).days
+    profile = (sb.table("users").select("search_start_date").eq("id", user_id).single().execute()).data or {}
+    days_since_start = 0
+    if profile.get("search_start_date"):
+        days_since_start = (date.today() - date.fromisoformat(profile["search_start_date"])).days
 
     # Last goal plan for targets
     goal_row = (
@@ -103,7 +101,7 @@ async def generate_plan(user_id: str) -> dict:
         if p.get("plan_json") and p["plan_json"].get("leetcode_topic")
     })
     next_lc = _get_next_leetcode_topic(completed_topics)
-    behavioral = _get_behavioral_focus(days_since_layoff)
+    behavioral = _get_behavioral_focus(days_since_start)
 
     # Targets from goal plan, fallback to sensible defaults
     app_target = goal_targets.get("applications", 8)
@@ -123,7 +121,7 @@ async def generate_plan(user_id: str) -> dict:
         for r in logs_asc
     ])
 
-    coach_resp = _client.chat.completions.create(
+    coach_resp = groq_complete(
         model=GROQ_MODEL,
         max_tokens=120,
         temperature=0.3,
@@ -148,7 +146,7 @@ async def generate_plan(user_id: str) -> dict:
         "leetcode_topic": next_lc["topic"],
         "leetcode_suggested": next_lc["problems"][:lc_target],
         "behavioral_focus": behavioral,
-        "system_design": 1 if days_since_layoff % 3 == 0 else 0,  # every 3 days
+        "system_design": 1 if days_since_start % 3 == 0 else 0,  # every 3 days
         "coach_note": coach_note,
     }
 

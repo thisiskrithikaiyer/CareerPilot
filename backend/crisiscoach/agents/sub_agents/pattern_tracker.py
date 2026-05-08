@@ -1,8 +1,6 @@
 """Pattern tracker sub-agent — detects behavioral patterns across check-ins and plans."""
-from openai import OpenAI
-from crisiscoach.config import GROQ_API_KEY, GROQ_MODEL
-
-_client = OpenAI(api_key=GROQ_API_KEY, base_url="https://api.groq.com/openai/v1")
+from crisiscoach.utils.groq_client import groq_complete
+from crisiscoach.config import GROQ_MODEL
 
 
 async def detect_patterns(user_id: str) -> dict:
@@ -50,7 +48,7 @@ async def detect_patterns(user_id: str) -> dict:
         'Output JSON: {"patterns": [...], "coaching_nudge": "..."}. '
         "Be specific. No generic observations."
     )
-    resp = _client.chat.completions.create(
+    resp = groq_complete(
         model=GROQ_MODEL,
         max_tokens=256,
         temperature=0.2,

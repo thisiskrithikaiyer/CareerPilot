@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Message, sendMessage, fetchChatHistory, AuthError } from "@/lib/api";
+import { Message, AgentEvent, sendMessage, fetchChatHistory, AuthError } from "@/lib/api";
 import ChatBubble from "./ChatBubble";
 
 // Format agent id → display name  e.g. "job_search_coach" → "Job Search Coach"
@@ -19,6 +19,8 @@ interface Props {
   onPendingConsumed?: () => void;
   onHistoryLoaded?: () => void;
   onAuthError?: () => void;
+  onAgentEvents?: (events: AgentEvent[]) => void;
+  onLoadingChange?: (loading: boolean) => void;
 }
 
 export default function ChatWindow({
@@ -27,6 +29,8 @@ export default function ChatWindow({
   onPendingConsumed,
   onHistoryLoaded,
   onAuthError,
+  onAgentEvents,
+  onLoadingChange,
 }: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [items, setItems] = useState<ChatItem[]>([]);
@@ -73,6 +77,7 @@ export default function ChatWindow({
     setChips([]);
     setInput("");
     setLoading(true);
+    onLoadingChange?.(true);
     setError(null);
 
     if (isFirst) onFirstMessage?.();
@@ -81,6 +86,10 @@ export default function ChatWindow({
       const res = await sendMessage(updatedMessages);
       const agent = res.agent;
       const assistantMsg: Message = { role: "assistant", content: res.reply };
+
+      if (res.agent_events?.length) {
+        onAgentEvents?.(res.agent_events);
+      }
 
       setMessages([...updatedMessages, assistantMsg]);
       setChips(res.chips ?? []);
@@ -100,6 +109,7 @@ export default function ChatWindow({
       setError(e instanceof Error ? e.message : "Something went wrong.");
     } finally {
       setLoading(false);
+      onLoadingChange?.(false);
     }
   }
 
@@ -109,7 +119,7 @@ export default function ChatWindow({
       <div className="flex-1 overflow-y-auto p-3 bg-gray-50">
         {items.length === 0 && (
           <p className="text-center text-gray-400 mt-10 text-xs leading-relaxed px-2">
-            Hi, I&apos;m CrisisCoach.<br />How are you feeling today?
+            Hi, I&apos;m CrisisCoach.<br />What are you working toward?
           </p>
         )}
 

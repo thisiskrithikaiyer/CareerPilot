@@ -1,9 +1,7 @@
 """Severance agent — parses severance package on onboarding and tracks declining balance."""
 import json
-from openai import OpenAI
-from crisiscoach.config import GROQ_API_KEY, GROQ_MODEL
-
-_client = OpenAI(api_key=GROQ_API_KEY, base_url="https://api.groq.com/openai/v1")
+from crisiscoach.utils.groq_client import groq_complete
+from crisiscoach.config import GROQ_MODEL
 
 
 async def parse_severance(user_id: str, raw_text: str) -> dict:
@@ -18,7 +16,7 @@ async def parse_severance(user_id: str, raw_text: str) -> dict:
         '"signing_deadline_days": <int|null>, "equity_cliff_preserved": <bool>}. '
         "Use null for missing fields."
     )
-    resp = _client.chat.completions.create(
+    resp = groq_complete(
         model=GROQ_MODEL,
         max_tokens=256,
         temperature=0,

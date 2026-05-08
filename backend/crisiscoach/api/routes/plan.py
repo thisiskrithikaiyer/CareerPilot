@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
@@ -26,20 +27,25 @@ class TaskUpdateRequest(BaseModel):
     completed: bool
 
 
+class GeneratePlanRequest(BaseModel):
+    target_date: Optional[str] = None
+
+
 @router.get("/plan/today")
-async def get_today_plan(user: dict = Depends(get_current_user)):
+async def get_today_plan(target_date: Optional[str] = None, user: dict = Depends(get_current_user)):
     user_id = user.get("sub", "")
     try:
         from crisiscoach.db.supabase import get_client
         from datetime import date
 
         sb = get_client()
-        today = date.today().isoformat()
+        today = target_date or date.today().isoformat()
         result = (
             sb.table("plans")
             .select("id, date, coach_note, plan_json, schedule, priority_mode")
             .eq("user_id", user_id)
             .eq("date", today)
+            .order("created_at", desc=True)
             .limit(1)
             .execute()
         )
@@ -72,12 +78,25 @@ async def update_task(task_id: str, body: TaskUpdateRequest, user: dict = Depend
 
 
 @router.post("/plan/generate")
-async def trigger_plan_generation(user: dict = Depends(get_current_user)):
-    """Generate today's daily plan immediately (no Redis queue)."""
+async def trigger_plan_generation(
+    body: Optional[GeneratePlanRequest] = None,
+    user: dict = Depends(get_current_user),
+):
+    """Generate a daily plan immediately. Pass target_date (YYYY-MM-DD) to build for a specific day."""
     user_id = user.get("sub", "")
+    target_date = body.target_date if body else None
     try:
         from crisiscoach.agents.background.daily_check import build_daily_plan
-        result = await build_daily_plan(user_id)
-        return {"ok": True, **result}
+        from datetime import date
+        result = await build_daily_plan(user_id, for_date=target_date)
+        plan_json = result["plan"]
+        return {
+            "plan_id": result["plan_id"],
+            "date": plan_json.get("date", date.today().isoformat()),
+            "coach_note": plan_json.get("coach_note", ""),
+            "priority_mode": plan_json.get("priority_mode", "standard"),
+            "schedule": result.get("schedule") or {},
+            **plan_json,
+        }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -1,8 +1,6 @@
 """Pause agent — nightly burnout signal check. Flags users who need a rest day."""
-from openai import OpenAI
-from crisiscoach.config import GROQ_API_KEY, GROQ_MODEL
-
-_client = OpenAI(api_key=GROQ_API_KEY, base_url="https://api.groq.com/openai/v1")
+from crisiscoach.utils.groq_client import groq_complete
+from crisiscoach.config import GROQ_MODEL
 
 BURNOUT_THRESHOLD_MOOD = 4       # avg mood below this triggers flag
 BURNOUT_THRESHOLD_DAYS = 3       # consecutive low-mood days
@@ -44,7 +42,7 @@ def _generate_pause_recommendation(avg_mood: float, avg_energy: float) -> str:
         "Write a brief (2-3 sentence) compassionate message telling them it's okay to take a rest day "
         "and suggesting one restorative activity. Be direct, not saccharine."
     )
-    resp = _client.chat.completions.create(
+    resp = groq_complete(
         model=GROQ_MODEL,
         max_tokens=128,
         messages=[{"role": "user", "content": prompt}],

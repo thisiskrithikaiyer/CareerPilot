@@ -1,14 +1,14 @@
 "use client";
 
 const CHIPS = [
-  { label: "Lost my job recently", icon: "💼" },
-  { label: "Overwhelmed at work", icon: "🔥" },
-  { label: "Anxiety & stress", icon: "😰" },
-  { label: "Burnout", icon: "😞" },
-  { label: "Financial pressure", icon: "💸" },
-  { label: "Career uncertainty", icon: "🧭" },
-  { label: "Relationship difficulties", icon: "💔" },
-  { label: "Just feeling lost", icon: "🌫️" },
+  { label: "I want to land a new role", icon: "🎯" },
+  { label: "Between jobs", icon: "💼" },
+  { label: "Switching industries", icon: "🔄" },
+  { label: "Targeting Big Tech", icon: "🏢" },
+  { label: "Need to level up my skills", icon: "📈" },
+  { label: "Struggling with interviews", icon: "🎤" },
+  { label: "Not getting callbacks", icon: "📬" },
+  { label: "Just starting my search", icon: "🚀" },
 ];
 
 export default function OnboardingWelcome({
@@ -21,13 +21,16 @@ export default function OnboardingWelcome({
       {/* Hero */}
       <div className="px-8 pt-10 pb-7">
         <span className="inline-block text-xs font-semibold tracking-widest text-violet-500 uppercase mb-3">
-          Your personal crisis coach
+          AI job coaching platform
         </span>
         <h2 className="text-2xl font-bold text-gray-900 leading-snug mb-2.5">
-          I&apos;m sorry you&apos;re going through this.
+          Let&apos;s land your next role.
         </h2>
         <p className="text-sm text-gray-500 leading-relaxed max-w-lg">
-          I&apos;m here to help you cut through the chaos, find clarity, and take back control — one step at a time. Let&apos;s figure this out together.
+          I&apos;m your AI job coach. Tell me your target role and timeline, and I&apos;ll build a personalized plan — then schedule every single day around hitting that goal.
+        </p>
+        <p className="text-sm text-gray-500 leading-relaxed max-w-lg mt-3">
+          No generic advice. I&apos;ll ask the right questions, learn your situation, and give you a focused daily schedule: what to study, what to apply to, and what to work on — in priority order.
         </p>
       </div>
 
@@ -36,7 +39,7 @@ export default function OnboardingWelcome({
       {/* Chips */}
       <div className="px-8 pt-6 pb-6 flex-1 overflow-y-auto">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
-          What&apos;s going on?
+          What&apos;s your situation?
         </p>
         <div className="flex flex-wrap gap-2.5">
           {CHIPS.map(({ label, icon }) => (
@@ -52,7 +55,7 @@ export default function OnboardingWelcome({
         </div>
 
         <p className="mt-7 text-xs text-gray-400">
-          Or type anything in the chat — I&apos;m listening.
+          Pick one to get started, or just describe your goal — I&apos;ll take it from there and build your schedule.
         </p>
       </div>
     </div>

@@ -1,27 +1,57 @@
 [
   {
     "id": "checkin_001",
+    "phase": "active",
     "input": {
       "mood_score": 3,
       "energy_score": 2,
       "wins": [],
       "blockers": ["Can't stop doom-scrolling job boards", "No responses from recruiters"]
     },
+    "expected_intent": "accountability",
     "expected_tone": "empathetic_direct",
-    "must_acknowledge": "low mood",
-    "must_address": "blocker",
+    "must_contain_one_of": ["recruiter", "doom", "energy", "tough", "hard", "rough"],
     "must_not_contain": ["keep your head up", "stay positive"]
   },
   {
     "id": "checkin_002",
+    "phase": "active",
     "input": {
       "mood_score": 8,
       "energy_score": 7,
       "wins": ["Got a recruiter screen scheduled", "Finished tailoring resume"],
       "blockers": []
     },
+    "expected_intent": "checkin",
     "expected_tone": "celebratory_specific",
-    "must_acknowledge": "recruiter screen",
+    "must_contain_one_of": ["recruiter", "screen", "resume", "tailored"],
     "must_not_contain": ["amazing", "incredible"]
+  },
+  {
+    "id": "checkin_003_freeform_wins",
+    "phase": "active",
+    "input": "I applied to 2 jobs and had a coffee chat today",
+    "expected_intent": "checkin",
+    "expected_tone": "acknowledges_specific_wins",
+    "must_contain_one_of": ["applied", "application", "coffee chat", "coffee", "jobs"],
+    "must_not_contain": ["on a scale", "rate your mood", "what's your mood", "what's your energy", "mood score", "energy score"]
+  },
+  {
+    "id": "checkin_004_freeform_blocker",
+    "phase": "active",
+    "input": "Sent out 3 applications but got rejected from the Amazon loop I was really counting on",
+    "expected_intent": "accountability",
+    "expected_tone": "acknowledges_wins_and_blocker",
+    "must_contain_one_of": ["Amazon", "rejection", "rejected", "loop", "application", "3"],
+    "must_not_contain": ["you've got this", "stay positive", "keep your head up"]
+  },
+  {
+    "id": "checkin_005_bare_opener",
+    "phase": "active",
+    "input": "check in",
+    "expected_intent": "checkin",
+    "expected_tone": "prompts_for_update",
+    "must_contain_one_of": ["today", "done", "blockers", "wins", "progress", "get done", "accomplished"],
+    "must_not_contain": ["keep your head up", "stay positive", "you've got this"]
   }
 ]

@@ -1,37 +1,41 @@
-"""Ingest company hiring signals and culture intel into vector store."""
+"""Ingest company profiles from data/companies.json into vector store."""
 import asyncio
+import json
+from pathlib import Path
 from crisiscoach.agents.background.fact_checker import ingest_document
 
 COLLECTION = "company_db"
+_DATA_FILE = Path(__file__).parent.parent / "data" / "companies.json"
 
 
-async def ingest_company(
-    company_name: str,
-    hiring_signals: list[str],
-    culture_notes: list[str],
-    source_url: str,
-):
-    chunks = [
-        f"{company_name} hiring signal: {s}" for s in hiring_signals
-    ] + [
-        f"{company_name} culture: {c}" for c in culture_notes
-    ]
-    return await ingest_document(
-        collection_name=COLLECTION,
-        source_url=source_url,
-        chunks=chunks,
-        metadata={"company": company_name, "domain": "company_intel"},
-    )
+async def ingest_all_companies():
+    companies = json.loads(_DATA_FILE.read_text())
+    total = 0
+    for company in companies:
+        name = company["name"]
+        chunks = []
+        for signal in company.get("hiring_signals", []):
+            chunks.append(f"{name} hiring signal: {signal}")
+        for note in company.get("culture_notes", []):
+            chunks.append(f"{name} culture: {note}")
+        for step in company.get("interview_process", []):
+            chunks.append(f"{name} interview process: {step}")
+        stack = company.get("tech_stack", [])
+        if stack:
+            chunks.append(f"{name} tech stack: {', '.join(stack)}")
+        roles = company.get("roles_commonly_open", [])
+        if roles:
+            chunks.append(f"{name} commonly hires: {', '.join(roles)}")
 
-
-async def ingest_seed_data():
-    await ingest_company(
-        company_name="Example Corp",
-        hiring_signals=["Posted 12 SWE roles in last 30 days", "Recently raised Series B"],
-        culture_notes=["Known for async culture", "Strong eng blog with technical depth"],
-        source_url="crisiscoach://seed/company/example",
-    )
+        result = await ingest_document(
+            collection_name=COLLECTION,
+            source_url=f"crisiscoach://seed/company/{name.lower().replace(' ', '_')}",
+            chunks=chunks,
+            metadata={"company": name, "tier": company.get("tier", ""), "domain": "company_intel"},
+        )
+        total += result["ingested"]
+    return {"ingested": total, "companies": len(companies)}
 
 
 if __name__ == "__main__":
-    asyncio.run(ingest_seed_data())
+    asyncio.run(ingest_all_companies())

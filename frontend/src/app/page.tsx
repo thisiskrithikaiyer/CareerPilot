@@ -1,99 +1,244 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import ChatWindow from "@/components/ChatWindow";
-import CrisisTracker from "@/components/CrisisTracker";
-import OnboardingWelcome from "@/components/OnboardingWelcome";
+import CoachView from "@/components/CoachView";
+import TodayPlanView from "@/components/TodayPlanView";
+import ProgressView from "@/components/ProgressView";
 import AuthScreen from "@/components/AuthScreen";
-import { getToken, clearToken } from "@/lib/api";
+import AgentFlowPanel from "@/components/AgentFlowPanel";
+import IntakeChatView from "@/components/IntakeChatView";
+import ExtrasForm from "@/components/ExtrasForm";
+import PlanningLoader from "@/components/PlanningLoader";
+import PlanVerdictView from "@/components/PlanVerdictView";
+import {
+  getToken,
+  clearToken,
+  AgentEvent,
+  GoalPlan,
+  IntakeFields,
+  submitIntake,
+  getIntakeStatus,
+  streamChat,
+  fetchGoalPlan,
+  generatePlanForDate,
+  getSessionDate,
+  advanceSessionDate,
+} from "@/lib/api";
+
+type AppView = "questionnaire" | "extras" | "loading" | "verdict" | "dashboard";
+type DashTab = "today" | "progress";
 
 export default function Home() {
   const [hydrated, setHydrated] = useState(false);
   const [authed, setAuthed] = useState(false);
-  const [isNewUser, setIsNewUser] = useState(true);
-  const [isLaidOff, setIsLaidOff] = useState(false);
-  const [pendingMessage, setPendingMessage] = useState<string | undefined>();
+  const [view, setView] = useState<AppView>("questionnaire");
+  const [agentEvents, setAgentEvents] = useState<AgentEvent[]>([]);
+  const [chatLoading, setChatLoading] = useState(false);
+  const [pendingPlan, setPendingPlan] = useState<GoalPlan | null>(null);
+  const [intakeFields, setIntakeFields] = useState<Partial<IntakeFields>>({});
+  const [planRefreshKey, setPlanRefreshKey] = useState(0);
+  const [dashTab, setDashTab] = useState<DashTab>("today");
+  const [sessionDate, setSessionDate] = useState<string>(() => getSessionDate());
+
+  async function resolveView() {
+    try {
+      const status = await getIntakeStatus();
+      setView(status.intake_complete ? "dashboard" : "questionnaire");
+    } catch {
+      setView("questionnaire");
+    }
+  }
 
   useEffect(() => {
-    if (getToken()) setAuthed(true);
-    if (localStorage.getItem("cc_laid_off") === "1") {
-      setIsLaidOff(true);
-      setIsNewUser(false);
+    if (!getToken()) {
+      setHydrated(true);
+      return;
     }
-    setHydrated(true);
+    setAuthed(true);
+    resolveView().then(() => setHydrated(true));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function markLaidOff() {
-    localStorage.setItem("cc_laid_off", "1");
-    setIsLaidOff(true);
+  async function handleAuth() {
+    setAuthed(true);
+    await resolveView();
   }
 
-  function clearLaidOff() {
-    localStorage.removeItem("cc_laid_off");
-    setIsLaidOff(false);
+  // Called by IntakeChatView when agent marks intake_complete
+  function handleIntakeQuestionsComplete(fields: Partial<IntakeFields>) {
+    setIntakeFields(fields);
+    setView("extras");
   }
 
-  function handleChipClick(text: string) {
-    setIsNewUser(false);
-    setPendingMessage(text);
-    if (/job|laid.?off/i.test(text)) markLaidOff();
+  // Called when user submits the extras form (resume)
+  async function handleExtrasSubmit(extras: Partial<IntakeFields>) {
+    const merged = { ...intakeFields, ...extras } as IntakeFields;
+    setView("loading");
+    setChatLoading(true);
+    // Keep existing intake agent events — don't wipe history
+
+    try {
+      await submitIntake(merged);
+
+      // Use streamChat so agent routing events hit the panel in real time
+      await streamChat(
+        [{ role: "user", content: "I've completed my intake. Please build my personalized 60-day career plan now." }],
+        (event) => {
+          if (event.type === "agent_event") {
+            setAgentEvents((prev) => [...prev, {
+              agent: event.agent!,
+              display_name: event.display_name!,
+              reason: event.reason!,
+              timestamp: event.timestamp!,
+            }]);
+          }
+        },
+      );
+
+      const plan = await fetchGoalPlan();
+      if (plan) {
+        setPendingPlan(plan);
+        setView("verdict");
+        return;
+      }
+    } catch (e) {
+      console.error("[onboarding] plan generation error:", e);
+    } finally {
+      setChatLoading(false);
+    }
+
+    setView("dashboard");
+  }
+
+  async function handleAdvanceDay() {
+    const tomorrow = advanceSessionDate();
+    setSessionDate(tomorrow);
+    await generatePlanForDate(tomorrow);
+    setPlanRefreshKey((k) => k + 1);
   }
 
   function handleSignOut() {
     clearToken();
     setAuthed(false);
-    setIsNewUser(true);
-    clearLaidOff();
-    setPendingMessage(undefined);
+    setView("questionnaire");
+    setAgentEvents([]);
+    setPendingPlan(null);
+    setIntakeFields({});
   }
 
   if (!hydrated) return null;
+
   if (!authed) {
-    return <AuthScreen onAuth={() => setAuthed(true)} />;
+    return <AuthScreen onAuth={handleAuth} />;
   }
 
+  // ── Persistent post-login layout: content left + dark agent panel right ────
   return (
-    <main className="flex h-screen bg-white overflow-hidden">
-      {/* Left panel */}
-      <div className="flex flex-col flex-1 border-r border-gray-200 overflow-hidden">
-        {/* Header */}
-        <header className="flex items-center gap-3 px-6 py-4 border-b border-violet-200 shrink-0" style={{background: "linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #a855f7 100%)"}}>
-          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0">
-            <span className="text-white text-xs font-bold tracking-tight">CC</span>
+    <div className="flex h-screen overflow-hidden">
+      {/* Left: view content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {view === "questionnaire" && (
+          <div className="flex-1 overflow-y-auto">
+            <IntakeChatView
+              onAgentEvent={(ev) => setAgentEvents((prev) => [...prev, ev])}
+              onComplete={handleIntakeQuestionsComplete}
+              onLoadingChange={setChatLoading}
+            />
           </div>
-          <div className="flex-1">
-            <h1 className="text-sm font-semibold text-white">CrisisCoach AI</h1>
-            <p className="text-xs text-purple-200">We&apos;re turning this into your success story.</p>
-          </div>
-          <button
-            onClick={handleSignOut}
-            className="text-xs text-purple-200 hover:text-white transition-colors"
-          >
-            Sign out
-          </button>
-        </header>
+        )}
 
-        {isNewUser ? (
-          <OnboardingWelcome onChipClick={handleChipClick} />
-        ) : (
-          <CrisisTracker isLaidOff={isLaidOff} onOfferReceived={clearLaidOff} />
+        {view === "extras" && (
+          <div className="flex-1 overflow-y-auto">
+            <ExtrasForm
+              onSubmit={handleExtrasSubmit}
+              onSkip={() => handleExtrasSubmit({})}
+            />
+          </div>
+        )}
+
+        {view === "loading" && (
+          <PlanningLoader agentEvents={agentEvents} />
+        )}
+
+        {view === "verdict" && pendingPlan && (
+          <div className="flex-1 overflow-y-auto">
+            <PlanVerdictView
+              plan={pendingPlan}
+              onAgentEvents={(evs) => setAgentEvents((prev) => [...prev, ...evs])}
+              onCommit={() => {
+                setPendingPlan(null);
+                setPlanRefreshKey((k) => k + 1);
+                setView("dashboard");
+              }}
+            />
+          </div>
+        )}
+
+        {view === "dashboard" && (
+          <>
+            {/* Top bar */}
+            <header className="flex items-center gap-3 px-6 py-3.5 shrink-0" style={{ background: "#fff", borderBottom: "1px solid #ede9fe" }}>
+              <div className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0" style={{ background: "linear-gradient(135deg, #7c3aed, #a78bfa)" }}>
+                <span className="text-white text-[10px] font-bold tracking-tight">CP</span>
+              </div>
+              <div className="flex-1">
+                <h1 className="text-sm font-semibold text-slate-800">CareerPilot</h1>
+                <p className="text-[11px] text-slate-400">
+                  {new Date(sessionDate + "T00:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+                </p>
+              </div>
+              <button onClick={handleSignOut} className="text-xs text-slate-400 hover:text-violet-600 transition-colors">
+                Sign out
+              </button>
+            </header>
+
+            {/* Tab nav */}
+            <nav className="flex gap-1 px-6 pt-3 pb-0 shrink-0" style={{ borderBottom: "1px solid #f1f5f9" }}>
+              {(["today", "progress"] as DashTab[]).map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setDashTab(tab)}
+                  className="px-4 py-2 text-xs font-semibold capitalize transition-all rounded-t-lg"
+                  style={
+                    dashTab === tab
+                      ? { color: "#7c3aed", borderBottom: "2px solid #7c3aed", background: "#faf9ff" }
+                      : { color: "#94a3b8", borderBottom: "2px solid transparent" }
+                  }
+                >
+                  {tab}
+                </button>
+              ))}
+            </nav>
+
+            {/* Tab content */}
+            {dashTab === "today" && (
+              <>
+                <div className="flex-1 overflow-y-auto px-6 pt-6">
+                  <TodayPlanView key={planRefreshKey} sessionDate={sessionDate} onAdvanceDay={handleAdvanceDay} />
+                </div>
+                <CoachView
+                  sessionDate={sessionDate}
+                  onAuthError={handleSignOut}
+                  onAgentEvents={(evs) => setAgentEvents((prev) => [...prev, ...evs])}
+                  onLoadingChange={setChatLoading}
+                  onCommitted={() => setPlanRefreshKey((k) => k + 1)}
+                />
+              </>
+            )}
+
+            {dashTab === "progress" && (
+              <div className="flex-1 overflow-hidden px-6 pt-6 pb-6">
+                <ProgressView sessionDate={sessionDate} />
+              </div>
+            )}
+          </>
         )}
       </div>
 
-      {/* Right: Chat panel */}
-      <div className="flex flex-col w-80 bg-white border-l border-gray-200 overflow-hidden shrink-0">
-        <header className="px-4 py-4 border-b border-violet-200 shrink-0" style={{background: "linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #a855f7 100%)"}}>
-          <h2 className="text-sm font-semibold text-white">Talk to me</h2>
-          <p className="text-xs text-purple-200">Talk to your coach</p>
-        </header>
-        <ChatWindow
-          pendingMessage={pendingMessage}
-          onFirstMessage={() => setIsNewUser(false)}
-          onPendingConsumed={() => setPendingMessage(undefined)}
-          onHistoryLoaded={() => setIsNewUser(false)}
-          onAuthError={handleSignOut}
-        />
+      {/* Right: always-on dark agent activity panel */}
+      <div className="w-60 shrink-0 overflow-hidden">
+        <AgentFlowPanel events={agentEvents} isLoading={chatLoading} />
       </div>
-    </main>
+    </div>
   );
 }

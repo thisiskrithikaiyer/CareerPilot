@@ -2,21 +2,17 @@
 Schedule Builder — takes priority mode + targets and builds morning/midday/evening blocks.
 Uses LLM only for the coach note. Block structure is deterministic.
 """
-from openai import OpenAI
-from crisiscoach.config import GROQ_API_KEY, GROQ_MODEL
-
-_client = OpenAI(api_key=GROQ_API_KEY, base_url="https://api.groq.com/openai/v1")
+from crisiscoach.utils.groq_client import groq_complete
+from crisiscoach.config import GROQ_MODEL
 
 
-def _block(time: str, tasks: list[dict]) -> dict:
+def _block(time: str, tasks: list[str]) -> dict:
     return {"time": time, "tasks": tasks}
 
 
-def _task(label: str, duration_min: int, detail: str = "") -> dict:
-    t = {"label": label, "duration_min": duration_min}
-    if detail:
-        t["detail"] = detail
-    return t
+def _task(label: str, duration_min: int, detail: str = "") -> str:
+    base = f"{label} ({duration_min}min)"
+    return f"{base} — {detail}" if detail else base
 
 
 def build_schedule(priority: dict, signals: dict, next_lc: dict, behavioral: str) -> dict:
@@ -119,7 +115,7 @@ def build_coach_note(signals: dict, priority: dict) -> str:
             f"Days since last interview: {signals.get('days_since_interview')}\n"
             f"Apps last 7 days: {signals.get('total_apps_7d')}"
         )
-        resp = _client.chat.completions.create(
+        resp = groq_complete(
             model=GROQ_MODEL,
             max_tokens=80,
             temperature=0.3,
