@@ -1,6 +1,36 @@
-"""LinkedIn enhancer sub-agent — optimizes headline and about section."""
+"""LinkedIn enhancer sub-agent — conversational LinkedIn coach + low-level rewrite utilities."""
+import json
+from langchain_core.messages import HumanMessage
 from careerpilot.utils.groq_client import groq_complete
 from careerpilot.config import GROQ_MODEL
+from careerpilot.orchestrator.state import State
+from careerpilot.prompts.loader import load_prompt
+
+
+async def run(state: State) -> dict:
+    base = load_prompt("linkedin_enhancer.txt")
+
+    linkedin_text = state.get("linkedin_text")
+    talent_map = state.get("talent_map")
+
+    snippets = []
+    if linkedin_text:
+        snippets.append(f"\nUSER'S CURRENT LINKEDIN PROFILE:\n{linkedin_text}")
+    if talent_map:
+        snippets.append(f"\nTALENT MAP (target roles + skills):\n{json.dumps(talent_map, indent=2)}")
+
+    system = base + "".join(snippets)
+
+    history = [
+        {"role": "user" if isinstance(m, HumanMessage) else "assistant", "content": m.content}
+        for m in state["messages"]
+    ]
+    resp = groq_complete(
+        model=GROQ_MODEL,
+        max_tokens=512,
+        messages=[{"role": "system", "content": system}, *history],
+    )
+    return {"response": resp.choices[0].message.content, "sources": []}
 
 
 async def improve_headline(current_headline: str, talent_map: dict) -> str:

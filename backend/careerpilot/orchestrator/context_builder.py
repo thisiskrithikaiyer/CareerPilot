@@ -7,7 +7,7 @@ REVISION_MODE_MIN_DAYS = 10
 NO_INTERVIEW_RESCORE_DAYS = 14
 
 # Only these agents use resume/LinkedIn text and tracking data
-_PROFILE_AGENTS = {"goal_planner", "profile_builder"}
+_PROFILE_AGENTS = {"goal_planner", "profile_builder", "resume", "linkedin"}
 
 
 def _compute_deviation(actual: int, target: int) -> dict:

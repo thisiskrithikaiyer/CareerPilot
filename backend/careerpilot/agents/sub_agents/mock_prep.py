@@ -1,7 +1,29 @@
-"""Mock prep sub-agent — generates interview questions and scores answers."""
+"""Mock prep sub-agent — conversational interview coach + low-level question/scoring utilities."""
 import json
+from langchain_core.messages import HumanMessage
 from careerpilot.utils.groq_client import groq_complete
 from careerpilot.config import GROQ_MODEL
+from careerpilot.orchestrator.state import State
+from careerpilot.prompts.loader import load_prompt
+
+
+async def run(state: State) -> dict:
+    base = load_prompt("mock_prep.txt")
+
+    role = state.get("role")
+    role_line = f"\nUser's target role: {role}" if role else ""
+    system = base + role_line
+
+    history = [
+        {"role": "user" if isinstance(m, HumanMessage) else "assistant", "content": m.content}
+        for m in state["messages"]
+    ]
+    resp = groq_complete(
+        model=GROQ_MODEL,
+        max_tokens=600,
+        messages=[{"role": "system", "content": system}, *history],
+    )
+    return {"response": resp.choices[0].message.content, "sources": []}
 
 
 async def generate_questions(role: str, interview_stage: str, n: int = 5) -> list[dict]:

@@ -12,17 +12,25 @@ AGENT_MAP = {
     "plan":           "careerpilot.agents.runtime.accountability",
     "accountability": "careerpilot.agents.runtime.accountability",
     "mental_health":  "careerpilot.agents.runtime.mental_health_check",
+    "resume":         "careerpilot.agents.sub_agents.resume_helper",
+    "linkedin":       "careerpilot.agents.sub_agents.linkedin_enhancer",
+    "mock_prep":      "careerpilot.agents.sub_agents.mock_prep",
+    "patterns":       "careerpilot.agents.sub_agents.pattern_tracker",
     "chat":           "careerpilot.agents.runtime.mental_health_check",
 }
 
 AGENT_DISPLAY_NAMES = {
-    "intake":       "Intake Coach",
-    "goal_planner": "Goal Strategist",
-    "checkin":      "Daily Tracker",
-    "plan":         "Accountability Coach",
+    "intake":         "Intake Coach",
+    "goal_planner":   "Goal Strategist",
+    "checkin":        "Daily Tracker",
+    "plan":           "Accountability Coach",
     "accountability": "Accountability Coach",
-    "mental_health": "Wellness Coach",
-    "chat":         "Coach",
+    "mental_health":  "Wellness Coach",
+    "resume":         "Resume Coach",
+    "linkedin":       "LinkedIn Coach",
+    "mock_prep":      "Interview Coach",
+    "patterns":       "Pattern Analyst",
+    "chat":           "Coach",
 }
 
 
@@ -34,8 +42,8 @@ async def orchestrator_node(state: State) -> dict:
     # 2. Supervisor decides which agent runs
     intent, reason = decide(enriched)
 
-    # 3. Re-fetch with intent for agents that need heavy data (resume, tracking)
-    if intent == "goal_planner":
+    # 3. Re-fetch with intent for agents that need heavy profile/tracking data
+    if intent in {"goal_planner", "resume", "linkedin"}:
         ctx = await build_context(state, intent=intent)
 
     agent_module = AGENT_MAP.get(intent, AGENT_MAP["chat"])

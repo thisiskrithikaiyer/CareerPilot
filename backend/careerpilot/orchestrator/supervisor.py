@@ -31,6 +31,22 @@ AGENTS = {
         "User is expressing extreme distress, burnout, hopelessness, or crisis signals like suicidal ideation or self-harm. "
         "ALWAYS takes priority — route here if ANY distress signal is present."
     ),
+    "resume": (
+        "User wants to improve, review, or tailor their resume — specific bullets, summary, ATS optimization, "
+        "or an overall assessment. Route here when the focus is the resume document itself."
+    ),
+    "linkedin": (
+        "User wants to optimize their LinkedIn profile — headline, About section, visibility, or "
+        "recruiter-facing positioning. Route here when the focus is LinkedIn specifically."
+    ),
+    "mock_prep": (
+        "User wants to practice interviewing — behavioral, technical coding, system design, or mixed. "
+        "Route here when they ask for a mock interview, want to practice questions, or want answer feedback."
+    ),
+    "patterns": (
+        "User wants to understand their behavioral patterns, recurring blockers, or consistency trends "
+        "across check-ins and task completion. Route here when they ask about habits, patterns, or trends."
+    ),
     "chat": (
         "General questions or conversation that don't fit any other agent."
     ),

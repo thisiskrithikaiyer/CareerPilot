@@ -1,6 +1,31 @@
-"""Resume helper sub-agent — called by intake or talent_mapper, never directly by user."""
+"""Resume helper sub-agent — conversational resume coach + low-level rewrite utilities."""
+from langchain_core.messages import HumanMessage
 from careerpilot.utils.groq_client import groq_complete
 from careerpilot.config import GROQ_MODEL
+from careerpilot.orchestrator.state import State
+from careerpilot.prompts.loader import load_prompt
+
+
+async def run(state: State) -> dict:
+    last_msg = next(
+        (m for m in reversed(state["messages"]) if isinstance(m, HumanMessage)), None
+    )
+
+    base = load_prompt("resume_helper.txt")
+    resume_text = state.get("resume_text")
+    resume_section = f"\n\nUSER'S CURRENT RESUME:\n{resume_text}" if resume_text else ""
+    system = base + resume_section
+
+    history = [
+        {"role": "user" if isinstance(m, HumanMessage) else "assistant", "content": m.content}
+        for m in state["messages"]
+    ]
+    resp = groq_complete(
+        model=GROQ_MODEL,
+        max_tokens=512,
+        messages=[{"role": "system", "content": system}, *history],
+    )
+    return {"response": resp.choices[0].message.content, "sources": []}
 
 
 async def improve_bullet(bullet: str, job_description: str = "") -> str:

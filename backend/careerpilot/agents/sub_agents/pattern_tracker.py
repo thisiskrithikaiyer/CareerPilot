@@ -1,6 +1,36 @@
-"""Pattern tracker sub-agent — detects behavioral patterns across check-ins and plans."""
+"""Pattern tracker sub-agent — conversational pattern coach + low-level detect utility."""
+import json
+from langchain_core.messages import HumanMessage
 from careerpilot.utils.groq_client import groq_complete
 from careerpilot.config import GROQ_MODEL
+from careerpilot.orchestrator.state import State
+from careerpilot.prompts.loader import load_prompt
+
+
+async def run(state: State) -> dict:
+    user_id = state.get("user_id", "")
+    base = load_prompt("pattern_tracker.txt")
+
+    pattern_section = ""
+    if user_id:
+        try:
+            data = await detect_patterns(user_id)
+            pattern_section = f"\n\nBEHAVIORAL DATA (last 14 days):\n{json.dumps(data, indent=2)}"
+        except Exception:
+            pattern_section = "\n\n(Pattern data unavailable — DB unreachable or insufficient history)"
+
+    system = base + pattern_section
+
+    history = [
+        {"role": "user" if isinstance(m, HumanMessage) else "assistant", "content": m.content}
+        for m in state["messages"]
+    ]
+    resp = groq_complete(
+        model=GROQ_MODEL,
+        max_tokens=400,
+        messages=[{"role": "system", "content": system}, *history],
+    )
+    return {"response": resp.choices[0].message.content, "sources": []}
 
 
 async def detect_patterns(user_id: str) -> dict:
