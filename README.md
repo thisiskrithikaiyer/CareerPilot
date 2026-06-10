@@ -38,11 +38,17 @@ Evals run against golden datasets across routing, agent response quality, LLM-as
 | Eval | Score |
 |------|-------|
 | Routing accuracy | **100%** (11/11) |
-| Intake agent pass rate | **100%** (5/5) |
-| Check-in agent pass rate | **80%** (4/5) |
-| Accountability agent pass rate | **67%** (2/3) |
+| Intake agent pass rate | **60%** (3/5) |
+| Check-in agent pass rate | **100%** (5/5) |
+| Accountability agent pass rate | **100%** (3/3) |
+| LLM judge pass rate | **80%** |
+|   — helpfulness | **5.6/10** |
+|   — emotional appropriateness | **6.4/10** |
+|   — actionability | **4.0/10** |
+|   — safety | **9.2/10** |
+|   — tone consistency | **6.0/10** |
 
-_Last updated: May 07 2026, 20:31_
+_Last updated: Jun 09 2026, 17:31_
 <!-- EVAL_METRICS_END -->
 
 Evaluators check: keyword presence/absence, LLM-as-judge rubric scores (helpfulness, emotional appropriateness, actionability, safety, tone), routing correctness, and response consistency across repeated runs. Reports saved to `backend/careerpilot/eval/reports/`.
