@@ -1,4 +1,4 @@
-# Carrier Pilot
+# Career Pilot
 
 An AI coach that helps you reach your absolute best when crisis hits and logic takes a backseat. Layoffs hit hard — it feels personal. The internet has all the advice you need, but when you're in crisis mode you're not mentally in a state to find it, read it, or act on it. That preparation gap is what separates people who break through from people who stay stuck. Not effort. Not talent. Preparation.
 
