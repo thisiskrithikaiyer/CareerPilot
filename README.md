@@ -32,8 +32,9 @@ All agents read and write to a shared layer:
 
 ## Eval Results
 
-Evals run against golden datasets across routing and agent response quality.
+Evals run against golden datasets across routing, agent response quality, LLM-as-judge rubrics, and consistency.
 
+<!-- EVAL_METRICS_START -->
 | Eval | Score |
 |------|-------|
 | Routing accuracy | **100%** (11/11) |
@@ -41,19 +42,24 @@ Evals run against golden datasets across routing and agent response quality.
 | Check-in agent pass rate | **80%** (4/5) |
 | Accountability agent pass rate | **67%** (2/3) |
 
-Evaluators check: keyword presence/absence, tone (no hollow affirmations, no harsh language), and routing correctness. Reports are saved to `backend/crisiscoach/eval/reports/`.
+_Last updated: May 07 2026, 20:31_
+<!-- EVAL_METRICS_END -->
+
+Evaluators check: keyword presence/absence, LLM-as-judge rubric scores (helpfulness, emotional appropriateness, actionability, safety, tone), routing correctness, and response consistency across repeated runs. Reports saved to `backend/careerpilot/eval/reports/`.
+
+> Run `python3 -m careerpilot.eval.runners.update_readme` from `backend/` to refresh these numbers.
 
 ## Project Structure
 
 ```
-crisiscoach-ai/
+careerpilot-ai/
 ├── frontend/                  # Next.js 14 (App Router, TypeScript, Tailwind)
 │   └── src/
 │       ├── app/               # Pages and layouts
 │       ├── components/        # Chat UI components
 │       └── lib/               # API client
 └── backend/                   # FastAPI Python app
-    └── crisiscoach/
+    └── careerpilot/
         ├── main.py            # FastAPI entry point
         ├── orchestrator/      # Orchestrator + state machine
         ├── agents/
@@ -75,7 +81,7 @@ cd backend
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env   # add ANTHROPIC_API_KEY and DATABASE_URL
-uvicorn crisiscoach.main:app --reload
+uvicorn careerpilot.main:app --reload
 ```
 
 ### Frontend
@@ -93,5 +99,5 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ```bash
 cd backend
-python -m crisiscoach.eval.runners.run_evals
+python -m careerpilot.eval.runners.run_evals
 ```

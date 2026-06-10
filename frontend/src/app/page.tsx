@@ -73,6 +73,11 @@ export default function Home() {
   // Called when user submits the extras form (resume)
   async function handleExtrasSubmit(extras: Partial<IntakeFields>) {
     const merged = { ...intakeFields, ...extras } as IntakeFields;
+    if (!merged.role || !merged.offer_timeline) {
+      console.error("[intake] missing required fields, resetting to questionnaire", merged);
+      setView("questionnaire");
+      return;
+    }
     setView("loading");
     setChatLoading(true);
     // Keep existing intake agent events — don't wipe history

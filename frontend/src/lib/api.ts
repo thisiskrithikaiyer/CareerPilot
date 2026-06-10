@@ -27,7 +27,7 @@ export interface AuthResponse {
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 const TOKEN_KEY = "cc_token";
 const TOKEN_VERSION_KEY = "cc_token_v";
-const TOKEN_VERSION = "2"; // bump this whenever auth system changes
+const TOKEN_VERSION = "3"; // bump this whenever auth system changes
 
 // --- Token helpers ---
 export function getToken(): string | null {
@@ -260,7 +260,11 @@ export async function submitIntake(fields: IntakeFields): Promise<void> {
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(err.detail ?? `Intake failed: ${res.status}`);
+    const detail = err.detail;
+    const msg = Array.isArray(detail)
+      ? detail.map((d: { msg?: string; loc?: string[] }) => `${d.loc?.join(".")}: ${d.msg}`).join(", ")
+      : (detail ?? `Intake failed: ${res.status}`);
+    throw new Error(msg);
   }
 }
 
@@ -358,6 +362,7 @@ export interface StreamEvent {
   intent?: string;
   sources?: string[];
   phase?: string;
+  refresh_plan?: boolean;
   // error
   message?: string;
 }

@@ -107,6 +107,9 @@ export default function CoachView({ sessionDate, onAuthError, onAgentEvents, onL
           setCurrentCoachText(ev.reply ?? "");
           if (ev.phase === "active" && onCommitted) {
             generatePlan().finally(() => onCommitted());
+          } else if (ev.refresh_plan && onCommitted) {
+            // Mental health agent rebuilt tomorrow's plan — refresh the plan view
+            setTimeout(() => onCommitted?.(), 1200);
           }
         } else if (ev.type === "error") {
           setError("Something went wrong. Try again.");

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CrisisCoach Eval Regression Dashboard</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+         background: #0d1117; color: #e6edf3; margin: 0; padding: 24px; }
+  h1 { font-size: 1.4rem; margin-bottom: 4px; color: #58a6ff; }
+  p.sub { color: #8b949e; font-size: 0.85rem; margin-bottom: 24px; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85rem; }
+  th { background: #161b22; color: #8b949e; padding: 8px 12px;
+        text-align: left; border-bottom: 1px solid #30363d; white-space: nowrap; }
+  td { padding: 7px 12px; border-bottom: 1px solid #21262d; white-space: nowrap; }
+  tr:hover td { background: #161b22; }
+  td.up { color: #3fb950; font-weight: 600; }
+  td.down { color: #f85149; font-weight: 600; }
+  td.na { color: #484f58; }
+  td.commit { font-family: monospace; font-size: 0.78rem; color: #8b949e;
+               max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+  .generated { color: #484f58; font-size: 0.75rem; margin-top: 16px; }
+</style>
+</head>
+<body>
+<h1>CrisisCoach — Eval Regression Dashboard</h1>
+<p class="sub">Tracking 7 eval run(s). Green = improvement ≥2pp, Red = regression ≥2pp.</p>
+<table>
+  <thead><tr><th>Run</th><th>Commit</th><th>Routing accuracy</th><th>Agent: intake</th><th>Agent: accountability</th><th>Agent: checkin</th><th>LLM judge</th><th>Consistency</th></tr></thead>
+  <tbody><tr><td>May 07 19:38</td><td class='commit'>1ad9969 feat: remove visa/legal/finance scope, add</td><td>87.5%</td><td>20.0%</td><td>33.3%</td><td>100.0%</td><td class='na'>—</td><td class='na'>—</td></tr>
+<tr><td>May 07 19:43</td><td class='commit'>1ad9969 feat: remove visa/legal/finance scope, add</td><td class='up'>100.0% ▲12.5%</td><td class='up'>60.0% ▲40.0%</td><td class='up'>100.0% ▲66.7%</td><td>100.0%</td><td class='na'>—</td><td class='na'>—</td></tr>
+<tr><td>May 07 19:48</td><td class='commit'>1ad9969 feat: remove visa/legal/finance scope, add</td><td>100.0%</td><td>60.0%</td><td class='down'>33.3% ▼66.7%</td><td>100.0%</td><td class='na'>—</td><td class='na'>—</td></tr>
+<tr><td>May 07 20:02</td><td class='commit'>0e80501 feat: add eval reports from 2026-05-07 eva</td><td>100.0%</td><td class='down'>40.0% ▼20.0%</td><td class='up'>66.7% ▲33.4%</td><td>100.0%</td><td class='na'>—</td><td class='na'>—</td></tr>
+<tr><td>May 07 20:18</td><td class='commit'>0e80501 feat: add eval reports from 2026-05-07 eva</td><td class='down'>90.9% ▼9.1%</td><td class='up'>80.0% ▲40.0%</td><td>66.7%</td><td class='down'>60.0% ▼40.0%</td><td class='na'>—</td><td class='na'>—</td></tr>
+<tr><td>May 07 20:26</td><td class='commit'>0e80501 feat: add eval reports from 2026-05-07 eva</td><td class='up'>100.0% ▲9.1%</td><td class='down'>60.0% ▼20.0%</td><td class='up'>100.0% ▲33.3%</td><td class='up'>80.0% ▲20.0%</td><td class='na'>—</td><td class='na'>—</td></tr>
+<tr><td>May 07 20:31</td><td class='commit'>0e80501 feat: add eval reports from 2026-05-07 eva</td><td>100.0%</td><td class='up'>100.0% ▲40.0%</td><td class='down'>66.7% ▼33.3%</td><td>80.0%</td><td class='na'>—</td><td class='na'>—</td></tr>
+</tbody>
+</table>
+<p class="generated">Generated 2026-06-09 15:56:13</p>
+</body>
+</html>

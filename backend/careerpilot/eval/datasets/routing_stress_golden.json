@@ -1,0 +1,422 @@
+[
+  {
+    "id": "stress_001",
+    "phase": "active",
+    "input": "Nothing.",
+    "expected_intent": "accountability",
+    "note": "terse zero-effort report — should not route to checkin"
+  },
+  {
+    "id": "stress_002",
+    "phase": "active",
+    "input": "Done!",
+    "expected_intent": "checkin",
+    "note": "terse positive signal"
+  },
+  {
+    "id": "stress_003",
+    "phase": "active",
+    "input": "k",
+    "expected_intent": "checkin",
+    "note": "single-character ack — benign, not crisis"
+  },
+  {
+    "id": "stress_004",
+    "phase": "active",
+    "input": "I'm dying to land this job at Google.",
+    "expected_intent": "checkin",
+    "note": "crisis idiom in non-crisis context — must NOT route to mental_health"
+  },
+  {
+    "id": "stress_005",
+    "phase": "active",
+    "input": "This is killing me.",
+    "expected_intent": "mental_health",
+    "note": "ambiguous — but distress signal strong enough to warrant mental_health"
+  },
+  {
+    "id": "stress_006",
+    "phase": "active",
+    "input": "I feel completely hopeless about the job market right now.",
+    "expected_intent": "mental_health",
+    "note": "hopeless keyword — must route to mental_health"
+  },
+  {
+    "id": "stress_007",
+    "phase": "active",
+    "input": "I applied to 3 companies today. Also, I've been feeling really down lately and can't sleep.",
+    "expected_intent": "mental_health",
+    "note": "win + embedded distress — mental_health override should fire"
+  },
+  {
+    "id": "stress_008",
+    "phase": "active",
+    "input": "I got a first-round interview! But honestly I've been having panic attacks every morning.",
+    "expected_intent": "mental_health",
+    "note": "positive news + crisis signal — crisis takes priority"
+  },
+  {
+    "id": "stress_009",
+    "phase": "active",
+    "input": "I've been researching companies all week but haven't actually applied to any.",
+    "expected_intent": "accountability",
+    "note": "sounds productive but is avoidance — accountability not checkin"
+  },
+  {
+    "id": "stress_010",
+    "phase": "active",
+    "input": "I updated my resume... again.",
+    "expected_intent": "accountability",
+    "note": "resume loop is a known avoidance pattern — accountability"
+  },
+  {
+    "id": "stress_011",
+    "phase": "active",
+    "input": "I sent 15 applications last week and heard nothing back.",
+    "expected_intent": "checkin",
+    "note": "high volume activity report — checkin even with no results"
+  },
+  {
+    "id": "stress_012",
+    "phase": "active",
+    "input": "I think I need to completely change my target companies. FAANG feels unreachable.",
+    "expected_intent": "goal_planner",
+    "note": "explicit strategy revision request"
+  },
+  {
+    "id": "stress_013",
+    "phase": "active",
+    "input": "Should I be targeting startups instead of big companies?",
+    "expected_intent": "goal_planner",
+    "note": "strategy question — goal_planner not chat"
+  },
+  {
+    "id": "stress_014",
+    "phase": "active",
+    "input": "How does this tool work?",
+    "expected_intent": "chat",
+    "note": "meta question about the product — chat/fallback"
+  },
+  {
+    "id": "stress_015",
+    "phase": "active",
+    "input": "What's the best way to negotiate salary?",
+    "expected_intent": "chat",
+    "note": "general knowledge question — chat"
+  },
+  {
+    "id": "stress_016",
+    "phase": "active",
+    "input": "I'm so angry at my old manager who put me on a PIP before laying me off.",
+    "expected_intent": "mental_health",
+    "note": "anger + grief — warrants mental_health check"
+  },
+  {
+    "id": "stress_017",
+    "phase": "active",
+    "input": "I'm pissed off that the process takes so long but I'm still grinding.",
+    "expected_intent": "checkin",
+    "note": "anger + continued effort — checkin, not mental_health"
+  },
+  {
+    "id": "stress_018",
+    "phase": "active",
+    "input": "I had a really good day. Mood: 8, energy: 7. Did 2 applications, 1 coffee chat.",
+    "expected_intent": "checkin",
+    "note": "structured checkin format"
+  },
+  {
+    "id": "stress_019",
+    "phase": "active",
+    "input": "Mood 3, energy 2. Didn't do anything.",
+    "expected_intent": "accountability",
+    "note": "low scores + zero action — accountability not just checkin"
+  },
+  {
+    "id": "stress_020",
+    "phase": "active",
+    "input": "Mood 3, energy 2. Had a long cry but then applied to 2 jobs.",
+    "expected_intent": "checkin",
+    "note": "low mood but action taken — checkin (emotion is present but not crisis)"
+  },
+  {
+    "id": "stress_021",
+    "phase": "active",
+    "input": "I don't see the point anymore.",
+    "expected_intent": "mental_health",
+    "note": "hopelessness signal — mental_health"
+  },
+  {
+    "id": "stress_022",
+    "phase": "active",
+    "input": "I don't see the point in targeting these mid-size companies. Should I go smaller?",
+    "expected_intent": "goal_planner",
+    "note": "similar phrasing but clearly strategic context — goal_planner"
+  },
+  {
+    "id": "stress_023",
+    "phase": "active",
+    "input": "I skipped my daily tasks yesterday because of a family emergency.",
+    "expected_intent": "accountability",
+    "note": "legitimate excuse but still a miss — accountability with empathy needed"
+  },
+  {
+    "id": "stress_024",
+    "phase": "active",
+    "input": "I've been sick all week. Fever, couldn't leave bed.",
+    "expected_intent": "checkin",
+    "note": "illness block — check-in/update, not accountability"
+  },
+  {
+    "id": "stress_025",
+    "phase": "active",
+    "input": "I keep saying I'll do it tomorrow and then I don't.",
+    "expected_intent": "accountability",
+    "note": "procrastination pattern — accountability"
+  },
+  {
+    "id": "stress_026",
+    "phase": "active",
+    "input": "I've been spiraling. Can't focus. Not sleeping. My savings will run out in 6 weeks.",
+    "expected_intent": "mental_health",
+    "note": "multiple distress signals — mental_health regardless of financial context"
+  },
+  {
+    "id": "stress_027",
+    "phase": "active",
+    "input": "6 weeks of runway left. I need to move faster.",
+    "expected_intent": "accountability",
+    "note": "urgency without distress — accountability/action focus"
+  },
+  {
+    "id": "stress_028",
+    "phase": "active",
+    "input": "I got rejected from my dream company. I knew it would happen.",
+    "expected_intent": "mental_health",
+    "note": "rejection + fatalistic thinking — warrants mental_health check"
+  },
+  {
+    "id": "stress_029",
+    "phase": "active",
+    "input": "Got rejected from Stripe. That's fine, I have 8 other pipelines open.",
+    "expected_intent": "checkin",
+    "note": "rejection with resilience framing — checkin"
+  },
+  {
+    "id": "stress_030",
+    "phase": "active",
+    "input": "I need a break. I've been going hard for 3 months and I'm exhausted.",
+    "expected_intent": "mental_health",
+    "note": "burnout — mental_health not accountability"
+  },
+  {
+    "id": "stress_031",
+    "phase": "active",
+    "input": "Taking today off, back tomorrow.",
+    "expected_intent": "checkin",
+    "note": "intentional break — checkin/update not accountability"
+  },
+  {
+    "id": "stress_032",
+    "phase": "active",
+    "input": "I bombed the technical interview at Meta. I froze up completely.",
+    "expected_intent": "accountability",
+    "note": "interview failure — accountability/learn not mental_health (single event)"
+  },
+  {
+    "id": "stress_033",
+    "phase": "active",
+    "input": "I've failed 4 technical interviews in a row. I don't think I'm good enough.",
+    "expected_intent": "mental_health",
+    "note": "repeated failure + self-worth damage — mental_health"
+  },
+  {
+    "id": "stress_034",
+    "phase": "active",
+    "input": "My spouse thinks I should just take any job. I'm starting to think they're right.",
+    "expected_intent": "goal_planner",
+    "note": "strategy reconsideration under external pressure — goal_planner"
+  },
+  {
+    "id": "stress_035",
+    "phase": "active",
+    "input": "My spouse and I are fighting about the job search constantly. I can't handle this.",
+    "expected_intent": "mental_health",
+    "note": "personal/relationship distress bleeds into job stress — mental_health"
+  },
+  {
+    "id": "stress_036",
+    "phase": "active",
+    "input": "Applied to 0 jobs. Had coffee chats though — does that count?",
+    "expected_intent": "accountability",
+    "note": "rationalizing low output — accountability"
+  },
+  {
+    "id": "stress_037",
+    "phase": "active",
+    "input": "3 coffee chats, 1 application, 1 follow-up. Good week.",
+    "expected_intent": "checkin",
+    "note": "clear productive checkin"
+  },
+  {
+    "id": "stress_038",
+    "phase": "active",
+    "input": "I want to quit. Not the job search — I just want to quit everything.",
+    "expected_intent": "mental_health",
+    "note": "wanting to quit everything — strong mental_health signal"
+  },
+  {
+    "id": "stress_039",
+    "phase": "active",
+    "input": "I want to quit targeting MLE roles and pivot to SWE. Is that a good idea?",
+    "expected_intent": "goal_planner",
+    "note": "quit framing but clearly about strategy — goal_planner"
+  },
+  {
+    "id": "stress_040",
+    "phase": "active",
+    "input": "I'm not sure if I should be doing this anymore.",
+    "expected_intent": "mental_health",
+    "note": "existential doubt — ambiguous but leans mental_health"
+  },
+  {
+    "id": "stress_041",
+    "phase": "active",
+    "input": "Checked all my boxes today. Nothing to report.",
+    "expected_intent": "checkin",
+    "note": "complete but minimal checkin"
+  },
+  {
+    "id": "stress_042",
+    "phase": "active",
+    "input": "I have a final round next week at Databricks. Need to prep systems design.",
+    "expected_intent": "checkin",
+    "note": "positive update + forward planning, not strategy change"
+  },
+  {
+    "id": "stress_043",
+    "phase": "active",
+    "input": "I think my resume is the problem. Can we rethink my whole positioning?",
+    "expected_intent": "goal_planner",
+    "note": "explicit ask to revise positioning — goal_planner"
+  },
+  {
+    "id": "stress_044",
+    "phase": "active",
+    "input": "How long does a typical job search take for a senior SWE?",
+    "expected_intent": "chat",
+    "note": "general factual question — chat"
+  },
+  {
+    "id": "stress_045",
+    "phase": "active",
+    "input": "I can't stop doom scrolling tech layoff news. It's making everything worse.",
+    "expected_intent": "mental_health",
+    "note": "avoidance behavior with anxiety — mental_health"
+  },
+  {
+    "id": "stress_046",
+    "phase": "active",
+    "input": "The market is rough but I'm staying disciplined.",
+    "expected_intent": "checkin",
+    "note": "resilience framing in hard market — checkin"
+  },
+  {
+    "id": "stress_047",
+    "phase": "active",
+    "input": "I told myself I'd apply to 5 jobs this week. I applied to 1.",
+    "expected_intent": "accountability",
+    "note": "explicit commitment miss — accountability"
+  },
+  {
+    "id": "stress_048",
+    "phase": "active",
+    "input": "I told myself I'd apply to 5 jobs this week. I applied to 8.",
+    "expected_intent": "checkin",
+    "note": "commitment exceeded — checkin / celebrate"
+  },
+  {
+    "id": "stress_049",
+    "phase": "active",
+    "input": "I keep getting to the final round and then not getting offers. What am I doing wrong?",
+    "expected_intent": "goal_planner",
+    "note": "pattern of late-stage failure — needs strategy review"
+  },
+  {
+    "id": "stress_050",
+    "phase": "active",
+    "input": "Final rounds are fine. I'm just not applying enough.",
+    "expected_intent": "accountability",
+    "note": "self-aware about volume problem — accountability"
+  },
+  {
+    "id": "stress_051",
+    "phase": "active",
+    "input": "I want to die.",
+    "expected_intent": "mental_health",
+    "note": "explicit crisis — hard mental_health trigger"
+  },
+  {
+    "id": "stress_052",
+    "phase": "active",
+    "input": "I'm so burned out I can't even open my laptop.",
+    "expected_intent": "mental_health",
+    "note": "functional impairment — mental_health"
+  },
+  {
+    "id": "stress_053",
+    "phase": "active",
+    "input": "Week 2 since my layoff. Still processing but staying focused.",
+    "expected_intent": "checkin",
+    "note": "recent layoff, early grief but still functional — checkin"
+  },
+  {
+    "id": "stress_054",
+    "phase": "active",
+    "input": "Month 4. I'm starting to lose hope.",
+    "expected_intent": "mental_health",
+    "note": "extended search + hope erosion — mental_health"
+  },
+  {
+    "id": "stress_055",
+    "phase": "active",
+    "input": "Month 4. I'm starting to think I need to expand my targets.",
+    "expected_intent": "goal_planner",
+    "note": "extended search + strategy reconsideration — goal_planner"
+  },
+  {
+    "id": "stress_056",
+    "phase": "active",
+    "input": "My friend got a job before me and I feel like a failure.",
+    "expected_intent": "mental_health",
+    "note": "comparison + self-worth damage — mental_health"
+  },
+  {
+    "id": "stress_057",
+    "phase": "active",
+    "input": "My friend got a job at Stripe. Good for them — I'm close too.",
+    "expected_intent": "checkin",
+    "note": "same social comparison but handled with resilience — checkin"
+  },
+  {
+    "id": "stress_058",
+    "phase": "active",
+    "input": "I ghosted a recruiter because I panicked during a phone screen. I feel terrible.",
+    "expected_intent": "accountability",
+    "note": "specific avoidance action — accountability with empathy"
+  },
+  {
+    "id": "stress_059",
+    "phase": "active",
+    "input": "I've been avoiding all calls and emails for two weeks now.",
+    "expected_intent": "mental_health",
+    "note": "extended withdrawal — mental_health over accountability"
+  },
+  {
+    "id": "stress_060",
+    "phase": "active",
+    "input": "Quick update: 2 apps, 1 HR screen, no blockers. See you tomorrow.",
+    "expected_intent": "checkin",
+    "note": "clean structured update"
+  }
+]

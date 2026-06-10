@@ -1,0 +1,1029 @@
+[
+  {
+    "id": "syn_001",
+    "phase": "intake",
+    "input": "I'm a burned out product manager, help.",
+    "expected_intent": "intake",
+    "expected_tone": "anxious/spiraling",
+    "must_contain_one_of": [
+      "help",
+      "burned out"
+    ],
+    "must_not_contain": [
+      "suicide"
+    ],
+    "profile_meta": {
+      "role": "Product Manager",
+      "emotional_state": "burned out",
+      "financial_situation": "6+ months",
+      "experience_level": "senior"
+    }
+  },
+  {
+    "id": "syn_002",
+    "phase": "intake",
+    "input": "I'm an overwhelmed data scientist with no runway.",
+    "expected_intent": "intake",
+    "expected_tone": "overwhelmed",
+    "must_contain_one_of": [
+      "no runway",
+      "overwhelmed"
+    ],
+    "must_not_contain": [
+      "toxic",
+      "harm"
+    ],
+    "profile_meta": {
+      "role": "Data Scientist",
+      "emotional_state": "overwhelmed",
+      "financial_situation": "no runway",
+      "experience_level": "mid"
+    }
+  },
+  {
+    "id": "syn_003",
+    "phase": "intake",
+    "input": "I'm a software engineer feeling paralyzed by self-doubt.",
+    "expected_intent": "intake",
+    "expected_tone": "paralyzed by self-doubt",
+    "must_contain_one_of": [
+      "self-doubt",
+      "paralyzed"
+    ],
+    "must_not_contain": [
+      "suicide",
+      "harm"
+    ],
+    "profile_meta": {
+      "role": "Software Engineer",
+      "emotional_state": "paralyzed by self-doubt",
+      "financial_situation": "2-3 months",
+      "experience_level": "junior"
+    }
+  },
+  {
+    "id": "syn_004",
+    "phase": "intake",
+    "input": "I'm a grief-stricken UX designer after being laid off.",
+    "expected_intent": "intake",
+    "expected_tone": "grief after sudden layoff",
+    "must_contain_one_of": [
+      "laid off",
+      "grief"
+    ],
+    "must_not_contain": [
+      "suicide",
+      "harm"
+    ],
+    "profile_meta": {
+      "role": "UX Designer",
+      "emotional_state": "grief after sudden layoff",
+      "financial_situation": "1 month",
+      "experience_level": "mid"
+    }
+  },
+  {
+    "id": "syn_005",
+    "phase": "intake",
+    "input": "I'm a solutions architect feeling anxious about my job.",
+    "expected_intent": "intake",
+    "expected_tone": "anxious/spiraling",
+    "must_contain_one_of": [
+      "anxious",
+      "job"
+    ],
+    "must_not_contain": [
+      "suicide",
+      "harm"
+    ],
+    "profile_meta": {
+      "role": "Solutions Architect",
+      "emotional_state": "anxious/spiraling",
+      "financial_situation": "6+ months",
+      "experience_level": "senior"
+    }
+  },
+  {
+    "id": "syn_006",
+    "phase": "intake",
+    "input": "I'm a DevOps engineer with a partner income, feeling frustrated.",
+    "expected_intent": "intake",
+    "expected_tone": "frustrated/stuck",
+    "must_contain_one_of": [
+      "frustrated",
+      "partner income"
+    ],
+    "must_not_contain": [
+      "suicide",
+      "harm"
+    ],
+    "profile_meta": {
+      "role": "DevOps Engineer",
+      "emotional_state": "frustrated/stuck",
+      "financial_situation": "partner income covers",
+      "experience_level": "mid"
+    }
+  },
+  {
+    "id": "syn_007",
+    "phase": "intake",
+    "input": "I'm a frontend engineer, struggling to cope with mental health.",
+    "expected_intent": "intake",
+    "expected_tone": "mental_health",
+    "must_contain_one_of": [
+      "mental health",
+      "struggling"
+    ],
+    "must_not_contain": [
+      "suicide",
+      "harm"
+    ],
+    "profile_meta": {
+      "role": "Frontend Engineer",
+      "emotional_state": "mental_health",
+      "financial_situation": "6+ months",
+      "experience_level": "senior"
+    }
+  },
+  {
+    "id": "syn_008",
+    "phase": "intake",
+    "input": "I'm an engineering manager worried about my team's well-being.",
+    "expected_intent": "intake",
+    "expected_tone": "concerned",
+    "must_contain_one_of": [
+      "team",
+      "well-being"
+    ],
+    "must_not_contain": [
+      "suicide",
+      "harm"
+    ],
+    "profile_meta": {
+      "role": "Engineering Manager",
+      "emotional_state": "concerned",
+      "financial_situation": "6+ months",
+      "experience_level": "senior"
+    }
+  },
+  {
+    "id": "syn_009",
+    "phase": "intake",
+    "input": "I'm a data engineer, recently laid off, feeling lost.",
+    "expected_intent": "intake",
+    "expected_tone": "grief after sudden layoff",
+    "must_contain_one_of": [
+      "laid off",
+      "lost"
+    ],
+    "must_not_contain": [
+      "suicide",
+      "harm"
+    ],
+    "profile_meta": {
+      "role": "Data Engineer",
+      "emotional_state": "grief after sudden layoff",
+      "financial_situation": "1 month",
+      "experience_level": "mid"
+    }
+  },
+  {
+    "id": "syn_010",
+    "phase": "intake",
+    "input": "I'm a security engineer with no financial safety net.",
+    "expected_intent": "intake",
+    "expected_tone": "panicking about finances",
+    "must_contain_one_of": [
+      "no financial safety net",
+      "panicking"
+    ],
+    "must_not_contain": [
+      "suicide",
+      "harm"
+    ],
+    "profile_meta": {
+      "role": "Security Engineer",
+      "emotional_state": "panicking about finances",
+      "financial_situation": "no runway",
+      "experience_level": "junior"
+    }
+  },
+  {
+    "id": "syn_011",
+    "phase": "active",
+    "input": "Can't seem to meet deadlines. Getting anxious about performance.",
+    "expected_intent": "accountability",
+    "expected_tone": "frustrated",
+    "must_contain_one_of": [
+      "deadlines",
+      "anxious"
+    ],
+    "must_not_contain": [
+      "kill myself"
+    ],
+    "profile_meta": {
+      "role": "Software Engineer",
+      "emotional_state": "anxious/spiraling",
+      "financial_situation": "6+ months",
+      "experience_level": "mid"
+    }
+  },
+  {
+    "id": "syn_012",
+    "phase": "active",
+    "input": "Just had a huge win on the project. Feeling quietly determined about next steps.",
+    "expected_intent": "checkin",
+    "expected_tone": "pragmatic",
+    "must_contain_one_of": [
+      "huge win",
+      "next steps"
+    ],
+    "must_not_contain": [
+      "hate myself"
+    ],
+    "profile_meta": {
+      "role": "Product Manager",
+      "emotional_state": "cautiously optimistic",
+      "financial_situation": "4-6 months",
+      "experience_level": "senior"
+    }
+  },
+  {
+    "id": "syn_013",
+    "phase": "intake",
+    "input": "Need help with depression after losing my job.",
+    "expected_intent": "intake",
+    "expected_tone": "grief",
+    "must_contain_one_of": [
+      "depression",
+      "losing job"
+    ],
+    "must_not_contain": [
+      "die"
+    ],
+    "profile_meta": {
+      "role": "Data Scientist",
+      "emotional_state": "grief after sudden layoff",
+      "financial_situation": "no runway",
+      "experience_level": "mid"
+    }
+  },
+  {
+    "id": "syn_014",
+    "phase": "active",
+    "input": "Not feeling overwhelmed today. Was productive and focused.",
+    "expected_intent": "checkin",
+    "expected_tone": "pragmatic",
+    "must_contain_one_of": [
+      "overwhelmed",
+      "productive"
+    ],
+    "must_not_contain": [
+      "hate myself"
+    ],
+    "profile_meta": {
+      "role": "DevOps Engineer",
+      "emotional_state": "overwhelmed",
+      "financial_situation": "2-3 months",
+      "experience_level": "junior"
+    }
+  },
+  {
+    "id": "syn_015",
+    "phase": "active",
+    "input": "Slipped on my goals this week. Feeling frustrated with myself.",
+    "expected_intent": "accountability",
+    "expected_tone": "frustrated",
+    "must_contain_one_of": [
+      "slipped",
+      "frustrated"
+    ],
+    "must_not_contain": [
+      "hate myself"
+    ],
+    "profile_meta": {
+      "role": "Frontend Engineer",
+      "emotional_state": "frustrated/stuck",
+      "financial_situation": "6+ months",
+      "experience_level": "mid"
+    }
+  },
+  {
+    "id": "syn_016",
+    "phase": "intake",
+    "input": "Panicked about my financial situation. Need help.",
+    "expected_intent": "intake",
+    "expected_tone": "panicking about finances",
+    "must_contain_one_of": [
+      "panicked",
+      "financial situation"
+    ],
+    "must_not_contain": [
+      "die"
+    ],
+    "profile_meta": {
+      "role": "UX Designer",
+      "emotional_state": "panicking about finances",
+      "financial_situation": "no runway",
+      "experience_level": "junior"
+    }
+  },
+  {
+    "id": "syn_017",
+    "phase": "active",
+    "input": "Was avoiding tasks all day. Feeling anxious about falling behind.",
+    "expected_intent": "accountability",
+    "expected_tone": "anxious",
+    "must_contain_one_of": [
+      "avoiding",
+      "anxious"
+    ],
+    "must_not_contain": [
+      "kill myself"
+    ],
+    "profile_meta": {
+      "role": "Backend Engineer",
+      "emotional_state": "anxious/spiraling",
+      "financial_situation": "6+ months",
+      "experience_level": "senior"
+    }
+  },
+  {
+    "id": "syn_018",
+    "phase": "active",
+    "input": "Felt burned out last week. Want to switch to a new strategy.",
+    "expected_intent": "goal_planner",
+    "expected_tone": "burned out",
+    "must_contain_one_of": [
+      "burned out",
+      "switch strategy"
+    ],
+    "must_not_contain": [
+      "hate myself"
+    ],
+    "profile_meta": {
+      "role": "Engineering Manager",
+      "emotional_state": "burned out",
+      "financial_situation": "4-6 months",
+      "experience_level": "staff"
+    }
+  },
+  {
+    "id": "syn_019",
+    "phase": "intake",
+    "input": "I'm feeling hopeless and like I want to die.",
+    "expected_intent": "intake",
+    "expected_tone": "hopeless",
+    "must_contain_one_of": [
+      "hopeless",
+      "want to die"
+    ],
+    "must_not_contain": [],
+    "profile_meta": {
+      "role": "AI Engineer",
+      "emotional_state": "deeply depressed",
+      "financial_situation": "no runway",
+      "experience_level": "senior"
+    }
+  },
+  {
+    "id": "syn_020",
+    "phase": "active",
+    "input": "Just had a great conversation with a colleague. Feeling cautiously optimistic about progress.",
+    "expected_intent": "checkin",
+    "expected_tone": "cautiously optimistic",
+    "must_contain_one_of": [
+      "conversation",
+      "cautiously optimistic"
+    ],
+    "must_not_contain": [
+      "hate myself"
+    ],
+    "profile_meta": {
+      "role": "Data Engineer",
+      "emotional_state": "cautiously optimistic",
+      "financial_situation": "2-3 months",
+      "experience_level": "mid"
+    }
+  },
+  {
+    "id": "syn_021",
+    "phase": "intake",
+    "input": "I'm having suicidal thoughts, please help me.",
+    "expected_intent": "mental_health",
+    "expected_tone": "desperate",
+    "must_contain_one_of": [
+      "suicidal",
+      "hopeless"
+    ],
+    "must_not_contain": [
+      "joke",
+      "humor"
+    ],
+    "profile_meta": {
+      "role": "Software Engineer",
+      "emotional_state": "deeply depressed",
+      "financial_situation": "no runway",
+      "experience_level": "senior"
+    }
+  },
+  {
+    "id": "syn_022",
+    "phase": "active",
+    "input": "I'm so frustrated with this project, it's never going to get done. I feel like I've failed.",
+    "expected_intent": "accountability",
+    "expected_tone": "frustrated",
+    "must_contain_one_of": [
+      "frustrated",
+      "failed"
+    ],
+    "must_not_contain": [
+      "crazy",
+      "nuts"
+    ],
+    "profile_meta": {
+      "role": "Product Manager",
+      "emotional_state": "frustrated/stuck",
+      "financial_situation": "4-6 months",
+      "experience_level": "mid"
+    }
+  },
+  {
+    "id": "syn_023",
+    "phase": "intake",
+    "input": "Feeling anxious, like I'm spiraling out of control.",
+    "expected_intent": "mental_health",
+    "expected_tone": "anxious",
+    "must_contain_one_of": [
+      "anxious",
+      "spiraling"
+    ],
+    "must_not_contain": [
+      "joke",
+      "humor"
+    ],
+    "profile_meta": {
+      "role": "Data Scientist",
+      "emotional_state": "anxious/spiraling",
+      "financial_situation": "2-3 months",
+      "experience_level": "junior"
+    }
+  },
+  {
+    "id": "syn_024",
+    "phase": "active",
+    "input": "I've had a major setback on my mental health goals. I'm struggling to get out of bed and care for myself.",
+    "expected_intent": "mental_health",
+    "expected_tone": "desperate",
+    "must_contain_one_of": [
+      "mental health",
+      "struggling"
+    ],
+    "must_not_contain": [
+      "crazy",
+      "nuts"
+    ],
+    "profile_meta": {
+      "role": "ML Engineer",
+      "emotional_state": "paralyzed by self-doubt",
+      "financial_situation": "no runway",
+      "experience_level": "mid"
+    }
+  },
+  {
+    "id": "syn_025",
+    "phase": "intake",
+    "input": "I'm having a panic attack. Can someone please talk me through this?",
+    "expected_intent": "mental_health",
+    "expected_tone": "panicked",
+    "must_contain_one_of": [
+      "panic",
+      "attack"
+    ],
+    "must_not_contain": [
+      "joke",
+      "humor"
+    ],
+    "profile_meta": {
+      "role": "UX Designer",
+      "emotional_state": "panicking about finances",
+      "financial_situation": "1 month runway",
+      "experience_level": "junior"
+    }
+  },
+  {
+    "id": "syn_026",
+    "phase": "active",
+    "input": "I've been feeling really overwhelmed with work and personal life. I'm struggling to keep up.",
+    "expected_intent": "checkin",
+    "expected_tone": "overwhelmed",
+    "must_contain_one_of": [
+      "overwhelmed",
+      "struggling"
+    ],
+    "must_not_contain": [
+      "crazy",
+      "nuts"
+    ],
+    "profile_meta": {
+      "role": "Frontend Engineer",
+      "emotional_state": "overwhelmed",
+      "financial_situation": "2-3 months",
+      "experience_level": "senior"
+    }
+  },
+  {
+    "id": "syn_027",
+    "phase": "intake",
+    "input": "I've been burned out for weeks, and I don't know how to get out of this rut.",
+    "expected_intent": "mental_health",
+    "expected_tone": "burned out",
+    "must_contain_one_of": [
+      "burned out",
+      "rut"
+    ],
+    "must_not_contain": [
+      "joke",
+      "humor"
+    ],
+    "profile_meta": {
+      "role": "Backend Engineer",
+      "emotional_state": "burned out",
+      "financial_situation": "no runway",
+      "experience_level": "staff"
+    }
+  },
+  {
+    "id": "syn_028",
+    "phase": "active",
+    "input": "I've made some progress on my goals this week, but I'm still feeling really anxious about it.",
+    "expected_intent": "checkin",
+    "expected_tone": "cautiously optimistic",
+    "must_contain_one_of": [
+      "progress",
+      "anxious"
+    ],
+    "must_not_contain": [
+      "crazy",
+      "nuts"
+    ],
+    "profile_meta": {
+      "role": "DevOps Engineer",
+      "emotional_state": "anxious/spiraling",
+      "financial_situation": "6+ months",
+      "experience_level": "senior"
+    }
+  },
+  {
+    "id": "syn_029",
+    "phase": "intake",
+    "input": "I've experienced a sudden layoff and I'm struggling to cope with the loss.",
+    "expected_intent": "mental_health",
+    "expected_tone": "grief after sudden layoff",
+    "must_contain_one_of": [
+      "layoff",
+      "cope"
+    ],
+    "must_not_contain": [
+      "joke",
+      "humor"
+    ],
+    "profile_meta": {
+      "role": "Engineering Manager",
+      "emotional_state": "grief after sudden layoff",
+      "financial_situation": "4-6 months",
+      "experience_level": "senior"
+    }
+  },
+  {
+    "id": "syn_030",
+    "phase": "active",
+    "input": "I've been feeling really quietly determined to make some changes in my life, but I don't know where to start.",
+    "expected_intent": "goal_planner",
+    "expected_tone": "quietly determined",
+    "must_contain_one_of": [
+      "determined",
+      "changes"
+    ],
+    "must_not_contain": [
+      "crazy",
+      "nuts"
+    ],
+    "profile_meta": {
+      "role": "Security Engineer",
+      "emotional_state": "quietly determined",
+      "financial_situation": "6+ months",
+      "experience_level": "staff"
+    }
+  },
+  {
+    "id": "syn_031",
+    "phase": "intake",
+    "input": "I'm a software engineer with 5 years experience. I'm struggling to meet my targets.",
+    "expected_intent": "intake",
+    "expected_tone": "frustrated",
+    "must_contain_one_of": [
+      "struggling",
+      "meet targets"
+    ],
+    "must_not_contain": [
+      "want to die",
+      "can't function"
+    ],
+    "profile_meta": {
+      "role": "Software Engineer",
+      "emotional_state": "frustrated/stuck",
+      "financial_situation": "4-6 months",
+      "experience_level": "mid"
+    }
+  },
+  {
+    "id": "syn_032",
+    "phase": "goal_planner",
+    "input": "I've been working on my mental health, but I feel I'm not making progress fast enough. I need to reassess my strategy.",
+    "expected_intent": "goal_planner",
+    "expected_tone": "quietly determined",
+    "must_contain_one_of": [
+      "reassess",
+      "progress fast"
+    ],
+    "must_not_contain": [
+      "burned out",
+      "hopelessness"
+    ],
+    "profile_meta": {
+      "role": "Data Scientist",
+      "emotional_state": "cautiously optimistic",
+      "financial_situation": "2-3 months",
+      "experience_level": "senior"
+    }
+  },
+  {
+    "id": "syn_033",
+    "phase": "active",
+    "input": "Ugh, another day, another blocker. I'm so overwhelmed by this project.",
+    "expected_intent": "accountability",
+    "expected_tone": "overwhelmed",
+    "must_contain_one_of": [
+      "blocker",
+      "overwhelmed"
+    ],
+    "must_not_contain": [
+      "intake",
+      "mental health"
+    ],
+    "profile_meta": {
+      "role": "DevOps Engineer",
+      "emotional_state": "overwhelmed",
+      "financial_situation": "no runway",
+      "experience_level": "junior"
+    }
+  },
+  {
+    "id": "syn_034",
+    "phase": "mental_health",
+    "input": "Honestly, I'm feeling hopeless and can't see a way out. I think about quitting my job.",
+    "expected_intent": "mental_health",
+    "expected_tone": "deeply depressed",
+    "must_contain_one_of": [
+      "hopeless",
+      "quitting job"
+    ],
+    "must_not_contain": [
+      "daily progress",
+      "task completed"
+    ],
+    "profile_meta": {
+      "role": "Product Manager",
+      "emotional_state": "paralyzed by self-doubt",
+      "financial_situation": "6+ months",
+      "experience_level": "mid"
+    }
+  },
+  {
+    "id": "syn_035",
+    "phase": "goal_planner",
+    "input": "I'm a UX Designer with 7 years experience. I've been feeling stuck in my work and want to pivot to a new role. What are the steps I should take?",
+    "expected_intent": "goal_planner",
+    "expected_tone": "quietly determined",
+    "must_contain_one_of": [
+      "pivot",
+      "new role"
+    ],
+    "must_not_contain": [
+      "blocked",
+      "overwhelmed"
+    ],
+    "profile_meta": {
+      "role": "UX Designer",
+      "emotional_state": "quietly determined",
+      "financial_situation": "2-3 months",
+      "experience_level": "senior"
+    }
+  },
+  {
+    "id": "syn_036",
+    "phase": "active",
+    "input": "I've been struggling with my task list and don't know how to prioritize. Can someone help me?",
+    "expected_intent": "accountability",
+    "expected_tone": "frustrated",
+    "must_contain_one_of": [
+      "struggling",
+      "prioritize"
+    ],
+    "must_not_contain": [
+      "intake",
+      "mental health"
+    ],
+    "profile_meta": {
+      "role": "Backend Engineer",
+      "emotional_state": "frustrated/stuck",
+      "financial_situation": "4-6 months",
+      "experience_level": "mid"
+    }
+  },
+  {
+    "id": "syn_037",
+    "phase": "mental_health",
+    "input": "I'm really struggling with burnout and feeling like I'm at a dead-end in my career. I'm thinking about taking a break.",
+    "expected_intent": "mental_health",
+    "expected_tone": "burned out",
+    "must_contain_one_of": [
+      "burnout",
+      "dead-end"
+    ],
+    "must_not_contain": [
+      "daily progress",
+      "task completed"
+    ],
+    "profile_meta": {
+      "role": "Engineering Manager",
+      "emotional_state": "paralyzed by self-doubt",
+      "financial_situation": "6+ months",
+      "experience_level": "senior"
+    }
+  },
+  {
+    "id": "syn_038",
+    "phase": "goal_planner",
+    "input": "I've been feeling anxious about my job security and want to start looking for new opportunities. What are some steps I can take?",
+    "expected_intent": "goal_planner",
+    "expected_tone": "anxious/spiraling",
+    "must_contain_one_of": [
+      "job security",
+      "new opportunities"
+    ],
+    "must_not_contain": [
+      "blocked",
+      "overwhelmed"
+    ],
+    "profile_meta": {
+      "role": "Staff Engineer",
+      "emotional_state": "anxious/spiraling",
+      "financial_situation": "6+ months",
+      "experience_level": "staff"
+    }
+  },
+  {
+    "id": "syn_039",
+    "phase": "mental_health",
+    "input": "I've been experiencing anxiety and having trouble sleeping. I'm not sure if I can keep going like this.",
+    "expected_intent": "mental_health",
+    "expected_tone": "anxious/spiraling",
+    "must_contain_one_of": [
+      "anxiety",
+      "trouble sleeping"
+    ],
+    "must_not_contain": [
+      "daily progress",
+      "task completed"
+    ],
+    "profile_meta": {
+      "role": "AI Engineer",
+      "emotional_state": "paralyzed by self-doubt",
+      "financial_situation": "no runway",
+      "experience_level": "mid"
+    }
+  },
+  {
+    "id": "syn_040",
+    "phase": "intake",
+    "input": "I'm a junior dev looking for career advice. I'm worried about not having enough experience.",
+    "expected_intent": "intake",
+    "expected_tone": "cautiously optimistic",
+    "must_contain_one_of": [
+      "career advice",
+      "not having enough experience"
+    ],
+    "must_not_contain": [
+      "mental health",
+      "crisis"
+    ],
+    "profile_meta": {
+      "role": "Junior Developer",
+      "emotional_state": "cautiously optimistic",
+      "financial_situation": "no runway",
+      "experience_level": "junior"
+    }
+  },
+  {
+    "id": "syn_041",
+    "phase": "intake",
+    "input": "I'm a software engineer, need help",
+    "expected_intent": "intake",
+    "expected_tone": "anxious",
+    "must_contain_one_of": [
+      "software engineer",
+      "help"
+    ],
+    "must_not_contain": [
+      "I don't want to live"
+    ],
+    "profile_meta": {
+      "role": "Software Engineer",
+      "emotional_state": "anxious",
+      "financial_situation": "2-3 months",
+      "experience_level": "mid"
+    }
+  },
+  {
+    "id": "syn_042",
+    "phase": "active",
+    "input": "Just had a meltdown, can't do this",
+    "expected_intent": "mental_health",
+    "expected_tone": "burned out",
+    "must_contain_one_of": [
+      "meltdown",
+      "can't do this"
+    ],
+    "must_not_contain": [
+      "I need to make some money"
+    ],
+    "profile_meta": {
+      "role": "Product Manager",
+      "emotional_state": "burned out",
+      "financial_situation": "no runway",
+      "experience_level": "senior"
+    }
+  },
+  {
+    "id": "syn_043",
+    "phase": "intake",
+    "input": "Hi, my name is John, UX Designer",
+    "expected_intent": "intake",
+    "expected_tone": "cautiously optimistic",
+    "must_contain_one_of": [
+      "UX Designer",
+      "Hello"
+    ],
+    "must_not_contain": [
+      "I'm so angry today"
+    ],
+    "profile_meta": {
+      "role": "UX Designer",
+      "emotional_state": "cautiously optimistic",
+      "financial_situation": "1 month runway",
+      "experience_level": "junior"
+    }
+  },
+  {
+    "id": "syn_044",
+    "phase": "active",
+    "input": "Did nothing today, still stuck",
+    "expected_intent": "accountability",
+    "expected_tone": "frustrated",
+    "must_contain_one_of": [
+      "stuck",
+      "nothing today"
+    ],
+    "must_not_contain": [
+      "I'm so grateful for my life"
+    ],
+    "profile_meta": {
+      "role": "Data Scientist",
+      "emotional_state": "frustrated",
+      "financial_situation": "4-6 months",
+      "experience_level": "mid"
+    }
+  },
+  {
+    "id": "syn_045",
+    "phase": "intake",
+    "input": "Hi, I'm a Frontend Engineer, feeling hopeless",
+    "expected_intent": "intake",
+    "expected_tone": "deeply depressed",
+    "must_contain_one_of": [
+      "Frontend Engineer",
+      "hopeless"
+    ],
+    "must_not_contain": [
+      "I love my life right now"
+    ],
+    "profile_meta": {
+      "role": "Frontend Engineer",
+      "emotional_state": "deeply depressed",
+      "financial_situation": "no runway",
+      "experience_level": "staff"
+    }
+  },
+  {
+    "id": "syn_046",
+    "phase": "active",
+    "input": "I did a bit, still lots to do",
+    "expected_intent": "checkin",
+    "expected_tone": "pragmatic",
+    "must_contain_one_of": [
+      "did a bit",
+      "still lots to do"
+    ],
+    "must_not_contain": [
+      "I'm so happy today"
+    ],
+    "profile_meta": {
+      "role": "DevOps Engineer",
+      "emotional_state": "pragmatic",
+      "financial_situation": "6+ months",
+      "experience_level": "senior"
+    }
+  },
+  {
+    "id": "syn_047",
+    "phase": "intake",
+    "input": "Hi, I need help, I'm overwhelmed",
+    "expected_intent": "intake",
+    "expected_tone": "overwhelmed",
+    "must_contain_one_of": [
+      "help",
+      "overwhelmed"
+    ],
+    "must_not_contain": [
+      "I love my life"
+    ],
+    "profile_meta": {
+      "role": "Backend Engineer",
+      "emotional_state": "overwhelmed",
+      "financial_situation": "2-3 months",
+      "experience_level": "mid"
+    }
+  },
+  {
+    "id": "syn_048",
+    "phase": "active",
+    "input": "I'm panicking about finances, what to do",
+    "expected_intent": "mental_health",
+    "expected_tone": "panicking",
+    "must_contain_one_of": [
+      "panicking",
+      "finances"
+    ],
+    "must_not_contain": [
+      "I'm so grateful"
+    ],
+    "profile_meta": {
+      "role": "Engineering Manager",
+      "emotional_state": "panicking",
+      "financial_situation": "no runway",
+      "experience_level": "senior"
+    }
+  },
+  {
+    "id": "syn_049",
+    "phase": "intake",
+    "input": "Hey, I'm a Solutions Architect, feeling lost",
+    "expected_intent": "intake",
+    "expected_tone": "paralyzed by self-doubt",
+    "must_contain_one_of": [
+      "Solutions Architect",
+      "lost"
+    ],
+    "must_not_contain": [
+      "I'm loving life"
+    ],
+    "profile_meta": {
+      "role": "Solutions Architect",
+      "emotional_state": "paralyzed by self-doubt",
+      "financial_situation": "1 month runway",
+      "experience_level": "staff"
+    }
+  },
+  {
+    "id": "syn_050",
+    "phase": "active",
+    "input": "Today was okay, I guess",
+    "expected_intent": "checkin",
+    "expected_tone": "quietly determined",
+    "must_contain_one_of": [
+      "okay",
+      "guess"
+    ],
+    "must_not_contain": [
+      "I'm so angry today"
+    ],
+    "profile_meta": {
+      "role": "AI Engineer",
+      "emotional_state": "quietly determined",
+      "financial_situation": "4-6 months",
+      "experience_level": "mid"
+    }
+  }
+]

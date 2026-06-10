@@ -1,0 +1,443 @@
+[
+  {
+    "name": "OpenAI",
+    "tier": "AI Lab",
+    "hiring_signals": ["Consistently hiring for research, safety, and product roles", "Expanding internationally with US as HQ"],
+    "culture_notes": ["Mission-driven: AGI safety first", "Fast-moving, high expectations, elite research culture"],
+    "interview_process": ["Technical screen, then systems design or ML fundamentals, then research presentation for research roles"],
+    "tech_stack": ["Python", "PyTorch", "Azure infrastructure", "Kubernetes"],
+    "roles_commonly_open": ["ML Research Scientist", "Software Engineer", "Safety Researcher", "Product Manager"]
+  },
+  {
+    "name": "Anthropic",
+    "tier": "AI Lab",
+    "hiring_signals": ["Rapidly scaling safety and product teams", "Heavy hiring in SF and remote"],
+    "culture_notes": ["Safety-first AI research culture", "Collaborative, low-ego, academic feel with startup pace"],
+    "interview_process": ["Coding screen, ML system design, research deep-dive for scientists, values-alignment interview"],
+    "tech_stack": ["Python", "JAX", "PyTorch", "AWS"],
+    "roles_commonly_open": ["Research Scientist", "Research Engineer", "Software Engineer", "Policy Researcher"]
+  },
+  {
+    "name": "Google DeepMind",
+    "tier": "Big Tech AI",
+    "hiring_signals": ["Merged Google Brain and DeepMind, actively hiring across both orgs", "Strong hiring in NYC and Mountain View"],
+    "culture_notes": ["Research-heavy, long-term thinking", "Academic pedigree valued, strong publication culture"],
+    "interview_process": ["Multiple coding rounds, ML theory, research presentation, Googleyness behavioral round"],
+    "tech_stack": ["Python", "JAX", "TensorFlow", "TPUs", "GCP"],
+    "roles_commonly_open": ["Research Scientist", "Research Engineer", "Software Engineer L4-L7", "Product Manager"]
+  },
+  {
+    "name": "Meta AI",
+    "tier": "Big Tech AI",
+    "hiring_signals": ["FAIR and GenAI orgs both hiring", "Open source LLM investments driving headcount growth"],
+    "culture_notes": ["Move fast culture, strong eng-driven decisions", "Open source commitment — LLaMA releases signal research openness"],
+    "interview_process": ["Coding (LeetCode hard), systems design, ML design, behavioral — 5-6 rounds total"],
+    "tech_stack": ["Python", "PyTorch", "React", "Hack", "Presto", "Spark"],
+    "roles_commonly_open": ["Research Scientist", "Software Engineer E4-E6", "ML Engineer", "Data Scientist"]
+  },
+  {
+    "name": "Microsoft",
+    "tier": "Big Tech AI",
+    "hiring_signals": ["AI integration across all product lines driving massive hiring", "Azure AI and Copilot teams expanding rapidly"],
+    "culture_notes": ["Growth mindset culture under Nadella", "Collaborative, large org with many internal mobility paths"],
+    "interview_process": ["Coding screen, design round, behavioral with STAR, as appropriate loop (4-5 rounds)"],
+    "tech_stack": ["Python", "C#", "TypeScript", "Azure", "PyTorch", "ONNX"],
+    "roles_commonly_open": ["Software Engineer", "Applied Scientist", "AI Product Manager", "Data Scientist"]
+  },
+  {
+    "name": "NVIDIA",
+    "tier": "AI Hardware",
+    "hiring_signals": ["GPU demand driving eng and research hiring at all levels", "CUDA, networking, and AI software teams all expanding"],
+    "culture_notes": ["High performance, detail-oriented engineering culture", "Long tenures, strong compensation, competitive but collaborative"],
+    "interview_process": ["Deep technical rounds: GPU architecture, CUDA programming, systems design, C++ proficiency"],
+    "tech_stack": ["CUDA", "C++", "Python", "TensorRT", "Triton", "NeMo"],
+    "roles_commonly_open": ["CUDA Engineer", "Deep Learning Engineer", "Solutions Architect", "Research Scientist"]
+  },
+  {
+    "name": "Databricks",
+    "tier": "AI Infrastructure",
+    "hiring_signals": ["MosaicML acquisition expanded AI research team", "Lakehouse + AI platform driving strong growth"],
+    "culture_notes": ["Engineer-led, customer-obsessed", "Strong technical culture, open source roots (Apache Spark)"],
+    "interview_process": ["Coding screen, distributed systems design, ML platform design, behavioral"],
+    "tech_stack": ["Python", "Scala", "Apache Spark", "Delta Lake", "MLflow", "PyTorch"],
+    "roles_commonly_open": ["Software Engineer", "ML Engineer", "Data Engineer", "Solutions Architect", "Research Scientist"]
+  },
+  {
+    "name": "Scale AI",
+    "tier": "AI Data",
+    "hiring_signals": ["Government and enterprise contracts driving rapid headcount growth", "RLHF and data engine teams expanding"],
+    "culture_notes": ["Execution-obsessed, fast-paced startup culture", "High ownership expected at every level"],
+    "interview_process": ["Coding screen, product sense or systems design depending on role, behavioral"],
+    "tech_stack": ["Python", "TypeScript", "React", "Kubernetes", "PostgreSQL"],
+    "roles_commonly_open": ["Software Engineer", "ML Engineer", "Product Manager", "Data Operations Lead"]
+  },
+  {
+    "name": "Waymo",
+    "tier": "AI Robotics / AV",
+    "hiring_signals": ["Expanding robotaxi fleet driving hiring across all eng disciplines", "Perception, planning, and simulation teams all growing"],
+    "culture_notes": ["Safety-first, rigorous engineering culture", "Google heritage — structured, data-driven, process-oriented"],
+    "interview_process": ["Coding, systems design, domain-specific ML or robotics rounds, behavioral"],
+    "tech_stack": ["Python", "C++", "TensorFlow", "ROS", "Simulation frameworks"],
+    "roles_commonly_open": ["Software Engineer", "Research Scientist", "Perception Engineer", "Robotics Engineer"]
+  },
+  {
+    "name": "Palantir",
+    "tier": "AI Enterprise",
+    "hiring_signals": ["AIP (AI Platform) launch driving significant product and eng hiring", "Government and commercial divisions both expanding"],
+    "culture_notes": ["Mission-driven, intense culture — work is taken very seriously", "Strong opinions on building software that matters, not just software"],
+    "interview_process": ["Decomp exercise (product problem solving), coding, systems design, culture fit — unique process"],
+    "tech_stack": ["Java", "TypeScript", "Python", "Spark", "Foundry platform"],
+    "roles_commonly_open": ["Forward Deployed Engineer", "Software Engineer", "Data Engineer", "Product Manager"]
+  },
+  {
+    "name": "xAI",
+    "tier": "AI Lab",
+    "hiring_signals": ["$20B funding round Jan 2026 from Nvidia, Cisco, Fidelity — rapidly expanding team", "Building Grok and AGI infrastructure, headcount growing fast from 200+"],
+    "culture_notes": ["AGI-focused, Elon Musk-led, extremely high-bar hiring", "Integrated with X/Twitter platform, fast-moving and mission-intense"],
+    "interview_process": ["Deep technical bar: ML fundamentals, systems, coding — similar rigor to top AI labs"],
+    "tech_stack": ["Python", "CUDA", "PyTorch", "Grok infrastructure"],
+    "roles_commonly_open": ["Research Scientist", "ML Engineer", "Infrastructure Engineer", "Software Engineer"]
+  },
+  {
+    "name": "Anysphere (Cursor)",
+    "tier": "AI Developer Tools",
+    "hiring_signals": ["$1B ARR in 24 months, $29.3B valuation Nov 2025 — one of fastest growing SaaS ever", "$2.3B Series D, 500K+ developers using product daily"],
+    "culture_notes": ["Small elite team (~300 people) moving extremely fast", "Engineering-driven, product quality obsessed, strong word-of-mouth culture"],
+    "interview_process": ["High bar coding, product thinking, systems design — lean team so every hire is high impact"],
+    "tech_stack": ["TypeScript", "Python", "Electron", "LLM APIs", "VSCode extension APIs"],
+    "roles_commonly_open": ["Software Engineer", "ML Engineer", "Product Manager", "Designer"]
+  },
+  {
+    "name": "Perplexity AI",
+    "tier": "AI Search",
+    "hiring_signals": ["$20B valuation Sep 2025, 100M+ monthly users — scaling product and infra teams", "Hiring across engineering, research, and growth"],
+    "culture_notes": ["Fast-paced, small team culture with high autonomy", "Research meets consumer product — academic rigour with startup speed"],
+    "interview_process": ["Coding screen, ML systems design, product thinking round, culture fit"],
+    "tech_stack": ["Python", "React", "LLM orchestration", "search indexing pipelines"],
+    "roles_commonly_open": ["Software Engineer", "ML Researcher", "Product Manager", "Growth Engineer"]
+  },
+  {
+    "name": "Mistral AI",
+    "tier": "AI Lab",
+    "hiring_signals": ["$14B valuation Sep 2025, doubled from $6B in under a year", "Open-source model releases driving enterprise adoption across Europe and US"],
+    "culture_notes": ["Research-first, open-source committed culture", "Founded by ex-Google DeepMind and Meta researchers — academic pedigree, startup speed"],
+    "interview_process": ["ML theory and systems deep dive, coding, research background discussion"],
+    "tech_stack": ["Python", "PyTorch", "JAX", "distributed training infrastructure"],
+    "roles_commonly_open": ["Research Scientist", "ML Engineer", "Software Engineer", "Enterprise Solutions Engineer"]
+  },
+  {
+    "name": "Cognition AI",
+    "tier": "AI Developer Tools",
+    "hiring_signals": ["$10.2B valuation, grew from $1M to $73M ARR in under a year", "Devin autonomous coding agent gaining strong enterprise traction"],
+    "culture_notes": ["Small elite team, extremely high technical bar", "Autonomous agent focus — building software that writes software"],
+    "interview_process": ["Extremely rigorous: competitive programming background valued, deep ML systems knowledge required"],
+    "tech_stack": ["Python", "TypeScript", "agent frameworks", "code execution sandboxes"],
+    "roles_commonly_open": ["Research Engineer", "Software Engineer", "ML Researcher"]
+  },
+  {
+    "name": "Sierra",
+    "tier": "AI Enterprise",
+    "hiring_signals": ["$10B valuation Sep 2025, $100M ARR in under 2 years", "Co-founded by ex-Salesforce co-CEO Bret Taylor — credibility driving enterprise deals"],
+    "culture_notes": ["Enterprise-grade culture with startup speed", "Customer-obsessed, founders with deep Salesforce and Google backgrounds set the tone"],
+    "interview_process": ["Product and systems rounds, strong emphasis on customer empathy and enterprise thinking"],
+    "tech_stack": ["Python", "TypeScript", "LLM orchestration", "enterprise integrations"],
+    "roles_commonly_open": ["Software Engineer", "ML Engineer", "Enterprise Account Executive", "Solutions Engineer"]
+  },
+  {
+    "name": "Cerebras Systems",
+    "tier": "AI Hardware",
+    "hiring_signals": ["$8.1B valuation, $1.1B Series G Sep 2025, delayed IPO for stronger 2026 listing", "Wafer-scale chip manufacturing requires deep hardware engineering talent"],
+    "culture_notes": ["Deep hardware engineering culture — builds the world's largest AI chips", "Competitive with Nvidia, research and engineering driven"],
+    "interview_process": ["Deep hardware architecture, VLSI, systems programming, C/C++ proficiency"],
+    "tech_stack": ["C++", "CUDA-equivalent proprietary stack", "Python ML frameworks", "chip simulation tools"],
+    "roles_commonly_open": ["Chip Architect", "ML Systems Engineer", "Software Engineer", "Research Scientist"]
+  },
+  {
+    "name": "Harvey",
+    "tier": "AI Legal",
+    "hiring_signals": ["$8B valuation Dec 2025, highest-valued legal AI startup", "10,000+ legal professionals using platform — rapid law firm adoption"],
+    "culture_notes": ["Domain-expert culture — deep collaboration between legal and engineering", "High standards for accuracy, built on top of frontier models with legal fine-tuning"],
+    "interview_process": ["Coding screen, domain-specific ML design, product thinking, legal workflow understanding"],
+    "tech_stack": ["Python", "TypeScript", "LLM APIs", "legal document processing pipelines"],
+    "roles_commonly_open": ["Software Engineer", "ML Engineer", "Legal AI Researcher", "Enterprise Account Manager"]
+  },
+  {
+    "name": "Glean",
+    "tier": "AI Enterprise",
+    "hiring_signals": ["$7.2B valuation, doubled ARR from $100M to $200M in 9 months", "1,000+ enterprise customers including Databricks, Reddit, Duolingo"],
+    "culture_notes": ["Customer-obsessed, enterprise-grade culture", "Founded by ex-Google search engineers — deep search and ML expertise valued"],
+    "interview_process": ["Coding, information retrieval systems design, ML relevance and ranking, behavioral"],
+    "tech_stack": ["Python", "Go", "Elasticsearch", "LLM orchestration", "enterprise connectors"],
+    "roles_commonly_open": ["Software Engineer", "ML Engineer", "Enterprise Sales", "Solutions Engineer"]
+  },
+  {
+    "name": "Cohere",
+    "tier": "AI Lab",
+    "hiring_signals": ["$7B valuation, $100M ARR in 2025, focused on enterprise and sovereign AI", "Founded by Google Brain alumni — strong research hiring pipeline"],
+    "culture_notes": ["Enterprise-first, no consumer distraction", "Canadian roots with US expansion — collaborative academic-meets-startup culture"],
+    "interview_process": ["ML fundamentals, NLP systems design, coding, enterprise product thinking"],
+    "tech_stack": ["Python", "PyTorch", "JAX", "enterprise deployment infrastructure"],
+    "roles_commonly_open": ["Research Scientist", "ML Engineer", "Solutions Engineer", "Enterprise Account Executive"]
+  },
+  {
+    "name": "Hugging Face",
+    "tier": "AI Infrastructure",
+    "hiring_signals": ["$4.5B valuation, 500K+ models hosted, used by Google, Meta, Microsoft, Amazon", "Open source community of 50,000+ organizations driving platform growth"],
+    "culture_notes": ["Open source first — every contribution is public and community-driven", "Distributed remote team across US and Europe, collaborative and research-forward"],
+    "interview_process": ["Coding, open source contribution history valued, ML systems, community and culture alignment"],
+    "tech_stack": ["Python", "PyTorch", "Transformers library", "Gradio", "Spaces platform"],
+    "roles_commonly_open": ["ML Engineer", "Research Scientist", "Software Engineer", "Developer Advocate"]
+  },
+  {
+    "name": "Lambda Labs",
+    "tier": "AI Infrastructure",
+    "hiring_signals": ["$4B+ valuation, $1.5B Series E Nov 2025 backed by Nvidia", "Multibillion-dollar Microsoft deal driving infrastructure scaling"],
+    "culture_notes": ["GPU cloud infrastructure culture — hardcore systems engineering", "Alternative to hyperscalers positioning drives scrappy, builder mentality"],
+    "interview_process": ["Distributed systems design, cloud infrastructure, networking, coding screen"],
+    "tech_stack": ["Python", "Kubernetes", "CUDA", "networking stack", "Nvidia hardware"],
+    "roles_commonly_open": ["Infrastructure Engineer", "ML Platform Engineer", "Software Engineer", "Solutions Architect"]
+  },
+  {
+    "name": "Together AI",
+    "tier": "AI Infrastructure",
+    "hiring_signals": ["$3.3B valuation, Nvidia-backed, 10,000+ developers on platform", "Open model cloud positioning driving strong developer adoption"],
+    "culture_notes": ["Developer-first culture, strong open source commitment", "Research and platform engineering blend — academic founders, startup execution"],
+    "interview_process": ["ML systems design, distributed inference, coding, platform thinking"],
+    "tech_stack": ["Python", "CUDA", "Kubernetes", "distributed inference frameworks", "open source LLMs"],
+    "roles_commonly_open": ["ML Systems Engineer", "Software Engineer", "Research Engineer", "Developer Relations"]
+  },
+  {
+    "name": "Runway",
+    "tier": "AI Creative",
+    "hiring_signals": ["$3B+ valuation, used by A24 Films and major studios, 10M+ creators", "$308M Series D led by General Atlantic — scaling research and product"],
+    "culture_notes": ["Creative meets technical — designers, artists, and engineers collaborate closely", "Research-driven video generation with strong creator community feedback loop"],
+    "interview_process": ["ML research for scientists, full-stack or infra for engineers, product portfolio for PMs"],
+    "tech_stack": ["Python", "PyTorch", "video processing pipelines", "diffusion model infrastructure"],
+    "roles_commonly_open": ["Research Scientist", "ML Engineer", "Software Engineer", "Product Designer"]
+  },
+  {
+    "name": "Writer",
+    "tier": "AI Enterprise",
+    "hiring_signals": ["$1.9B valuation, unicorn status, customers include Accenture, Uber, Spotify", "Enterprise governance and compliance focus driving Fortune 500 adoption"],
+    "culture_notes": ["Enterprise-grade culture with emphasis on security and compliance", "Customer success driven — deep partnership with large accounts"],
+    "interview_process": ["Coding, enterprise product design, content AI systems, behavioral with ownership emphasis"],
+    "tech_stack": ["Python", "TypeScript", "LLM fine-tuning", "enterprise security stack"],
+    "roles_commonly_open": ["Software Engineer", "ML Engineer", "Enterprise Account Executive", "Customer Success Manager"]
+  },
+  {
+    "name": "Thinking Machines Lab",
+    "tier": "AI Lab",
+    "hiring_signals": ["$2B seed round at $12B valuation Jul 2025, in talks for $50-60B valuation by end of 2025", "Founded by ex-OpenAI CTO Mira Murati — attracting top AI talent fast"],
+    "culture_notes": ["Pre-product stealth mode — pure research and foundational AI building culture", "Small team, extremely high bar, long-term AGI focus"],
+    "interview_process": ["Deep ML research background, frontier model knowledge, systems thinking — stealth so limited public info"],
+    "tech_stack": ["Python", "JAX", "PyTorch", "custom training infrastructure"],
+    "roles_commonly_open": ["Research Scientist", "Research Engineer", "ML Systems Engineer"]
+  },
+  {
+    "name": "Safe Superintelligence (SSI)",
+    "tier": "AI Lab",
+    "hiring_signals": ["$2B round at $32B valuation Apr 2025 led by Alphabet despite zero revenue", "Co-founded by Ilya Sutskever (ex-OpenAI chief scientist) — top AI safety talent magnet"],
+    "culture_notes": ["Pure safety research culture, no product pressure", "Small (~50 people) elite team — stealth, mission-driven, long time horizon"],
+    "interview_process": ["Frontier ML research bar — publications, safety research background, theoretical depth valued"],
+    "tech_stack": ["Python", "JAX", "PyTorch", "custom research infrastructure"],
+    "roles_commonly_open": ["Research Scientist", "Safety Researcher", "Research Engineer"]
+  },
+  {
+    "name": "Character.AI",
+    "tier": "AI Consumer",
+    "hiring_signals": ["20M+ monthly active users, Google invested $2.7B via reverse acquihire", "Platform continues operating independently with strong user growth"],
+    "culture_notes": ["Consumer entertainment culture — creative, user-experience driven", "Fast feedback loop from massive user base shapes product direction"],
+    "interview_process": ["Coding screen, ML systems, product and consumer thinking, culture fit"],
+    "tech_stack": ["Python", "PyTorch", "consumer-scale infrastructure", "real-time inference systems"],
+    "roles_commonly_open": ["Software Engineer", "ML Engineer", "Product Manager", "Data Scientist"]
+  },
+  {
+    "name": "Ambience Healthcare",
+    "tier": "AI Healthcare",
+    "hiring_signals": ["$243M Series C 2025, deployed at UCSF Health and Memorial Hermann", "Clinical documentation AI reducing physician burnout — strong hospital system adoption"],
+    "culture_notes": ["Mission-driven healthcare culture — clinician empathy is core to product decisions", "Andreessen Horowitz backed, high standards for accuracy and safety in clinical settings"],
+    "interview_process": ["Coding, healthcare ML systems design, HIPAA/compliance awareness, behavioral"],
+    "tech_stack": ["Python", "ASR pipelines", "NLP", "EHR integrations", "HIPAA-compliant infrastructure"],
+    "roles_commonly_open": ["ML Engineer", "Software Engineer", "Clinical AI Researcher", "Solutions Engineer"]
+  },
+  {
+    "name": "Groq",
+    "tier": "AI Hardware",
+    "hiring_signals": ["LPU inference chips outperforming GPUs on speed — strong industry buzz driving hiring", "Partnerships with major cloud providers expanding go-to-market team"],
+    "culture_notes": ["Hardware-first culture, obsessed with inference speed and efficiency", "Smaller team, high ownership, contrarian bet against Nvidia dominance"],
+    "interview_process": ["Deep hardware architecture or compiler engineering rounds, systems design, coding"],
+    "tech_stack": ["C++", "Python", "LPU architecture", "GroqCloud APIs", "compiler toolchain"],
+    "roles_commonly_open": ["Compiler Engineer", "ML Systems Engineer", "Software Engineer", "Solutions Architect"]
+  },
+  {
+    "name": "ElevenLabs",
+    "tier": "AI Creative",
+    "hiring_signals": ["Fastest voice AI adoption in market — publishers, game studios, and creators all onboarding", "International expansion driving localization and infra hiring"],
+    "culture_notes": ["Small team, extremely fast iteration — product updates ship weekly", "Research and product deeply intertwined, strong voice AI community"],
+    "interview_process": ["Coding screen, audio ML systems design, product thinking for PMs, culture fit"],
+    "tech_stack": ["Python", "PyTorch", "audio signal processing", "streaming inference", "cloud infra"],
+    "roles_commonly_open": ["ML Research Scientist", "Audio Engineer", "Software Engineer", "Product Manager"]
+  },
+  {
+    "name": "Replit",
+    "tier": "AI Developer Tools",
+    "hiring_signals": ["Replit Agent launched — strong developer adoption driving product and infra scaling", "Moving from IDE to autonomous software builder, reshaping team composition"],
+    "culture_notes": ["Developer community-first culture with 20M+ users giving direct feedback", "Remote-friendly, high autonomy, builder mentality throughout"],
+    "interview_process": ["Coding, product thinking, dev tools systems design, culture and ownership behavioral"],
+    "tech_stack": ["TypeScript", "Python", "Nix", "cloud execution environments", "LLM APIs"],
+    "roles_commonly_open": ["Software Engineer", "ML Engineer", "Product Manager", "Developer Relations"]
+  },
+  {
+    "name": "Weights & Biases",
+    "tier": "AI Infrastructure",
+    "hiring_signals": ["MLOps category leader with strong enterprise and research adoption", "Weave (LLM observability) expanding total addressable market significantly"],
+    "culture_notes": ["Researcher-friendly culture — dogfoods own tools internally", "Remote-first, strong open source contributions, community-driven roadmap"],
+    "interview_process": ["Coding, ML experiment tracking systems design, customer empathy rounds for GTM roles"],
+    "tech_stack": ["Python", "Go", "React", "distributed logging infrastructure", "cloud storage"],
+    "roles_commonly_open": ["Software Engineer", "ML Engineer", "Solutions Engineer", "Developer Advocate"]
+  },
+  {
+    "name": "Pinecone",
+    "tier": "AI Infrastructure",
+    "hiring_signals": ["Vector database category leader powering thousands of RAG applications", "Enterprise deals accelerating as AI apps move to production"],
+    "culture_notes": ["Infrastructure engineering culture — reliability and performance are non-negotiable", "Remote-first, strong focus on developer experience and documentation"],
+    "interview_process": ["Distributed systems design, database internals, coding, customer scenario rounds for GTM"],
+    "tech_stack": ["Rust", "Python", "Go", "vector indexing algorithms", "cloud-native infrastructure"],
+    "roles_commonly_open": ["Software Engineer", "ML Infrastructure Engineer", "Enterprise Sales", "Solutions Architect"]
+  },
+  {
+    "name": "Figure AI",
+    "tier": "AI Robotics",
+    "hiring_signals": ["$2.6B raised, BMW partnership for factory deployment — hardware and software hiring accelerating", "Figure 02 humanoid robot in production, scaling manufacturing team"],
+    "culture_notes": ["Extremely high bar, hardware-meets-AI culture — shipping physical products with zero margin for error", "Ambitious and intense — building human-level robots is the explicit mission"],
+    "interview_process": ["Robotics, controls, perception, or full-stack eng depending on role — deep domain knowledge required"],
+    "tech_stack": ["Python", "C++", "ROS2", "PyTorch", "simulation environments", "embedded systems"],
+    "roles_commonly_open": ["Robotics Engineer", "ML Researcher", "Controls Engineer", "Perception Engineer"]
+  },
+  {
+    "name": "Aurora Innovation",
+    "tier": "AI Robotics / AV",
+    "hiring_signals": ["Aurora Driver commercially launching on Texas freight routes — scaling ops and eng teams", "Post-Uber ATG and Lyft Level 5 acquisitions brought deep AV talent"],
+    "culture_notes": ["Safety-first AV culture with strong research roots", "Public company (NASDAQ: AUR) — more structured than pure startup, still moves fast on product"],
+    "interview_process": ["Coding, AV-specific domain rounds (perception, planning, mapping), systems design, behavioral"],
+    "tech_stack": ["C++", "Python", "ROS", "sensor fusion pipelines", "simulation", "lidar/radar processing"],
+    "roles_commonly_open": ["Software Engineer", "Perception Engineer", "Motion Planning Engineer", "Safety Engineer"]
+  },
+  {
+    "name": "Snowflake",
+    "tier": "AI Infrastructure",
+    "hiring_signals": ["Cortex AI platform driving net-new AI engineering hiring across all divisions", "Every data workload becoming an AI workload — strong tailwinds for all teams"],
+    "culture_notes": ["Enterprise data culture — reliability, scale, and customer obsession", "Public company with startup energy maintained through aggressive product bets"],
+    "interview_process": ["Coding (SQL + Python), distributed systems design, data platform architecture, behavioral STAR"],
+    "tech_stack": ["Java", "Python", "SQL", "Snowpark", "Apache Arrow", "cloud infrastructure"],
+    "roles_commonly_open": ["Software Engineer", "ML Engineer", "Data Engineer", "Solutions Architect", "Product Manager"]
+  },
+  {
+    "name": "ServiceNow",
+    "tier": "AI Enterprise",
+    "hiring_signals": ["Now Assist (GenAI suite) driving significant net-new engineering hiring", "AI automation across every enterprise workflow — product teams expanding rapidly"],
+    "culture_notes": ["Enterprise software culture focused on reliability and customer success", "Strong internal mobility, large org with clear career ladders"],
+    "interview_process": ["Coding screen, enterprise systems design, behavioral STAR, product-specific round"],
+    "tech_stack": ["JavaScript", "Python", "Java", "Now Platform", "cloud infrastructure"],
+    "roles_commonly_open": ["Software Engineer", "ML Engineer", "Product Manager", "Solutions Consultant"]
+  },
+  {
+    "name": "Recursion Pharmaceuticals",
+    "tier": "AI Healthcare",
+    "hiring_signals": ["Publicly traded AI drug discovery company scaling data and ML teams", "Partnership with NVIDIA for BioNeMo driving compute and AI research hiring"],
+    "culture_notes": ["Science-first culture that treats drug discovery as a data problem", "Interdisciplinary — biologists, chemists, and ML engineers collaborate daily"],
+    "interview_process": ["ML for biology systems design, coding, domain knowledge in drug discovery or genomics, behavioral"],
+    "tech_stack": ["Python", "PyTorch", "cloud HPC", "bioinformatics pipelines", "computer vision for cell imaging"],
+    "roles_commonly_open": ["ML Scientist", "Computational Biologist", "Software Engineer", "Data Scientist"]
+  },
+  {
+    "name": "Tempus AI",
+    "tier": "AI Healthcare",
+    "hiring_signals": ["Publicly traded (NASDAQ: TEM), genomics and clinical AI at scale", "Expanding AI platform across oncology, cardiology, and psychiatry"],
+    "culture_notes": ["Data-driven clinical culture — decisions backed by genomic and real-world evidence", "Mission-oriented around improving cancer outcomes, strong sense of purpose"],
+    "interview_process": ["Coding, healthcare data systems design, clinical ML, HIPAA awareness, behavioral"],
+    "tech_stack": ["Python", "SQL", "Spark", "genomics pipelines", "cloud data lakes", "ML frameworks"],
+    "roles_commonly_open": ["Data Scientist", "ML Engineer", "Software Engineer", "Clinical Informatics Specialist"]
+  },
+  {
+    "name": "CrowdStrike",
+    "tier": "AI Security",
+    "hiring_signals": ["Charlotte AI (GenAI security platform) driving significant product and research hiring", "Post-outage recovery with increased focus on reliability and threat detection"],
+    "culture_notes": ["Security-first culture — threat intelligence is a core company differentiator", "Fast-moving for a public company, engineering teams operate with startup urgency"],
+    "interview_process": ["Coding, security systems design, behavioral — security domain knowledge a plus"],
+    "tech_stack": ["Go", "Python", "Scala", "Kafka", "Elasticsearch", "cloud-native infrastructure"],
+    "roles_commonly_open": ["Software Engineer", "Security Data Scientist", "ML Engineer", "Threat Intelligence Analyst"]
+  },
+  {
+    "name": "Weaviate",
+    "tier": "AI Infrastructure",
+    "hiring_signals": ["Open-source vector database with strong cloud offering growing fast", "Enterprise contracts accelerating as production AI apps scale"],
+    "culture_notes": ["Open-source first, remote-friendly, European roots with global team", "Developer community deeply shapes product roadmap — community PRs welcomed"],
+    "interview_process": ["Distributed systems design, database internals, Go or Python coding, customer empathy rounds"],
+    "tech_stack": ["Go", "Python", "vector indexing (HNSW)", "GraphQL", "cloud infrastructure"],
+    "roles_commonly_open": ["Software Engineer", "ML Engineer", "Developer Advocate", "Enterprise Sales"]
+  },
+  {
+    "name": "Inflection AI",
+    "tier": "AI Lab",
+    "hiring_signals": ["$1.3B Series B from Microsoft, Bill Gates, Nvidia — infrastructure scale signals ambition", "Pi assistant at 6M+ users, building personalized AI at consumer scale"],
+    "culture_notes": ["Co-founded by Reid Hoffman and Mustafa Suleyman — strong strategic and research leadership", "Long-term personalization research culture, not chasing benchmarks"],
+    "interview_process": ["ML research and systems rounds, product thinking for consumer AI, behavioral"],
+    "tech_stack": ["Python", "JAX", "large-scale training clusters", "consumer inference infrastructure"],
+    "roles_commonly_open": ["Research Scientist", "ML Engineer", "Software Engineer", "Product Manager"]
+  },
+  {
+    "name": "Adept AI",
+    "tier": "AI Developer Tools",
+    "hiring_signals": ["$415M raised, agentic AI for software task automation gaining enterprise traction", "Amazon hired founding team — company continues operating with strong AI agent roadmap"],
+    "culture_notes": ["Pioneer in action-taking AI agents — deep belief in AI that does, not just talks", "Research and product closely intertwined, small high-ownership team"],
+    "interview_process": ["Coding, agent systems design, ML fundamentals, product thinking for complex workflows"],
+    "tech_stack": ["Python", "PyTorch", "browser automation", "agent orchestration frameworks"],
+    "roles_commonly_open": ["Research Engineer", "ML Engineer", "Software Engineer", "Product Manager"]
+  },
+  {
+    "name": "Replicate",
+    "tier": "AI Infrastructure",
+    "hiring_signals": ["10,000+ developers running open-source models via API — strong developer adoption", "$40M Series B led by a16z, building the default platform for model deployment"],
+    "culture_notes": ["Small team (~50), high ownership, deeply developer-empathetic culture", "Open source community is a first-class stakeholder in product decisions"],
+    "interview_process": ["Coding, cloud infrastructure systems design, developer experience thinking, behavioral"],
+    "tech_stack": ["Python", "Go", "Docker", "Kubernetes", "model serving infrastructure"],
+    "roles_commonly_open": ["Software Engineer", "ML Engineer", "Developer Relations", "Product Manager"]
+  },
+  {
+    "name": "World Labs",
+    "tier": "AI Lab",
+    "hiring_signals": ["$291.5M raised, founded by Fei-Fei Li — top spatial intelligence and 3D AI talent target", "Pre-product with strong research direction — hiring research-first roles"],
+    "culture_notes": ["Academic-caliber research culture led by one of AI's most respected figures", "Small team, long-term vision on embodied and spatial AI"],
+    "interview_process": ["Deep research background in computer vision, 3D understanding, or embodied AI required"],
+    "tech_stack": ["Python", "PyTorch", "3D rendering", "simulation environments", "computer vision pipelines"],
+    "roles_commonly_open": ["Research Scientist", "Research Engineer", "ML Engineer"]
+  },
+  {
+    "name": "Jasper AI",
+    "tier": "AI Creative",
+    "hiring_signals": ["$1.8B valuation, 1.8M monthly users, customers include IBM, Canva, Logitech", "Marketing-first AI platform expanding into enterprise workflow automation"],
+    "culture_notes": ["Marketing and content-focused culture — creative professionals shape product priorities", "Strong customer success culture — high-touch enterprise relationships"],
+    "interview_process": ["Coding for engineers, product and content thinking for PMs, GTM rounds for sales"],
+    "tech_stack": ["Python", "TypeScript", "React", "LLM APIs", "content pipeline infrastructure"],
+    "roles_commonly_open": ["Software Engineer", "ML Engineer", "Product Manager", "Enterprise Account Executive"]
+  },
+  {
+    "name": "Crusoe",
+    "tier": "AI Infrastructure",
+    "hiring_signals": ["$10B+ valuation, $1.375B Series E — building 1.2GW AI campus, massive infra hiring", "OpenAI and Oracle partnerships signal strategic importance"],
+    "culture_notes": ["Energy-first infrastructure culture — sustainability and compute efficiency are core values", "Large-scale data center engineering — significant hardware and power systems expertise"],
+    "interview_process": ["Infrastructure systems design, networking, power systems or cloud engineering, coding, behavioral"],
+    "tech_stack": ["Python", "Kubernetes", "Terraform", "networking stack", "NVIDIA hardware", "power management systems"],
+    "roles_commonly_open": ["Infrastructure Engineer", "Data Center Engineer", "ML Platform Engineer", "Solutions Architect"]
+  },
+  {
+    "name": "Fathom",
+    "tier": "AI Productivity",
+    "hiring_signals": ["200,000+ users across sales and customer success teams, $17M Series A", "Bot-free meeting transcription differentiator driving strong word-of-mouth growth"],
+    "culture_notes": ["User-obsessed product culture — NPS-driven development", "Small team, high ownership, async-friendly work style"],
+    "interview_process": ["Coding, product thinking, customer empathy rounds, behavioral"],
+    "tech_stack": ["Python", "TypeScript", "ASR pipelines", "NLP", "video conferencing integrations"],
+    "roles_commonly_open": ["Software Engineer", "ML Engineer", "Product Manager", "Customer Success Manager"]
+  }
+]

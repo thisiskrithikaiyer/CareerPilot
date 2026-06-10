@@ -1,0 +1,34 @@
+[
+  {
+    "q": "What is the WARN Act and does it apply to me?",
+    "a": "The WARN Act requires 60 days notice for layoffs affecting 50+ employees at companies with 100+ workers. If violated, you may be owed back pay and benefits for those 60 days."
+  },
+  {
+    "q": "How long do I have to review and sign a severance agreement?",
+    "a": "You typically have 21 days to review a severance agreement (45 days if it's part of a group layoff). After signing, you have 7 days to revoke. Never sign on the spot."
+  },
+  {
+    "q": "Is my non-compete enforceable?",
+    "a": "Non-compete clauses are unenforceable in California, North Dakota, Oklahoma, and Minnesota (as of 2023). In other states enforceability depends on scope, duration, and state law — consult an employment attorney."
+  },
+  {
+    "q": "How long can I keep my health insurance after a layoff?",
+    "a": "COBRA lets you continue your employer health plan for up to 18 months. You must elect within 60 days of losing coverage. You pay the full premium (employee + employer share) plus a 2% admin fee."
+  },
+  {
+    "q": "Am I eligible for unemployment insurance?",
+    "a": "You're eligible if you were laid off through no fault of your own. Apply the same week as your layoff — most states don't back-pay the first week. Benefits typically replace 40-50% of prior wages up to a state maximum."
+  },
+  {
+    "q": "Can my employer claw back a signing bonus after a layoff?",
+    "a": "If your offer letter included a clawback clause tied to a minimum tenure, the employer may try to recover it. Review your offer letter and consult an attorney — clawbacks are often negotiable."
+  },
+  {
+    "q": "What is a release of claims and should I sign it?",
+    "a": "A release of claims waives your right to sue the company (e.g., for discrimination or WARN Act violations) in exchange for severance. Review with an employment attorney before signing — you can negotiate the terms."
+  },
+  {
+    "q": "Can I negotiate my severance package?",
+    "a": "Yes. Common negotiables: additional weeks of pay, extended healthcare, accelerated vesting, outplacement services, and removal of non-disparagement clauses. Negotiate before signing the release."
+  }
+]
