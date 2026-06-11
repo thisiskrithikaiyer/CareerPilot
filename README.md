@@ -1,26 +1,26 @@
 # Career Pilot
 
-An AI coach that helps you reach your absolute best when crisis hits and logic takes a backseat. Layoffs hit hard — it feels personal. The internet has all the advice you need, but when you're in crisis mode you're not mentally in a state to find it, read it, or act on it. That preparation gap is what separates people who break through from people who stay stuck. Not effort. Not talent. Preparation.
+An AI career coach powered by an agentic system that plans your day, tirelessly, so you can focus on succeeding. The internet has all the advice you need — but advice isn't a plan. What separates people who land their next role from people who stay stuck isn't effort or talent. It's preparation: knowing exactly what to do today, doing it, and building tomorrow on what you actually finished.
 
-Carrier Pilot is an AI coach that customizes your preparation backed by data and your own existing potential — so when logic takes a backseat, you still move forward.
+That's what the agents do, every single day, without being asked. They study your target role, your skill gaps, and your real progress, then build a day customized to you — which problems to drill, which roles to apply for, when to rest. Log a check-in and they're already re-planning tomorrow around what you completed. Fall behind and they carry the work forward and recalibrate. You never start a day wondering what to do; the system has already decided, and it decided based on *you*.
 
-Built with **Next.js + FastAPI + Groq (Llama 3.3 70B)**, powered by a multi-agent system that meets you where you are emotionally and turns overwhelm into action.
+Built with **Next.js + FastAPI + Groq (Llama 3.3 70B)** — a multi-agent system that meets you where you are and turns an overwhelming search into a concrete daily plan.
 
 ## Multi-Agent Architecture
 
-Carrier Pilot uses an orchestrated multi-agent system where each agent has a focused responsibility.
+Career Pilot uses an orchestrated multi-agent system where each agent has a focused responsibility.
 
 | Agent | Role |
 |-------|------|
-| **Orchestrator** | Routes every message to the right agent based on user phase and context |
-| **Intake Agent** | Onboards new users — collects situation, emotional state, skills, and goals |
-| **Planner Agent** | Builds a structured action plan; dispatches tasks to specialized agents |
-| **DailyTracker Agent** | Handles daily check-ins — extracts and **persists** progress (apps, DSA, networking, mood), closes plan tasks on command ("close the leetcode task"), and triggers next-day prep |
-| **Accountability Agent** | Monitors plan health; triggers replanning if progress stalls |
-| **Resume Helper** | Tailors resume to target roles and highlights transferable skills |
-| **LinkedIn Enhancer** | Optimizes LinkedIn profile for recruiter visibility |
-| **Mock Prep Agent** | Runs targeted mock interviews based on role and skill gaps |
-| **Pattern Tracker** | Surfaces recurring blockers and behavioral patterns across check-ins |
+| **Orchestrator** | Reads every message and hands it to the right specialist — phase-aware, context-aware, with distress signals overriding everything else |
+| **Intake Agent** | Learns who *you* are — situation, skills, goals, and target role — so every downstream agent plans for you, not a template |
+| **Planner Agent** | Turns your goal into a strategy: daily targets, a role-specific prep curriculum, and weekly milestones |
+| **DailyTracker Agent** | Listens to your check-ins and **persists** every win — apps sent, DSA solved, networking, mood — closes plan tasks on command ("close the leetcode task"), then immediately kicks off tomorrow's prep |
+| **Accountability Agent** | Watches planned vs. actual and steps in the moment you drift — missed days, low motivation, stalled pipeline |
+| **Resume Helper** | Tailors your resume to target roles and surfaces transferable skills you'd undersell |
+| **LinkedIn Enhancer** | Sharpens your profile for recruiter visibility and positioning |
+| **Mock Prep Agent** | Drills you with mock interviews aimed at *your* role and *your* weak spots |
+| **Pattern Tracker** | Studies your check-in history to surface the recurring blockers you can't see from inside |
 
 ### Shared Infrastructure
 
@@ -32,11 +32,13 @@ All agents read and write to a shared layer:
 
 ### Proactive Planning Loop
 
-The coach preps the next day's tasks from what was *actually* completed, not what was planned:
+This is the core of the product: the agents plan tomorrow from what you *actually* completed, not what was on paper — and they do it the moment you report in, without being asked.
 
-1. Every check-in (chat or form) is extracted into structured progress and written to `daily_log` / `checkins`.
-2. Plan tasks can be closed from chat ("mark the system design task done") or via checkbox — both persist to the plan's `task_status`.
-3. Each saved check-in proactively rebuilds **tomorrow's** plan: unfinished work carries over to the morning block, application shortfalls fold into tomorrow's target (capped), and curriculum topics only advance when there's evidence they were completed.
+1. **You talk, the system writes.** Every check-in (chat or form) is extracted into structured progress and persisted to `daily_log` / `checkins` — "sent 3 apps and solved 2 leetcode problems" becomes data the planner acts on.
+2. **Done means done.** Close tasks from chat ("mark the system design task done") or via checkbox — both persist to the plan's `task_status`, and the agents treat them as ground truth.
+3. **Tomorrow is already prepped.** Each saved check-in triggers a rebuild of tomorrow's plan: unfinished work carries over to the morning block, application shortfalls fold into tomorrow's target (capped, so one rough day never snowballs), and prep topics only advance when there's evidence you completed them. Crush today and the curriculum moves forward; struggle, and the system meets you where you are.
+
+Every guarantee in this loop is enforced by the hard evals below.
 
 ## Eval Results
 
@@ -99,7 +101,7 @@ careerpilot-ai/
 cd backend
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env   # add ANTHROPIC_API_KEY and DATABASE_URL
+cp .env.example .env   # add your Groq API key (GROK_API_KEY) + Supabase URL/keys
 uvicorn careerpilot.main:app --reload
 ```
 
