@@ -6,8 +6,13 @@ const AGENT_STYLE: Record<string, { dot: string; icon: string; label: string }> 
   intake:         { dot: "#818cf8", icon: "🎙", label: "Intake"         },
   goal_planner:   { dot: "#7c3aed", icon: "🎯", label: "Goal Planner"   },
   checkin:        { dot: "#059669", icon: "📋", label: "Check-in"       },
+  plan:           { dot: "#d97706", icon: "🗓", label: "Plan"           },
   accountability: { dot: "#d97706", icon: "⚖️", label: "Accountability" },
   mental_health:  { dot: "#e11d48", icon: "💙", label: "Wellness"       },
+  resume:         { dot: "#0284c7", icon: "📄", label: "Resume"         },
+  linkedin:       { dot: "#2563eb", icon: "💼", label: "LinkedIn"       },
+  mock_prep:      { dot: "#9333ea", icon: "🎤", label: "Mock Prep"      },
+  patterns:       { dot: "#0d9488", icon: "📈", label: "Patterns"       },
   chat:           { dot: "#94a3b8", icon: "💬", label: "Coach"          },
 };
 

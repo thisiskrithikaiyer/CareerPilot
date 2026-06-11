@@ -24,14 +24,65 @@ function formatDate(dateStr: string) {
   return d.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "2-digit" });
 }
 
-function todayStr() {
-  return new Date().toISOString().slice(0, 10);
+const CHART_SERIES: { key: keyof DailyLogData; label: string; color: string }[] = [
+  { key: "applications_sent", label: "Apps",       color: "#7c3aed" },
+  { key: "dsa_problems",      label: "DSA",        color: "#a78bfa" },
+  { key: "networking_sent",   label: "Networking", color: "#ddd6fe" },
+];
+
+function ActivityChart({ rows, today }: { rows: DailyLogEntry[]; today: string }) {
+  const recent = rows.slice(-14);
+  if (recent.length < 2) return null;
+  const max = Math.max(
+    1,
+    ...recent.map((r) => CHART_SERIES.reduce((sum, s) => sum + ((r[s.key] as number) || 0), 0)),
+  );
+  return (
+    <div className="rounded-2xl px-4 py-3.5 mb-4 shrink-0 bg-white" style={{ border: "1px solid #ede9fe" }}>
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-[0.12em]">Last {recent.length} days</p>
+        <div className="flex items-center gap-3">
+          {CHART_SERIES.map((s) => (
+            <span key={s.key} className="flex items-center gap-1.5 text-[10px] text-slate-400">
+              <span className="w-2 h-2 rounded-sm" style={{ background: s.color }} /> {s.label}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div className="flex items-end gap-1 h-20">
+        {recent.map((r) => {
+          const total = CHART_SERIES.reduce((sum, s) => sum + ((r[s.key] as number) || 0), 0);
+          return (
+            <div
+              key={r.date}
+              className="flex-1 flex flex-col justify-end h-full"
+              style={{ opacity: r.date === today ? 1 : 0.85 }}
+              title={`${r.date}: ${CHART_SERIES.map((s) => `${(r[s.key] as number) || 0} ${s.label}`).join(", ")}`}
+            >
+              <div className="flex flex-col rounded-t overflow-hidden" style={{ height: `${(total / max) * 100}%`, minHeight: total > 0 ? 3 : 0 }}>
+                {CHART_SERIES.map((s) => {
+                  const v = (r[s.key] as number) || 0;
+                  return v > 0 ? (
+                    <div key={s.key} style={{ flex: v, background: s.color }} />
+                  ) : null;
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
-export default function ProgressView() {
+interface Props {
+  sessionDate: string;
+}
+
+export default function ProgressView({ sessionDate }: Props) {
   const [rows, setRows] = useState<DailyLogEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [editRow, setEditRow] = useState<DailyLogData & { date?: string }>({ date: todayStr() });
+  const [editRow, setEditRow] = useState<DailyLogData & { date?: string }>({ date: sessionDate });
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const tableRef = useRef<HTMLDivElement>(null);
@@ -40,11 +91,11 @@ export default function ProgressView() {
     fetchDailyLogs(90).then((data) => {
       setRows(data);
       // Pre-fill edit row with today's existing entry if present
-      const today = data.find((r) => r.date === todayStr());
+      const today = data.find((r) => r.date === sessionDate);
       if (today) setEditRow({ ...today });
       setLoading(false);
     });
-  }, []);
+  }, [sessionDate]);
 
   function setField<K extends keyof DailyLogData>(key: K, value: DailyLogData[K]) {
     setEditRow((prev) => ({ ...prev, [key]: value }));
@@ -53,7 +104,7 @@ export default function ProgressView() {
   async function handleSave() {
     setSaving(true);
     try {
-      await submitDailyLog({ ...editRow, date: todayStr() });
+      await submitDailyLog({ ...editRow, date: sessionDate });
       // Refresh rows
       const data = await fetchDailyLogs(90);
       setRows(data);
@@ -64,7 +115,7 @@ export default function ProgressView() {
     }
   }
 
-  const today = todayStr();
+  const today = sessionDate;
   // Merge today's editable row into the display list
   const allRows: (DailyLogEntry & { isToday?: boolean })[] = rows.some((r) => r.date === today)
     ? rows.map((r) => (r.date === today ? { ...editRow, date: today, isToday: true } : r))
@@ -101,6 +152,9 @@ export default function ProgressView() {
           {saving ? "Saving…" : saved ? "Saved!" : "Save today"}
         </button>
       </div>
+
+      {/* Activity trend */}
+      <ActivityChart rows={sorted} today={today} />
 
       {/* Scrollable table */}
       <div ref={tableRef} className="flex-1 overflow-auto rounded-2xl" style={{ border: "1px solid #ede9fe" }}>

@@ -481,6 +481,175 @@ export async function fetchDailyLogs(days = 90): Promise<DailyLogEntry[]> {
   return res.json();
 }
 
+// --- Check-in ---
+export interface CheckinData {
+  mood_score: number;
+  energy_score: number;
+  wins?: string[];
+  blockers?: string[];
+  notes?: string;
+}
+
+export interface CheckinResponse {
+  id: string;
+  created_at: string;
+  mood_score: number;
+  energy_score: number;
+  coach_response: string;
+}
+
+export interface CheckinEntry {
+  id: string;
+  user_id?: string;
+  mood_score: number;
+  energy_score: number;
+  wins: string[] | null;
+  blockers: string[] | null;
+  notes: string | null;
+  created_at: string;
+}
+
+export async function submitCheckin(data: CheckinData): Promise<CheckinResponse> {
+  const token = getToken();
+  const res = await fetch(`${API_BASE}/api/checkin`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify(data),
+  });
+  handleUnauthorized(res);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail ?? `Check-in failed: ${res.status}`);
+  }
+  return res.json();
+}
+
+export async function fetchCheckinHistory(limit = 7): Promise<CheckinEntry[]> {
+  const token = getToken();
+  const res = await fetch(`${API_BASE}/api/checkin/history?limit=${limit}`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
+  if (!res.ok) return [];
+  return res.json();
+}
+
+// --- Interviews ---
+export type InterviewStage = "phone_screen" | "technical" | "system_design" | "behavioral" | "onsite" | "final";
+export type InterviewContact = "linkedin" | "referral" | "job_board" | "cold_apply" | "recruiter" | "other";
+export type InterviewStatus = "pass" | "fail" | "pending";
+
+export interface InterviewData {
+  company: string;
+  role?: string;
+  stage: InterviewStage;
+  date: string;
+  how_contacted?: InterviewContact;
+  topics?: string[];
+  questions_asked?: string[];
+  what_went_wrong?: string | null;
+  notes?: string;
+  status?: InterviewStatus;
+}
+
+export interface InterviewEntry extends InterviewData {
+  id: string;
+  user_id?: string;
+  status: InterviewStatus;
+  created_at: string;
+}
+
+export async function createInterview(data: InterviewData): Promise<InterviewEntry> {
+  const token = getToken();
+  const res = await fetch(`${API_BASE}/api/interviews`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify(data),
+  });
+  handleUnauthorized(res);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail ?? `Failed to log interview: ${res.status}`);
+  }
+  return res.json();
+}
+
+export async function updateInterview(
+  id: string,
+  patch: Partial<Pick<InterviewData, "status" | "what_went_wrong" | "notes" | "topics" | "questions_asked">>,
+): Promise<void> {
+  const token = getToken();
+  const res = await fetch(`${API_BASE}/api/interviews/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify(patch),
+  });
+  handleUnauthorized(res);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail ?? `Failed to update interview: ${res.status}`);
+  }
+}
+
+export async function fetchInterviews(limit = 50): Promise<InterviewEntry[]> {
+  const token = getToken();
+  const res = await fetch(`${API_BASE}/api/interviews?limit=${limit}`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
+  if (!res.ok) return [];
+  return res.json();
+}
+
+// --- Dashboard ---
+export interface SkillMapEntry {
+  score: number;
+  evidence?: string[];
+}
+
+export interface DashboardSnapshot {
+  days_since: number | null;
+  days_left: number | null;
+  phase: string | null;
+  open_tasks: number | null;
+  role: string | null;
+  leetcode_level: string | null;
+  intake_complete: boolean | null;
+  mood_score: number | null;
+  energy_score: number | null;
+  last_checkin_at: string | null;
+}
+
+export interface DashboardData {
+  upcoming_interviews: InterviewEntry[];
+  past_interviews: InterviewEntry[];
+  today_log: DailyLogEntry | null;
+  recent_logs: DailyLogEntry[];
+  recent_checkins: CheckinEntry[];
+  today_plan: (Partial<TodayPlan> & { tasks?: { id: string; title: string; category: string; priority: number; completed: boolean }[] }) | null;
+  active_goal: GoalPlan | null;
+  skill_map: Record<string, SkillMapEntry> | null;
+  tracking_skills: string[] | null;
+  snapshot: Partial<DashboardSnapshot> | null;
+}
+
+export async function fetchDashboard(): Promise<DashboardData | null> {
+  const token = getToken();
+  const res = await fetch(`${API_BASE}/api/dashboard`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
+  handleUnauthorized(res);
+  if (!res.ok) return null;
+  return res.json();
+}
+
 // --- Chat ---
 export async function fetchChatHistory(limit = 10): Promise<Message[]> {
   const token = getToken();

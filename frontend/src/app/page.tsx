@@ -10,6 +10,9 @@ import IntakeChatView from "@/components/IntakeChatView";
 import ExtrasForm from "@/components/ExtrasForm";
 import PlanningLoader from "@/components/PlanningLoader";
 import PlanVerdictView from "@/components/PlanVerdictView";
+import OverviewView from "@/components/OverviewView";
+import InterviewsView from "@/components/InterviewsView";
+import ProfileView from "@/components/ProfileView";
 import {
   getToken,
   clearToken,
@@ -26,7 +29,9 @@ import {
 } from "@/lib/api";
 
 type AppView = "questionnaire" | "extras" | "loading" | "verdict" | "dashboard";
-type DashTab = "today" | "progress";
+type DashTab = "overview" | "today" | "interviews" | "progress" | "profile";
+
+const DASH_TABS: DashTab[] = ["overview", "today", "interviews", "progress", "profile"];
 
 export default function Home() {
   const [hydrated, setHydrated] = useState(false);
@@ -199,7 +204,7 @@ export default function Home() {
 
             {/* Tab nav */}
             <nav className="flex gap-1 px-6 pt-3 pb-0 shrink-0" style={{ borderBottom: "1px solid #f1f5f9" }}>
-              {(["today", "progress"] as DashTab[]).map((tab) => (
+              {DASH_TABS.map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setDashTab(tab)}
@@ -216,6 +221,16 @@ export default function Home() {
             </nav>
 
             {/* Tab content */}
+            {dashTab === "overview" && (
+              <div className="flex-1 overflow-y-auto px-6 pt-6">
+                <OverviewView
+                  sessionDate={sessionDate}
+                  refreshKey={planRefreshKey}
+                  onGoToInterviews={() => setDashTab("interviews")}
+                />
+              </div>
+            )}
+
             {dashTab === "today" && (
               <>
                 <div className="flex-1 overflow-y-auto px-6 pt-6">
@@ -231,9 +246,21 @@ export default function Home() {
               </>
             )}
 
+            {dashTab === "interviews" && (
+              <div className="flex-1 overflow-y-auto px-6 pt-6">
+                <InterviewsView sessionDate={sessionDate} />
+              </div>
+            )}
+
             {dashTab === "progress" && (
               <div className="flex-1 overflow-hidden px-6 pt-6 pb-6">
                 <ProgressView sessionDate={sessionDate} />
+              </div>
+            )}
+
+            {dashTab === "profile" && (
+              <div className="flex-1 overflow-y-auto px-6 pt-6">
+                <ProfileView />
               </div>
             )}
           </>

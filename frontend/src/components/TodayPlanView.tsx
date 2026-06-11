@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { fetchTodayPlan, generatePlan, submitDailyLog, updateTaskStatus, TodayPlan, DailyLogData } from "@/lib/api";
+import CheckinCard from "./CheckinCard";
 
 const PRIORITY_COLOR: Record<string, { text: string; bg: string }> = {
   urgent:   { text: "#dc2626", bg: "#fef2f2" },
@@ -44,7 +45,8 @@ export default function TodayPlanView({ sessionDate, onAdvanceDay }: Props) {
   const [log, setLog] = useState<DailyLogData>(EMPTY_LOG);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [todayDone, setTodayDone] = useState(false);
+  const [endOfDay, setEndOfDay] = useState<"log" | "checkin" | "done">("log");
+  const [coachResponse, setCoachResponse] = useState<string | null>(null);
   const [advancing, setAdvancing] = useState(false);
 
   useEffect(() => {
@@ -53,7 +55,8 @@ export default function TodayPlanView({ sessionDate, onAdvanceDay }: Props) {
     setChecked(new Set());
     setLog(EMPTY_LOG);
     setSaved(false);
-    setTodayDone(false);
+    setEndOfDay("log");
+    setCoachResponse(null);
     fetchTodayPlan(sessionDate).then((p) => {
       setPlan(p);
       // Restore persisted completion state — checkboxes survive reloads and
@@ -92,7 +95,7 @@ export default function TodayPlanView({ sessionDate, onAdvanceDay }: Props) {
     try {
       await submitDailyLog({ ...log, date: sessionDate });
       setSaved(true);
-      setTimeout(() => setTodayDone(true), 600);
+      setTimeout(() => setEndOfDay("checkin"), 600);
     } finally {
       setSaving(false);
     }
@@ -253,8 +256,25 @@ export default function TodayPlanView({ sessionDate, onAdvanceDay }: Props) {
         </div>
       )}
 
-      {/* Daily Log / Done card */}
-      {todayDone ? (
+      {/* End-of-day flow: log → check-in → done */}
+      {endOfDay === "checkin" ? (
+        <div className="space-y-2">
+          <CheckinCard
+            onComplete={(res) => {
+              setCoachResponse(res.coach_response);
+              setEndOfDay("done");
+            }}
+          />
+          <div className="flex justify-center">
+            <button
+              onClick={() => setEndOfDay("done")}
+              className="text-xs text-slate-400 hover:text-violet-500 transition-colors underline underline-offset-2"
+            >
+              Skip check-in
+            </button>
+          </div>
+        </div>
+      ) : endOfDay === "done" ? (
         <div className="done-card rounded-3xl overflow-hidden relative" style={{ border: "1px solid #ede9fe", background: "linear-gradient(160deg, #faf9ff 0%, #f5f3ff 100%)" }}>
           <span className="orb orb-1" />
           <span className="orb orb-2" />
@@ -268,10 +288,14 @@ export default function TodayPlanView({ sessionDate, onAdvanceDay }: Props) {
             </div>
 
             <p className="text-lg font-bold text-slate-900 mb-1">Today is done.</p>
-            <p className="text-sm text-slate-500 mb-6 leading-relaxed">
-              Great work — your progress has been saved.<br />
-              Ready for tomorrow?
-            </p>
+            {coachResponse ? (
+              <p className="text-sm text-slate-600 mb-6 leading-relaxed max-w-md">{coachResponse}</p>
+            ) : (
+              <p className="text-sm text-slate-500 mb-6 leading-relaxed">
+                Great work — your progress has been saved.<br />
+                Ready for tomorrow?
+              </p>
+            )}
 
             {/* Summary pills */}
             <div className="flex flex-wrap justify-center gap-2 mb-7">
@@ -303,7 +327,7 @@ export default function TodayPlanView({ sessionDate, onAdvanceDay }: Props) {
             </button>
 
             <button
-              onClick={() => setTodayDone(false)}
+              onClick={() => setEndOfDay("log")}
               className="text-xs text-slate-400 hover:text-violet-500 transition-colors underline underline-offset-2"
             >
               Edit log
