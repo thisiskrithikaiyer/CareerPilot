@@ -77,6 +77,46 @@ async def update_task(task_id: str, body: TaskUpdateRequest, user: dict = Depend
         raise HTTPException(status_code=500, detail=str(e))
 
 
+class TaskStatusRequest(BaseModel):
+    task_key: str                 # schedule key, e.g. "morning-0"
+    completed: bool
+    date: Optional[str] = None    # defaults to today
+
+
+@router.patch("/plan/task-status")
+async def update_task_status(body: TaskStatusRequest, user: dict = Depends(get_current_user)):
+    """Persist completion state for a schedule task. The next-day planner reads this."""
+    user_id = user.get("sub", "")
+    try:
+        from careerpilot.db.supabase import get_client
+        from datetime import date
+
+        sb = get_client()
+        plan_date = body.date or date.today().isoformat()
+        rows = (
+            sb.table("plans")
+            .select("id, plan_json")
+            .eq("user_id", user_id)
+            .eq("date", plan_date)
+            .order("created_at", desc=True)
+            .limit(1)
+            .execute()
+        ).data
+        if not rows:
+            raise HTTPException(status_code=404, detail="No plan for this date.")
+        plan = rows[0]
+        plan_json = plan.get("plan_json") or {}
+        task_status = dict(plan_json.get("task_status") or {})
+        task_status[body.task_key] = body.completed
+        plan_json["task_status"] = task_status
+        sb.table("plans").update({"plan_json": plan_json}).eq("id", plan["id"]).execute()
+        return {"ok": True, "task_status": task_status}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.post("/plan/generate")
 async def trigger_plan_generation(
     body: Optional[GeneratePlanRequest] = None,

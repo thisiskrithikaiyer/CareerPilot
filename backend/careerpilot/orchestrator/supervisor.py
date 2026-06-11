@@ -21,7 +21,12 @@ AGENTS = {
         "or when user explicitly wants to revisit their plan."
     ),
     "checkin": (
-        "User is logging how today went: mood, energy, wins, blockers, prep done, applications sent, interviews completed."
+        "User is reporting CONCRETE progress: prep done, applications sent, interviews completed, mood/energy numbers. "
+        "ALSO handles task commands — 'close the X task', 'mark X done', 'finished X', 'completed X'. "
+        "If the user is instead expressing drift, missed days, low motivation, or that they did nothing, "
+        "prefer 'accountability' over 'checkin'. Likewise if a progress report centers on a rejection or "
+        "setback they are processing emotionally (e.g. 'got rejected from the loop I was counting on'), "
+        "prefer 'accountability'."
     ),
     "accountability": (
         "User wants to review planned vs actual, be held to commitments, or is showing drift: "

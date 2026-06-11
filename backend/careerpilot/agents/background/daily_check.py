@@ -3,10 +3,11 @@ Daily Plan Builder — orchestrates sub-agents to build tomorrow's smart daily p
 
 Flow:
   1. signal_analyzer  → reads all DB data, computes signals
-  2. plan_prioritizer → determines priority mode + adjusted targets (pure logic)
-  3. planner          → determines next leetcode topic from curriculum
-  4. schedule_builder → builds morning/midday/evening time blocks
-  5. saves to plans table with full schedule, signals, priority_mode
+  2. carryover        → diffs the previous plan against what was ACTUALLY completed
+  3. plan_prioritizer → determines priority mode + adjusted targets (pure logic)
+  4. planner          → determines next leetcode topic from curriculum
+  5. schedule_builder → builds morning/midday/evening time blocks (+ carryover)
+  6. saves to plans table with full schedule, signals, priority_mode
 """
 from datetime import date, timedelta
 
@@ -15,6 +16,33 @@ from careerpilot.agents.background.plan_prioritizer import prioritize
 from careerpilot.agents.background.schedule_builder import build_schedule, build_coach_note
 from careerpilot.agents.background.planner import BEHAVIORAL_ROTATION, _get_behavioral_focus
 from careerpilot.agents.background.role_curriculum import get_next_topic, get_next_system_design, detect_role_type
+from careerpilot.agents.background.carryover import compute_carryover, adjust_targets_for_carryover
+
+
+def _load_previous_day(sb, user_id: str, plan_date: str) -> tuple[dict | None, dict | None, dict | None]:
+    """Most recent plan before plan_date, plus that day's activity log."""
+    prev_rows = (
+        sb.table("plans")
+        .select("date, plan_json, schedule")
+        .eq("user_id", user_id)
+        .lt("date", plan_date)
+        .order("date", desc=True)
+        .order("created_at", desc=True)
+        .limit(1)
+        .execute()
+    ).data or []
+    if not prev_rows:
+        return None, None, None
+    prev = prev_rows[0]
+    log_rows = (
+        sb.table("daily_log")
+        .select("*")
+        .eq("user_id", user_id)
+        .eq("date", prev["date"])
+        .limit(1)
+        .execute()
+    ).data or []
+    return prev.get("plan_json"), prev.get("schedule"), (log_rows[0] if log_rows else None)
 
 
 async def build_daily_plan(user_id: str, for_date: str | None = None) -> dict:
@@ -27,8 +55,15 @@ async def build_daily_plan(user_id: str, for_date: str | None = None) -> dict:
     # ── 1. Analyze signals ────────────────────────────────────────────────────
     signals = await analyze(user_id, sb)
 
+    # ── 1b. Carryover — what did the previous plan's day actually complete? ──
+    prev_plan_json, prev_schedule, prev_log = _load_previous_day(sb, user_id, plan_date)
+    carryover = compute_carryover(prev_plan_json, prev_schedule, prev_log)
+
     # ── 2. Determine priority ─────────────────────────────────────────────────
     priority = prioritize(signals)
+    priority["adjusted_targets"] = adjust_targets_for_carryover(
+        priority.get("adjusted_targets") or {}, carryover
+    )
 
     # ── 3. Curriculum progression ─────────────────────────────────────────────
     profile = (
@@ -98,13 +133,30 @@ async def build_daily_plan(user_id: str, for_date: str | None = None) -> dict:
         if p.get("plan_json") and p["plan_json"].get("system_design_concept")
     })
 
+    # Planned ≠ done: if yesterday's topic/concept wasn't actually completed
+    # (no closed task, no logged work), keep serving it instead of advancing.
+    if carryover.get("lc_topic") and not carryover.get("lc_topic_completed"):
+        completed_lc_topics = [t for t in completed_lc_topics if t != carryover["lc_topic"]]
+    if carryover.get("sd_concept") and not carryover.get("sd_concept_completed"):
+        completed_sd_concepts = [c for c in completed_sd_concepts if c != carryover["sd_concept"]]
+
     next_lc = get_next_topic(role_text, completed_lc_topics)
     next_sd = get_next_system_design(role_text, completed_sd_concepts)
     behavioral = _get_behavioral_focus(days_since_start)
 
     # ── 4. Build time-blocked schedule ───────────────────────────────────────
     schedule = build_schedule(priority, signals, next_lc, behavioral)
-    coach_note = build_coach_note(signals, priority)
+
+    # Unfinished work rolls forward — carryover tasks lead the morning block so
+    # the day starts by closing yesterday's gaps.
+    if carryover.get("carryover_tasks"):
+        morning = schedule.get("morning", {"time": "Morning (9am–12pm)", "tasks": []})
+        morning["tasks"] = [
+            f"Carryover from yesterday: {t}" for t in carryover["carryover_tasks"]
+        ] + morning.get("tasks", [])
+        schedule["morning"] = morning
+
+    coach_note = build_coach_note(signals, priority, carryover)
 
     # ── 5. Compose plan_json ──────────────────────────────────────────────────
     targets = priority["adjusted_targets"]
@@ -126,6 +178,11 @@ async def build_daily_plan(user_id: str, for_date: str | None = None) -> dict:
         "system_design_skills": next_sd.get("skills", []),
         "behavioral_focus": behavioral,
         "coach_note": coach_note,
+        # Completion-aware planning state
+        "task_status": {},
+        "carryover_tasks": carryover.get("carryover_tasks", []),
+        "completed_yesterday": carryover.get("completed_yesterday", []),
+        "yesterday_completion_rate": carryover.get("completion_rate"),
     }
 
     # ── 6. Save to plans table ────────────────────────────────────────────────

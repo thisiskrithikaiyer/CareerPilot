@@ -105,7 +105,7 @@ def build_schedule(priority: dict, signals: dict, next_lc: dict, behavioral: str
     return schedule
 
 
-def build_coach_note(signals: dict, priority: dict) -> str:
+def build_coach_note(signals: dict, priority: dict, carryover: dict | None = None) -> str:
     try:
         context = (
             f"Priority mode: {priority['priority_mode']}\n"
@@ -115,16 +115,28 @@ def build_coach_note(signals: dict, priority: dict) -> str:
             f"Days since last interview: {signals.get('days_since_interview')}\n"
             f"Apps last 7 days: {signals.get('total_apps_7d')}"
         )
+        if carryover:
+            done = carryover.get("completed_yesterday") or []
+            rolled = carryover.get("carryover_tasks") or []
+            rate = carryover.get("completion_rate")
+            context += (
+                f"\nYesterday completed: {'; '.join(done) if done else 'nothing logged'}"
+                f"\nYesterday completion rate: {rate if rate is not None else 'no plan'}"
+                f"\nCarried over to today: {'; '.join(rolled) if rolled else 'none'}"
+                f"\nApp shortfall folded into today: {carryover.get('apps_shortfall', 0)}"
+            )
         resp = groq_complete(
             model=GROQ_MODEL,
-            max_tokens=80,
+            max_tokens=100,
             temperature=0.3,
             messages=[
                 {
                     "role": "system",
                     "content": (
-                        "You are a direct job-search coach. Write one sharp coaching note (2 sentences max). "
-                        "Name the biggest issue and what to do about it today. No fluff."
+                        "You are a direct job-search coach writing tomorrow's plan note (3 sentences max). "
+                        "First acknowledge what was actually completed yesterday (name it specifically). "
+                        "Then name the biggest issue and what today's plan does about it — mention carryover "
+                        "tasks if any. No fluff, no generic praise."
                     ),
                 },
                 {"role": "user", "content": context},

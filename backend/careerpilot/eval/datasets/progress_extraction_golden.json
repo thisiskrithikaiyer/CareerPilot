@@ -1,0 +1,69 @@
+[
+  {
+    "id": "px_01_counts_and_mood",
+    "input": "Quick check-in: sent 3 applications and solved 2 leetcode problems today. Mood is about 7.",
+    "expected": {
+      "applications_sent": 3,
+      "dsa_problems": 2,
+      "mood_score": 7
+    }
+  },
+  {
+    "id": "px_02_close_task_verb",
+    "input": "close the leetcode task",
+    "expected": {
+      "close_tasks_contains": "leetcode"
+    }
+  },
+  {
+    "id": "px_03_close_plus_counts",
+    "input": "Finished the system design review, mark it done. Also sent 4 apps.",
+    "expected": {
+      "close_tasks_contains": "design",
+      "applications_sent": 4
+    }
+  },
+  {
+    "id": "px_04_mood_energy_blockers",
+    "input": "Feeling 4/10 energy today, mood 5. No real progress, kept doomscrolling job boards.",
+    "expected": {
+      "energy_score": 4,
+      "mood_score": 5,
+      "blockers_nonempty": true,
+      "applications_sent": 0
+    }
+  },
+  {
+    "id": "px_05_multi_counts",
+    "input": "Applied to 6 jobs, sent 2 networking messages, and did one mock interview this afternoon.",
+    "expected": {
+      "applications_sent": 6,
+      "networking_sent": 2,
+      "mocks_done": 1
+    }
+  },
+  {
+    "id": "px_06_win_no_counts",
+    "input": "Today was rough but I got a recruiter screen scheduled for Friday!",
+    "expected": {
+      "wins_nonempty": true,
+      "dsa_problems": 0,
+      "applications_sent": 0
+    }
+  },
+  {
+    "id": "px_07_no_guessing",
+    "input": "hi",
+    "expected": {
+      "no_progress": true
+    }
+  },
+  {
+    "id": "px_08_vague_energy_stays_null",
+    "input": "Solved 1 dsa problem. Honestly feeling pretty exhausted.",
+    "expected": {
+      "dsa_problems": 1,
+      "energy_score": null
+    }
+  }
+]

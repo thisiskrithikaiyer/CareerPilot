@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { fetchTodayPlan, generatePlan, submitDailyLog, TodayPlan, DailyLogData } from "@/lib/api";
+import { fetchTodayPlan, generatePlan, submitDailyLog, updateTaskStatus, TodayPlan, DailyLogData } from "@/lib/api";
 
 const PRIORITY_COLOR: Record<string, { text: string; bg: string }> = {
   urgent:   { text: "#dc2626", bg: "#fef2f2" },
@@ -54,7 +54,14 @@ export default function TodayPlanView({ sessionDate, onAdvanceDay }: Props) {
     setLog(EMPTY_LOG);
     setSaved(false);
     setTodayDone(false);
-    fetchTodayPlan(sessionDate).then((p) => { setPlan(p); setLoading(false); });
+    fetchTodayPlan(sessionDate).then((p) => {
+      setPlan(p);
+      // Restore persisted completion state — checkboxes survive reloads and
+      // reflect tasks closed from chat ("close the leetcode task").
+      const status = p?.task_status ?? {};
+      setChecked(new Set(Object.keys(status).filter((k) => status[k])));
+      setLoading(false);
+    });
   }, [sessionDate]);
 
   async function handleGenerate() {
@@ -66,11 +73,14 @@ export default function TodayPlanView({ sessionDate, onAdvanceDay }: Props) {
   }
 
   function toggleTask(key: string) {
+    const willComplete = !checked.has(key);
     setChecked((prev) => {
       const next = new Set(prev);
       next.has(key) ? next.delete(key) : next.add(key);
       return next;
     });
+    // Persist so the next-day planner knows what was actually completed.
+    updateTaskStatus(key, willComplete, sessionDate);
   }
 
   function setLogField<K extends keyof DailyLogData>(key: K, value: DailyLogData[K]) {

@@ -134,12 +134,50 @@ def _print_consistency(name: str, results: dict) -> None:
         )
 
 
+def _print_hard(name: str, results: dict) -> None:
+    print(f"\n╔══════════════════════════════════════════════════════╗")
+    print(f"║  HARD EVAL: {name.upper():<41}║")
+    print(f"╚══════════════════════════════════════════════════════╝")
+    pr = results["pass_rate"]
+    bar = "█" * int(pr * 20) + "░" * (20 - int(pr * 20))
+    print(f"  {bar}  {pr:.1%}  ({results['passed']}/{results['total']})")
+    for r in results["results"]:
+        mark = "✓" if r["passed"] else "✗"
+        print(f"  {mark} [{r['id']}]")
+        if r.get("error"):
+            print(f"      ERROR: {r['error']}")
+        elif not r["passed"]:
+            for c in r.get("checks", []):
+                if not c["passed"]:
+                    print(f"      FAIL {c['check']}  got={c['got']}")
+            if "expected" in r:
+                print(f"      expected={r['expected']} got={r.get('got')}")
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
-async def run_all(skip_consistency: bool = False, consistency_runs: int = 5) -> dict:
+HARD_EVALS = [
+    ("progress_extraction", "eval_progress_extraction"),
+    ("task_close", "eval_task_close"),
+    ("next_day_plan", "eval_next_day_plan"),
+]
+
+
+async def run_all(skip_consistency: bool = False, consistency_runs: int = 5, hard_only: bool = False) -> dict:
     results: dict = {}
 
-    print("\n🔍 Running routing eval…")
+    print("\n🔩 Running hard evals (deterministic product guarantees)…")
+    from careerpilot.eval.evaluators import hard_actions
+    for name, fn in HARD_EVALS:
+        print(f"   • {name}…")
+        results[f"hard_{name}"] = getattr(hard_actions, fn)()
+
+    if hard_only:
+        for name, _ in HARD_EVALS:
+            _print_hard(name, results[f"hard_{name}"])
+        return results
+
+    print("🔍 Running routing eval…")
     results["routing"] = run_routing_eval()
 
     print("🤖 Running end-to-end agent evals…")
@@ -155,6 +193,8 @@ async def run_all(skip_consistency: bool = False, consistency_runs: int = 5) -> 
         results["consistency"] = await run_consistency_eval("intake", n_runs=consistency_runs)
 
     # ── Print all results ────────────────────────────────────────────────────
+    for name, _ in HARD_EVALS:
+        _print_hard(name, results[f"hard_{name}"])
     _print_routing(results["routing"])
     for dataset in ["intake", "accountability", "checkin"]:
         _print_agent(dataset, results[f"agent_{dataset}"])
@@ -169,6 +209,9 @@ async def run_all(skip_consistency: bool = False, consistency_runs: int = 5) -> 
     print("║  Eval                ║ Pass rate  ║ Avg / score     ║")
     print("╠══════════════════════╬════════════╬═════════════════╣")
 
+    for name, _ in HARD_EVALS:
+        hr = results[f"hard_{name}"]
+        print(f"║  {'hard_' + name:<20} ║  {hr['pass_rate']:.1%}     ║  {str(hr['passed']) + '/' + str(hr['total']):<13}  ║")
     r = results["routing"]
     print(f"║  {'routing':<20} ║  {r['accuracy']:.1%}     ║  {'n/a':<13}  ║")
     for ds in ["intake", "accountability", "checkin"]:
@@ -201,8 +244,11 @@ if __name__ == "__main__":
                         help="Skip the multi-run consistency eval (faster)")
     parser.add_argument("--consistency-runs", type=int, default=5,
                         help="Number of runs per case for consistency eval")
+    parser.add_argument("--hard-only", action="store_true",
+                        help="Run only the deterministic hard evals (fast, no report written)")
     args = parser.parse_args()
     asyncio.run(run_all(
         skip_consistency=args.skip_consistency,
         consistency_runs=args.consistency_runs,
+        hard_only=args.hard_only,
     ))

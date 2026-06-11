@@ -202,7 +202,29 @@ export interface TodayPlan {
   job_apps: number;
   leetcode_problems: number;
   leetcode_topic: string;
+  task_status?: Record<string, boolean>;
+  carryover_tasks?: string[];
+  completed_yesterday?: string[];
   [key: string]: unknown;
+}
+
+export async function updateTaskStatus(
+  taskKey: string,
+  completed: boolean,
+  date?: string,
+): Promise<Record<string, boolean> | null> {
+  const token = getToken();
+  const res = await fetch(`${API_BASE}/api/plan/task-status`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify({ task_key: taskKey, completed, date }),
+  });
+  if (!res.ok) return null;
+  const data = await res.json();
+  return data.task_status ?? null;
 }
 
 export async function fetchTodayPlan(date?: string): Promise<TodayPlan | null> {

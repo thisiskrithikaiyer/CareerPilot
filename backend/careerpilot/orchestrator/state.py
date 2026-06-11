@@ -30,6 +30,7 @@ class State(TypedDict):
     # Response
     response: str
     sources: list[str]            # citations from RAG
+    needs_plan_refresh: bool      # agent persisted progress/closed tasks → UI should refetch plan
     chips: list[str]              # structured chips from agent (replaces text-parsed CHIPS: hack)
     field_key: str | None         # intake: next field to collect
 

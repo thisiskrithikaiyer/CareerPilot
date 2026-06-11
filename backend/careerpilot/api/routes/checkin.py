@@ -50,6 +50,18 @@ async def submit_checkin(body: CheckinRequest, user: dict = Depends(get_current_
             wins=body.wins,
             blockers=body.blockers,
         )
+
+        # Proactive next-day prep: a saved check-in means we know how today went —
+        # rebuild tomorrow's plan around it in the background.
+        try:
+            import asyncio
+            from datetime import date, timedelta
+            from careerpilot.agents.background.daily_check import build_daily_plan
+            tomorrow = (date.today() + timedelta(days=1)).isoformat()
+            asyncio.ensure_future(build_daily_plan(user_id, for_date=tomorrow))
+        except Exception as prep_err:
+            print(f"[CHECKIN] Tomorrow prep failed: {prep_err}")
+
         return CheckinResponse(
             id=saved["id"],
             created_at=saved["created_at"],

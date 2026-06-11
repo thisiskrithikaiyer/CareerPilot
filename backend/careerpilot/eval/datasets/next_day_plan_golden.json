@@ -1,0 +1,151 @@
+[
+  {
+    "id": "nd_01_all_done_advances",
+    "description": "Everything closed via checkboxes — topic advances, nothing carries over, no shortfall.",
+    "prev_plan_json": {
+      "job_apps": 8,
+      "leetcode_problems": 2,
+      "leetcode_topic": "Arrays",
+      "system_design_concept": "Rate limiter",
+      "task_status": { "morning-0": true, "morning-1": true, "midday-0": true, "midday-1": true }
+    },
+    "prev_schedule": {
+      "morning": { "tasks": ["Leetcode: Arrays (60min)", "System design (45min)"] },
+      "midday": { "tasks": ["Job applications (90min) — Send 8 targeted applications", "Networking outreach (30min)"] },
+      "evening": { "tasks": [] }
+    },
+    "prev_log": { "applications_sent": 8, "dsa_problems": 2, "system_design_done": 1 },
+    "expected": {
+      "lc_topic_completed": true,
+      "sd_concept_completed": true,
+      "apps_shortfall": 0,
+      "carryover_empty": true,
+      "completion_rate": 1.0
+    }
+  },
+  {
+    "id": "nd_02_nothing_done_repeats_topic",
+    "description": "No checkboxes, no logged work — topic repeats, work carries over, targets absorb shortfall.",
+    "prev_plan_json": {
+      "job_apps": 8,
+      "leetcode_problems": 2,
+      "leetcode_topic": "Arrays",
+      "system_design_concept": "Rate limiter",
+      "task_status": {}
+    },
+    "prev_schedule": {
+      "morning": { "tasks": ["Leetcode: Arrays (60min)", "System design (45min)"] },
+      "midday": { "tasks": ["Job applications (90min) — Send 8 targeted applications"] },
+      "evening": { "tasks": ["Log today's activity (10min)"] }
+    },
+    "prev_log": {},
+    "expected": {
+      "lc_topic_completed": false,
+      "sd_concept_completed": false,
+      "apps_shortfall": 8,
+      "carryover_contains": "Leetcode",
+      "carryover_not_contains": "Log today",
+      "adjusted_job_apps": 12,
+      "completion_rate": 0.0
+    }
+  },
+  {
+    "id": "nd_03_log_evidence_counts_without_checkbox",
+    "description": "User never ticked boxes but the daily log proves the DSA work happened — topic still advances.",
+    "prev_plan_json": {
+      "job_apps": 6,
+      "leetcode_problems": 2,
+      "leetcode_topic": "Trees",
+      "task_status": {}
+    },
+    "prev_schedule": {
+      "morning": { "tasks": ["Leetcode: Trees (60min)"] },
+      "midday": { "tasks": ["Job applications (90min) — Send 6 targeted applications"] },
+      "evening": { "tasks": [] }
+    },
+    "prev_log": { "dsa_problems": 3, "applications_sent": 6 },
+    "expected": {
+      "lc_topic_completed": true,
+      "apps_shortfall": 0,
+      "carryover_empty": true
+    }
+  },
+  {
+    "id": "nd_04_partial_apps_shortfall_capped",
+    "description": "Sent 5 of 8 apps — shortfall of 3 folds into tomorrow's target.",
+    "prev_plan_json": {
+      "job_apps": 8,
+      "leetcode_problems": 2,
+      "leetcode_topic": "Graphs",
+      "task_status": { "morning-0": true }
+    },
+    "prev_schedule": {
+      "morning": { "tasks": ["Leetcode: Graphs (60min)"] },
+      "midday": { "tasks": ["Job applications (90min) — Send 8 targeted applications"] },
+      "evening": { "tasks": [] }
+    },
+    "prev_log": { "applications_sent": 5, "dsa_problems": 2 },
+    "expected": {
+      "lc_topic_completed": true,
+      "apps_shortfall": 3,
+      "adjusted_job_apps": 11,
+      "carryover_contains": "applications"
+    }
+  },
+  {
+    "id": "nd_05_big_shortfall_is_capped",
+    "description": "Zero of 10 apps — carryover cap keeps tomorrow at +4, not +10.",
+    "prev_plan_json": {
+      "job_apps": 10,
+      "leetcode_problems": 2,
+      "leetcode_topic": "DP",
+      "task_status": { "morning-0": true }
+    },
+    "prev_schedule": {
+      "morning": { "tasks": ["Leetcode: DP (60min)"] },
+      "midday": { "tasks": ["Job applications (90min) — Send 10 targeted applications"] },
+      "evening": { "tasks": [] }
+    },
+    "prev_log": { "dsa_problems": 2 },
+    "expected": {
+      "apps_shortfall": 10,
+      "adjusted_job_apps": 14,
+      "carryover_contains": "applications"
+    }
+  },
+  {
+    "id": "nd_06_first_day_no_history",
+    "description": "No previous plan exists — clean slate, no carryover, no shortfall.",
+    "prev_plan_json": null,
+    "prev_schedule": null,
+    "prev_log": null,
+    "expected": {
+      "apps_shortfall": 0,
+      "carryover_empty": true,
+      "completion_rate": null,
+      "lc_topic_completed": false
+    }
+  },
+  {
+    "id": "nd_07_chat_close_counts_as_evidence",
+    "description": "Task closed from chat (task_status) with no log row — still counts as completed.",
+    "prev_plan_json": {
+      "job_apps": 8,
+      "leetcode_problems": 2,
+      "leetcode_topic": "Heaps",
+      "task_status": { "morning-0": true, "midday-0": true }
+    },
+    "prev_schedule": {
+      "morning": { "tasks": ["Leetcode: Heaps (60min)"] },
+      "midday": { "tasks": ["Job applications (90min) — Send 8 targeted applications"] },
+      "evening": { "tasks": [] }
+    },
+    "prev_log": null,
+    "expected": {
+      "lc_topic_completed": true,
+      "apps_shortfall": 0,
+      "carryover_empty": true,
+      "completion_rate": 1.0
+    }
+  }
+]

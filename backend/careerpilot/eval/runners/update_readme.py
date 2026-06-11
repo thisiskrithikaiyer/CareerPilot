@@ -42,7 +42,18 @@ def _build_table(report: dict, ts: str) -> str:
     judge = report.get("llm_judge", {})
     consist = report.get("consistency", {})
 
-    rows = [
+    rows = []
+    hard_labels = [
+        ("hard_progress_extraction", "Check-in extraction (hard)"),
+        ("hard_task_close", "Task close matching (hard)"),
+        ("hard_next_day_plan", "Next-day plan carryover (hard)"),
+    ]
+    for key, label in hard_labels:
+        h = report.get(key)
+        if h:
+            rows.append((label, f"{_fmt_pct(h.get('pass_rate'))} ({h.get('passed', '?')}/{h.get('total', '?')})"))
+
+    rows += [
         ("Routing accuracy", f"{_fmt_pct(routing.get('accuracy'))} ({routing.get('correct', '?')}/{routing.get('total', '?')})"),
         ("Intake agent pass rate", f"{_fmt_pct(intake.get('pass_rate'))} ({intake.get('passed', '?')}/{intake.get('total', '?')})"),
         ("Check-in agent pass rate", f"{_fmt_pct(checkin.get('pass_rate'))} ({checkin.get('passed', '?')}/{checkin.get('total', '?')})"),
